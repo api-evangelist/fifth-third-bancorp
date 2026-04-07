@@ -1,7 +1,12 @@
 aid: fifth-third-bancorp
-url: https://raw.githubusercontent.com/api-evangelist/fifth-third-bancorp/refs/heads/main/apis.yml
+url: 
+  https://raw.githubusercontent.com/api-evangelist/fifth-third-bancorp/refs/heads/main/apis.yml
 modified: '2026-03-21'
 apis: []
 common:
   - type: Website
     url: https://www.fifth-third-bancorp.com
+description: >-
+  Fifth Third Bancorp is a diversified financial services company providing commercial
+  banking, branch banking, consumer lending, and wealth and asset management services
+  across multiple U.S. states.
