@@ -28,6 +28,10 @@ common:
     url: https://ir.53.com/
   - type: TreasuryManagement
     url: https://www.53.com/content/fifth-third/en/commercial-banking/payments-and-treasury-management.html
+  - type: Integrations
+    url: https://www.53.com/integrations
+integrations:
+  - name: Fifth Third Bank
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
