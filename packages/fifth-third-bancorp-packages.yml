@@ -1,0 +1,36 @@
+generated: '2026-07-23'
+method: searched
+source: https://developers.newline53.com/docs/newline-sdk-overview
+notes: >-
+  First-party Newline SDKs (TypeScript, Java, .NET) are distributed from the
+  newline53 GitHub org rather than the public language registries; installs
+  resolve through GitHub (npm github:, JitPack for Gradle/Maven, GitHub Packages
+  NuGet feed). The Newline MCP server is distributed the same way (npx from git).
+packages:
+  - language: typescript
+    registry: github
+    name: newline53/newline-ts-sdk
+    url: https://github.com/newline53/newline-ts-sdk
+    install: npm install github:newline53/newline-ts-sdk
+    module_format: esm
+    official: true
+  - language: java
+    registry: jitpack
+    name: com.github.newline53:newline-java-sdk
+    url: https://github.com/newline53/newline-java-sdk
+    install: "implementation 'com.github.newline53:newline-java-sdk:main-SNAPSHOT'"
+    requires: JDK 11+
+    official: true
+  - language: csharp
+    registry: github-packages
+    name: newline-dotnet-sdk
+    url: https://github.com/newline53/newline-dotnet-sdk
+    install: dotnet add package newline-dotnet-sdk --source https://nuget.pkg.github.com/newline53/index.json
+    official: true
+  - language: typescript
+    registry: github
+    name: newline-mcp-server
+    url: https://github.com/newline53/newline-mcp-server
+    install: npx -y git+https://github.com/newline53/newline-mcp-server
+    kind: mcp-server
+    official: true

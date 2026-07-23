@@ -1,0 +1,48 @@
+generated: '2026-07-23'
+method: searched
+source: https://developers.newline53.com/docs/ach-return-reason-codes
+docs_pages:
+  - https://developers.newline53.com/docs/ach-return-reason-codes
+  - https://developers.newline53.com/docs/instant-payments-reject-codes-and-descriptions
+scheme: nacha-ach-return-reason-codes
+envelope_field: return reason code (on Returns / Transaction records)
+notes: >-
+  Newline runs ACH, wire, and Real-Time Payments rails; the ACH "decline"
+  equivalent is the NACHA Return Reason Code carried on Received Returns and
+  Originated Returns, plus Notification of Change (NOC) codes. Instant Payment
+  (RTP) rejects have their own reject-code reference. Codes below are the
+  Received Returns set published in the docs; a Timeframe/SEC-code subset applies
+  to Originated Returns.
+decline_codes:
+  - {code: R01, meaning: Insufficient Funds, action: Available balance not sufficient to cover amount of entry}
+  - {code: R02, meaning: Account Closed, action: Previously active account is closed}
+  - {code: R03, meaning: No Account/Unable to Locate Account, action: Account number does not match an open account}
+  - {code: R04, meaning: Invalid Account Number Structure, action: Account number structure is not valid}
+  - {code: R05, meaning: Unauthorized Debit to Consumer Acct Using Corporate Code, action: Unauthorized corporate entry to consumer account}
+  - {code: R06, meaning: Return requested by ODFI (Recall), action: ODFI requested the RDFI return an entry}
+  - {code: R07, meaning: Authorization Revoked by Customer, action: Consumer claims authorization was terminated}
+  - {code: R08, meaning: Payment Stopped, action: Receiver requested the debit be stopped prior to posting}
+  - {code: R09, meaning: Uncollected Funds, action: Uncollected item brings available balance below entry amount}
+  - {code: R10, meaning: Customer Advises Not Authorized, action: Consumer advises no authorization for a payment}
+  - {code: R11, meaning: Entry Not in Accordance with Terms of Authorization, action: Consumer advises an error with a payment}
+  - {code: R12, meaning: Account/Branch sold to another financial institution, action: RDFI no longer maintains the account}
+  - {code: R14, meaning: Representative Payee Deceased or Unable to Continue, action: Representative payee of government payment deceased}
+  - {code: R15, meaning: Account Holder/Beneficiary Deceased, action: Beneficiary or account holder deceased}
+  - {code: R16, meaning: Account Frozen/Entry Returned Per OFAC Instruction, action: Funds unavailable due to RDFI or legal action}
+  - {code: R17, meaning: File record edit criteria, action: Entry cannot be processed by RDFI; reason in addenda}
+  - {code: R20, meaning: Non-Transaction Account, action: Policies/regulations restrict activity to account}
+  - {code: R21, meaning: Invalid company identification, action: ID in Company ID field is not valid}
+  - {code: R23, meaning: Credit Entry Refused by Receiver, action: Receiver requests to return credit entry}
+  - {code: R24, meaning: Duplicate Entry, action: Receiver will not accept the duplicate payment}
+  - {code: R29, meaning: Corporate Customer Advises Not Authorized, action: Specific payment not authorized by Receiver (Company)}
+  - {code: R31, meaning: Permissible return entry, action: ODFI agrees to accept a return after the deadline}
+  - {code: R33, meaning: Return of XCK Entry, action: RDFI returns an XCK entry (up to 60 days after settlement)}
+  - {code: R37, meaning: Source document presented for payment, action: Source doc for ARC/BOC/POP entry presented for payment}
+  - {code: R38, meaning: Stop Payment on source document, action: Stop payment on the source document (ARC/BOC)}
+  - {code: R39, meaning: Improper source document, action: Source document used for ARC/BOC/POP deemed improper}
+  - {code: R50, meaning: State Law Affecting RCK Acceptance, action: RDFI state has not adopted revised UCC article 4}
+  - {code: R51, meaning: Item related to RCK Entry is Ineligible, action: RCK item not eligible or notice/signature issue}
+  - {code: R52, meaning: Stop Payment on Item, action: Stop payment placed on item the RCK entry relates to}
+  - {code: R53, meaning: Item and RCK Entry presented for payment, action: Both RCK entry and check presented for payment}
+  - {code: R70, meaning: Permissible return not accepted, action: ODFI has not agreed to accept a permissible return}
+masked_to_buyers: false

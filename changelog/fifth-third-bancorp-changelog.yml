@@ -1,0 +1,30 @@
+generated: '2026-07-23'
+method: searched
+source: https://developers.newline53.com/changelog
+scheme: monthly-dated
+current: "June '26 Updates"
+notes: >-
+  Newline publishes a monthly-dated changelog on the ReadMe developer hub
+  (authored by the Newline team). Entry bodies are rendered client-side; the
+  recent window of dated entries is captured below by title.
+entries:
+  - version: "June '26 Updates"
+    date: '2026-06'
+  - version: "May '26 Updates"
+    date: '2026-05'
+  - version: "April '26 Updates"
+    date: '2026-04'
+  - version: "March '26 Updates"
+    date: '2026-03'
+  - version: "Feb '26 Updates"
+    date: '2026-02'
+  - version: "Jan '26 Updates"
+    date: '2026-01'
+  - version: "December '25 Updates"
+    date: '2025-12'
+  - version: "November '25 Updates"
+    date: '2025-11'
+  - version: "October '25 Updates"
+    date: '2025-10'
+  - version: "September '25 Updates"
+    date: '2025-09'

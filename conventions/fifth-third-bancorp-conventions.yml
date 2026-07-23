@@ -1,0 +1,46 @@
+generated: '2026-07-23'
+method: searched
+source: openapi/newline-platform-api.json + Newline developer docs
+authentication:
+  style: jws-hmac-bearer
+  header: Authorization
+  token_prefix: auth-
+  algorithm: HS512
+  token_ttl: up to 8 hours
+  detail: See authentication/fifth-third-bancorp-authentication.yml
+idempotency:
+  supported: false
+  notes: No idempotency-key header or parameter is documented or present in the OpenAPI.
+pagination:
+  style: offset
+  params:
+    - limit
+    - offset
+  notes: List operations page with limit + offset query parameters.
+filtering:
+  common_params:
+    - external_uid
+    - created_at_after
+    - created_at_before
+    - id_after
+    - id_before
+    - status
+  notes: Range filters use *_after / *_before pairs and settled_index_after/before; id_after/id_before for keyset-style windows.
+sorting:
+  param: sort
+identifiers:
+  scheme: uid (opaque unique identifiers per resource); external_uid for client-supplied references
+error_envelope:
+  format: json
+  detail: See errors/fifth-third-bancorp-problem-types.yml and errors/fifth-third-bancorp-decline-codes.yml
+rate_limiting:
+  signaled: false
+  notes: No rate-limit headers documented in the OpenAPI; program-level transfer limits (frequency/volume) are set during onboarding.
+events:
+  webhooks: https://developers.newline53.com/docs/webhooks
+  message_queue: https://developers.newline53.com/docs/message-queue
+  encryption: Webhook payloads are PGP-encrypted in transit (both sandbox and production)
+  detail: See asyncapi/fifth-third-bancorp-newline-webhooks.yml
+versioning:
+  scheme: uri-path (v1)
+  detail: See lifecycle/fifth-third-bancorp-lifecycle.yml

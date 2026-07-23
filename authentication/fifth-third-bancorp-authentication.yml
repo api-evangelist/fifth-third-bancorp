@@ -1,0 +1,43 @@
+generated: '2026-07-23'
+method: searched
+source: openapi/newline-platform-api.json
+docs: https://developers.newline53.com/docs/api-authentication
+docs_pages:
+  - https://developers.newline53.com/docs/authentication-guide
+  - https://developers.newline53.com/docs/api-authentication
+  - https://developers.newline53.com/docs/authorization-guide
+  - https://developers.newline53.com/docs/sdk-authentication
+summary:
+  types:
+    - apiKey
+  api_key_in:
+    - header
+  oauth2_flows: []
+model: jws-hmac-bearer
+notes: >-
+  The Newline Platform API uses a JWT/JWS-based bearer strategy. A client
+  exchanges a refresh token for an access token by POSTing to /auth a JWS whose
+  payload carries the Program UID (sub) and current epoch time (iat), signed
+  with a previously shared HMAC secret using HS512. The returned access token
+  (prefixed "auth-") is valid up to 8 hours and is supplied in the Authorization
+  header of every subsequent request. The sandbox uses an identical token
+  strategy to production. HMAC secrets/Program IDs are provisioned by the
+  Newline Relationship team over secure email (no self-service signup at this time).
+schemes:
+  - name: ApiKeyAuth
+    type: apiKey
+    in: header
+    parameter: Authorization
+    description: >-
+      Access token (auth- prefixed) obtained from POST /auth by signing a JWS
+      with the shared HMAC (HS512); supplied in the Authorization header.
+    sources:
+      - openapi/newline-platform-api.json
+signing:
+  algorithm: HS512
+  jws_payload:
+    sub: Program UID
+    iat: current epoch time
+  token_prefix: auth-
+  token_ttl: up to 8 hours
+provisioning: Relationship-team issued (secure email); no self-service signup

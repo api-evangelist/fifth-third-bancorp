@@ -1,0 +1,33 @@
+generated: '2026-07-23'
+method: searched
+source: https://developers.newline53.com/docs/sandbox-walkthrough
+docs_pages:
+  - https://developers.newline53.com/docs/sandbox-walkthrough
+  - https://developers.newline53.com/docs/synthetic-accounts-1
+  - https://developers.newline53.com/docs/transactions-and-transfers
+  - https://developers.newline53.com/docs/sandbox-errors
+  - https://developers.newline53.com/docs/clearing-the-sandbox
+base_url: https://sandbox.newline53.com/api/v1
+auth: Identical JWS/HMAC (HS512) token strategy to production
+provisioning: HMAC keys issued by the Newline Relationship team over secure email; no self-service sandbox signup yet
+test_vs_live:
+  separation: separate sandbox host (sandbox.newline53.com); production access is program-scoped
+  notes: Sandbox does not contain all production features
+staged_fixtures:
+  customers: Staged customers are business customers with only name and address populated (no self-serve customer creation in sandbox)
+  synthetic_accounts: >-
+    Staged general Synthetic Accounts are master accounts with a 1:1 relationship to a Custodial Account
+    (a Commercial DDA), pre-loaded with varying balances
+simulation:
+  mock_transactions:
+    endpoint: POST /sandbox/mock_transactions
+    purpose: Auto-generate externally originated transactions to validate how they render in your app (sandbox only)
+  transfers: Transfers to/from external accounts are simulated; no real money movement occurs
+  external_accounts: >-
+    Creating ach_external / wire_external / instant_payments_external Synthetic Accounts performs no
+    authentication in sandbox (any account/routing number accepted); production requires valid, connectable accounts
+  vrns: VRNs can be created off any staged general Synthetic Account (beta in production)
+  debit_cards: Debit card interactions can be tested in sandbox, fully simulated (beta in production)
+  error_scenarios: Error scenarios can be exercised via the sandbox (see docs/sandbox-errors)
+  clear_state: Sandbox state can be reset (see docs/clearing-the-sandbox)
+published_test_values: none (no magic card/account numbers published; fixtures are program-staged)

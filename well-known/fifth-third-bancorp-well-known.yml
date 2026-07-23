@@ -1,0 +1,29 @@
+generated: '2026-07-23'
+method: searched
+notes: >-
+  Probed the /.well-known/ discovery surface on the docs, API, and corporate
+  hosts. No standardized discovery documents are published (no security.txt,
+  no OpenID/OAuth metadata, no api-catalog). The API base host returns 403 to
+  anonymous /.well-known probes. AI/agent discovery is instead served via
+  https://developers.newline53.com/llms.txt (a documented index) and the
+  published OpenAPI at /openapi/newline-platform-api.json.
+hosts:
+  - host: https://developers.newline53.com
+    documents:
+      - {path: /llms.txt, status: 200, file: ../llms/fifth-third-bancorp-llms.txt}
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+  - host: https://sandbox.newline53.com
+    documents:
+      - {path: /.well-known/security.txt, status: 403}
+      - {path: /.well-known/openid-configuration, status: 403}
+      - {path: /.well-known/oauth-authorization-server, status: 403}
+      - {path: /.well-known/oauth-protected-resource, status: 403}
+  - host: https://newline53.com
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /llms.txt, status: 404}
+  - host: https://www.53.com
+    documents:
+      - {path: /.well-known/security.txt, status: 302}

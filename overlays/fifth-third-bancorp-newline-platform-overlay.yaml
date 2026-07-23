@@ -1,0 +1,24 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Newline Platform API
+  version: 1.0.0
+extends: openapi/newline-platform-api.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: fifth-third-bancorp
+      x-apievangelist-product: Newline by Fifth Third
+      x-apievangelist-auth: jws-hmac-bearer (HS512, auth- token, 8h TTL)
+      x-apievangelist-pagination: offset+limit
+      x-apievangelist-mcp: git+https://github.com/newline53/newline-mcp-server
+      x-apievangelist-webhooks: https://developers.newline53.com/docs/webhooks
+  - target: $.info
+    update:
+      x-apievangelist-artifacts:
+        authentication: authentication/fifth-third-bancorp-authentication.yml
+        conventions: conventions/fifth-third-bancorp-conventions.yml
+        errors: errors/fifth-third-bancorp-problem-types.yml
+        decline_codes: errors/fifth-third-bancorp-decline-codes.yml
+        lifecycle: lifecycle/fifth-third-bancorp-lifecycle.yml
+        data_model: data-model/fifth-third-bancorp-data-model.yml
+        webhooks: asyncapi/fifth-third-bancorp-newline-webhooks.yml

@@ -1,0 +1,210 @@
+# Newline Documentation
+
+> Welcome to the Newline API docs powered by Fifth Third Bank. Here we’ll explain how to use our API to build your financial products and services using our network.
+
+## Guides
+- [Welcome to Newline's Developer Docs](https://developers.newline53.com/docs/welcome.md)
+- [New AI in our Docs ](https://developers.newline53.com/docs/new-ai-in-our-docs.md)
+- [Using the MCP Server in Newline Developer Docs](https://developers.newline53.com/docs/using-the-mcp-server-in-newline-developer-docs.md): Learn how supported AI tools use the ReadMe MCP server to search and read Newline developer documentation.
+- [Overview](https://developers.newline53.com/docs/overview.md)
+- [Postman Collection](https://developers.newline53.com/docs/postman-collection.md)
+- [Terminology](https://developers.newline53.com/docs/terminology-1.md)
+- [Objects](https://developers.newline53.com/docs/objects-index.md)
+- [Enumerations](https://developers.newline53.com/docs/enumerations.md)
+- [Model Context Protocol (MCP) Guide](https://developers.newline53.com/docs/mcp-guide.md)
+- [Newline SDK Overview](https://developers.newline53.com/docs/newline-sdk-overview.md)
+- [Newline SDK Quickstart](https://developers.newline53.com/docs/newline-sdk-quickstart.md)
+- [SDK Authentication](https://developers.newline53.com/docs/sdk-authentication.md)
+- [TypeScript SDK Installation](https://developers.newline53.com/docs/typescript-sdk-installation.md)
+- [Java SDK Installation](https://developers.newline53.com/docs/java-sdk-installation.md)
+- [.NET SDK Installation](https://developers.newline53.com/docs/net-sdk-installation.md)
+- [SDK Error Handling](https://developers.newline53.com/docs/sdk-error-handling.md)
+- [Virtual Reference Numbers (VRNs)](https://developers.newline53.com/docs/virtual-reference-numbers-vrns.md)
+- [Authorization Guide](https://developers.newline53.com/docs/authorization-guide.md)
+- [Payment Features](https://developers.newline53.com/docs/payment-features.md)
+- [Transfers](https://developers.newline53.com/docs/transfer.md)
+- [Payment Rails](https://developers.newline53.com/docs/payment-rails.md)
+- [ACH](https://developers.newline53.com/docs/ach.md)
+- [Book Transfers](https://developers.newline53.com/docs/book-transfers.md)
+- [Instant Payments](https://developers.newline53.com/docs/instant-payments.md)
+- [Wire](https://developers.newline53.com/docs/wire.md)
+- [QuickStart Guide: Completing a Transfer](https://developers.newline53.com/docs/quickstart-guide-completing-a-transfer.md)
+- [Transaction Reconciliation](https://developers.newline53.com/docs/transaction-reconciliation.md): Learn how to reconcile Newline transactions with Fifth Third bank statements using posted transaction CSVs and daily closing balances.
+- [Reporting](https://developers.newline53.com/docs/reporting.md)
+- [Understanding Intraday vs Prior Day Reporting](https://developers.newline53.com/docs/understanding-intraday-vs-prior-day-reporting.md)
+- [Posted Transactions](https://developers.newline53.com/docs/posted-transactions-1.md)
+- [Authorizations CSVs Explained](https://developers.newline53.com/docs/authorizations-csvs.md)
+- [Managed File Transfer (MFT) Connecting to the Bank](https://developers.newline53.com/docs/mft-onboarding.md)
+- [CSV Reporting: Settled vs Updated Transactions](https://developers.newline53.com/docs/overview-of-transaction-csv-reports.md): Learn how Settled Transactions and Updated Transactions CSV reports differ, when records appear in each report, and which report to use for reconciliation or lifecycle monitoring.
+- [Settled Transaction CSV](https://developers.newline53.com/docs/settled-transaction-csv.md)
+- [Updated Transaction CSV](https://developers.newline53.com/docs/updated-transaction-csv.md)
+- [Posted Transactions (Prior Day) CSV Guide](https://developers.newline53.com/docs/posted-transactions-prior-day-csv-guide.md)
+- [Intraday Reporting Guide](https://developers.newline53.com/docs/intraday-reporting-guide.md)
+- [Prior Day Reporting Guide](https://developers.newline53.com/docs/prior-day-reporting-guide.md)
+- [Accounts (Prior Day) CSV Guide](https://developers.newline53.com/docs/accounts-prior-day-csv-guide.md): Use the Accounts (Prior Day) CSV to understand end-of-day account balances derived from prior-day activity, including settled balances and statement-aligned closing balances.
+- [Sandbox Walkthrough](https://developers.newline53.com/docs/sandbox-walkthrough.md)
+- [Authentication Guide](https://developers.newline53.com/docs/authentication-guide.md)
+- [API Authentication](https://developers.newline53.com/docs/api-authentication.md)
+- [OpenAPI Guide ](https://developers.newline53.com/docs/openapi-guide.md)
+- [Guidance on Money Movements](https://developers.newline53.com/docs/guidance-on-money-movements.md)
+- [Staging Test Synthetic Accounts](https://developers.newline53.com/docs/synthetic-accounts-1.md)
+- [Simulating Transactions and Transfers](https://developers.newline53.com/docs/transactions-and-transfers.md)
+- [Testing Error Scenarios](https://developers.newline53.com/docs/sandbox-errors.md)
+- [Returns](https://developers.newline53.com/docs/returns-1.md)
+- [Clearing the Sandbox](https://developers.newline53.com/docs/clearing-the-sandbox.md)
+- [Notifications](https://developers.newline53.com/docs/notifications.md)
+- [Message Queue](https://developers.newline53.com/docs/message-queue.md)
+- [Message Queue Authentication](https://developers.newline53.com/docs/messagequeue-authenticaion.md)
+- [Message Queue Topics](https://developers.newline53.com/docs/messagequeue-topics.md)
+- [Message Queue Topic Definitions](https://developers.newline53.com/docs/messagequeue-topic-definitions.md)
+- [Message Queue Topic Publication](https://developers.newline53.com/docs/messagequeue-topic-publication.md)
+- [Message Queue Subscriptions](https://developers.newline53.com/docs/messagequeue-subscriptions.md)
+- [MQ Behavior in Sandbox & Production](https://developers.newline53.com/docs/mq-behavior-in-sandbox-production.md)
+- [Webhooks](https://developers.newline53.com/docs/webhooks.md)
+- [Webhook Authentication](https://developers.newline53.com/docs/webhooks-authentication.md)
+- [Webhook Topics](https://developers.newline53.com/docs/webhooks-topics.md)
+- [Webhook Topic Definitions](https://developers.newline53.com/docs/webhooks-topic-definitions.md)
+- [Webhook Subscriptions](https://developers.newline53.com/docs/webhooks-subscriptions.md)
+- [Webhooks FAQs](https://developers.newline53.com/docs/webhooks-faqs.md)
+- [Error Detail and Resolution](https://developers.newline53.com/docs/errors-and-support.md)
+- [FAQs](https://developers.newline53.com/docs/faqs.md)
+- [API Errors](https://developers.newline53.com/docs/api-errors.md)
+- [General Errors](https://developers.newline53.com/docs/general-errors.md)
+- [Synthetic Account Errors](https://developers.newline53.com/docs/synthetic-account-errors.md)
+- [Custodial Account Errors](https://developers.newline53.com/docs/custodial-account-errors.md)
+- [Pool Errors](https://developers.newline53.com/docs/pool-errors.md)
+- [Synthetic Account Type Errors](https://developers.newline53.com/docs/synthetic-account-type-errors.md)
+- [Transfer Related Errors](https://developers.newline53.com/docs/transfer-related-errors.md)
+- [Instant Payments Reject Codes and Descriptions](https://developers.newline53.com/docs/instant-payments-reject-codes-and-descriptions.md)
+- [ACH Return Reason Codes](https://developers.newline53.com/docs/ach-return-reason-codes.md)
+- [Transaction Specific Errors](https://developers.newline53.com/docs/transaction-specific-errors.md)
+- [Customer-Related Errors](https://developers.newline53.com/docs/customer-related-errors.md)
+- [Compliance and Security Errors](https://developers.newline53.com/docs/compliance-and-security-errors.md)
+- [Program Errors](https://developers.newline53.com/docs/program-errors.md)
+- [Product Errors](https://developers.newline53.com/docs/product-errors.md)
+- [Client Errors](https://developers.newline53.com/docs/client-errors.md)
+- [Sandbox and Testing Errors](https://developers.newline53.com/docs/sandbox-and-testing-errors.md)
+- [Virtual Reference Number (VRN) Errors](https://developers.newline53.com/docs/virtual-reference-number-vrn-errors.md)
+- [Return Errors](https://developers.newline53.com/docs/return-errors.md)
+- [Disclosure](https://developers.newline53.com/docs/disclosure.md)
+- [Terms & Conditions](https://developers.newline53.com/docs/terms-conditions.md)
+- [Newline's Card Issuing Sponsorship Program](https://developers.newline53.com/docs/card-issuing-implementation-guide.md)
+- [Unlocking Card Issuing](https://developers.newline53.com/docs/card-issuing-product-guide.md)
+- [Document Review](https://developers.newline53.com/docs/document-review.md)
+- [Connecting to Newline Using Managed File Transfer (MFT)](https://developers.newline53.com/docs/connecting-to-the-bank.md)
+- [Transaction Monitoring Data Integration Guide](https://developers.newline53.com/docs/transaction-monitoring-data-integration-guide.md)
+- [Card Issuing Specific File Specs](https://developers.newline53.com/docs/file-specs.md)
+- [Card](https://developers.newline53.com/docs/card.md)
+- [Cardholder](https://developers.newline53.com/docs/cardholder-file.md)
+- [Posted Transactions](https://developers.newline53.com/docs/posted-transactions.md)
+- [Newline's Embedded Deposit Account Solutions (EDAS)](https://developers.newline53.com/docs/newlines-embedded-deposit-account-solutions-edas.md)
+- [EDAS Onboarding Guide](https://developers.newline53.com/docs/edas-onboarding-guide.md)
+- [Bring Your Own Ledger (BYOL) with EDAS](https://developers.newline53.com/docs/bring-your-own-ledger-byol-with-edas.md)
+- [EDAS Specific File Specs](https://developers.newline53.com/docs/edas-specific-file-specs.md)
+- [Payment Transactions](https://developers.newline53.com/docs/payment-transaction.md)
+- [Person](https://developers.newline53.com/docs/person-entity-specification.md)
+- [EDAS FAQs](https://developers.newline53.com/docs/edas-faqs.md)
+- [Common File Specs](https://developers.newline53.com/docs/common-files-specs.md)
+- [Accounts](https://developers.newline53.com/docs/accounts-specification.md)
+- [Beneficial Ownership](https://developers.newline53.com/docs/beneficial-ownership.md)
+- [Business](https://developers.newline53.com/docs/business.md)
+- [Account Reconciliation](https://developers.newline53.com/docs/account-reconciliation.md)
+- [Summary File Specifications Requirements](https://developers.newline53.com/docs/card-balance.md)
+- [Detail File Specifications Requirements](https://developers.newline53.com/docs/card-details-file-requirements.md)
+- [Overview of the Newline Dashboard](https://developers.newline53.com/docs/overview-of-the-newline-dashboard.md)
+- [Getting Started Guide](https://developers.newline53.com/docs/getting-started-guide-1.md): Learn how to authenticate with Okta, navigate the Newline Dashboard, search transactions, review reports, and access support resources.
+- [Searching Transactions](https://developers.newline53.com/docs/searching-transactions.md): Search and filter read-only transaction data in the Newline Dashboard.
+- [Team Management](https://developers.newline53.com/docs/team-management.md): View, filter, add, and manage Newline Dashboard team members, roles, statuses, and client group access.
+- [Reports & Analytics ](https://developers.newline53.com/docs/reports-analytics.md): Overview of Newline Dashboard reporting tools, program metrics, and interactive analytics charts.
+- [Dashboard FAQs](https://developers.newline53.com/docs/dashboard-faqs.md)
+- [Newline Status Page](https://developers.newline53.com/docs/newline-status-page.md)
+
+## API Reference
+- [Getting Started](https://developers.newline53.com/reference/getting_started_guide.md)
+- [Auth](https://developers.newline53.com/reference/auth.md)
+- [Generate an authentication token](https://developers.newline53.com/reference/post_auth.md): An access token can be generated by providing a refresh token. The generated token then can be used as an authentication token to access resources for up to 8 hours.  The Client will need to provide a JWS, its payload containing Program UID as `sub` (subject) and current Epoch time as `iat` (issued at timestamp), signed by an HMAC that has been shared offline previously using HS512. See the above guide for more details.  When Newline processes the `POST /auth` request, it validates that the `iat` claim is current. A 30-second difference is allowed to account for clock skew. Nevertheless, it is important that the refresh token be submitted as quickly as possible after it is generated to avoid failure in receiving an access token. Note that the returned access token is a valid JWS following `auth-` and the whole value (`auth-header.payload.signature`) must be provided in the `Authorization` header when making requests to other endpoints.
+- [Customers](https://developers.newline53.com/reference/customers.md)
+- [Overview of Customer Types](https://developers.newline53.com/reference/overview-of-customer-types.md)
+- [Get a list of Customers](https://developers.newline53.com/reference/get_customers.md): Retrieves a list of Customers filtered by the given parameters. Filter parameters are not case sensitive, but will only return exact matches.  Multiple filter parameters can be provided at once, but a result will not be returned unless there are exact matches for all submitted parameters. As an example: submitting `first_name=Olive&last_name=Oyl` would match exactly "Olive Oyl" but NOT "Olive Boyl" or "Oliver Oyl".  The list endpoint will not include sensitive Customer data such as address or DOB. This can only be retrieved by viewing a specific Customer record. By default we do not display Customers in the `initiated` status, as Customers in this status have not completed onboarding. To cause Customers with this status to be included in the list you must provide the `include_initiated=true` parameter.
+- [Create a new Customer](https://developers.newline53.com/reference/post_customers.md): This endpoint is used to initialize a new Customer. All request body data is optional unless otherwise specified. For customer types other than `primary`, `customer_type` must be specified.  The `customer_type` cannot be changed after the customer is created. Customer details accepted by [Adjust Customer Data](https://developers.newline53.com/reference/put_customers-uid) can be sent in this request if desired. See Adjust Customer Data for an example with all customer details provided.
+- [Get a single Customer](https://developers.newline53.com/reference/get_customers-uid.md): Retrieve overall status about a Customer as well as their total Asset Balances across all accounts.
+- [Adjust Customer Data](https://developers.newline53.com/reference/put_customers-uid.md): Submit or update a Customer's personally identifiable information (PII) after the Customer is created. Before a Customer has been onboarded to a product with [Customer Product](https://developers.newline53.com/reference/post_customer-products), this endpoint may be used to update or remove any details without validations. After the Customer has been onboarded to a product, all validations will be enforced.  This endpoint is used to supply the remaining personally identifiable information (PII) for each Customer after they are created. The PII for a Customer must be submitted in full. Newline will not accept your request if any field is incomplete or missing.  PII can be edited for a Customer up until a valid request is sent to the Customer Product endpoint. Once a Customer is in a status of Active, subsequent calls to this endpoint will result in additional KYC/AML evaluations. Each KYC/AML evaluation will result in a billable event for your Program. Please work with Newline on how you plan to implement PII modifications for your Customers.  Only first_name, middle_name, last_name, suffix, email, phone, and address will be editable after a Customer is in a status of Active. Once Customer data is adjusted, the pii_confirmed_at field on the Customer record will be updated.  Newline accepts Tax Identifier Number in the Social Security Number field of the API. Newline performs validation on the SSN field supplied with a Customer to prevent invalid SSN values. Newline will reject a Customer record with a SSN value that does not adhere to the following parameters:  - The 1st part, 3-digits, may not include 000, 666 - The 2nd part, 2-digits, may range from 01 to 99 - The 3rd part, 4-digits, may range from 0001 to 9999  We will accept SSN and TIN in the SSN field of the /customers endpoint.
+- [Archive a Customer](https://developers.newline53.com/reference/delete_customers-uid.md): Archiving a Customer refunds any remaining balance, closes all of their active Synthetic and Custodial Accounts and closes their Debit Cards. This process can take up to 8 business days to complete as the Transfers take place.  When archiving a customer, you can prevent them from reapplying to your program by setting `can_apply_again` to false. If you do not set any value, `can_apply_again` defaults to true.  When a request to archive a Customer is first received, the customer status will update to `pending_archival` and their accounts will be locked. When the archival process is complete, their customer status will update to `archived`. For a customer to move to the `archived` status, they must carry a $0 balance and have no pending transactions.  If the Customer has a positive balance across any accounts and a connected external account, Newline will initiate an ACH transfer to zero out the account balance and move the customer to the `archived` status.  If the Customer does not have an external account or the ACH transfer fails, Newline will mail a paper check to the Customer address on file to zero out the account balance and move the customer to the `archived` status.  If the Customer has a negative balance across any accounts, the negative account balances must be brought up to or greater than $0.00 before the archival workflow can continue.  Once archived, a Customer's records will still be available for historical purposes (according to the bank’s record retention schedule), but they will not be able to open any new Accounts. The Customer can still apply again as long as `can_apply_again` is not set to false.
+- [Customer Statuses](https://developers.newline53.com/reference/customer-statuses.md)
+- [Pools](https://developers.newline53.com/reference/pools.md)
+- [List Pools](https://developers.newline53.com/reference/get_pools.md): Retrieves a list of Pools filtered by the given parameters.
+- [Get a single Pool](https://developers.newline53.com/reference/get_pools-uid.md): Retrieve overall status about a Pool as well as its total Asset Balances across all associated accounts.
+- [Products](https://developers.newline53.com/reference/products.md)
+- [List Products](https://developers.newline53.com/reference/get_products.md): Products filtered by the given parameters.
+- [Get a single Product](https://developers.newline53.com/reference/get_products-uid.md): Retrieve overall status about a Product as well as its configuration, availability, and any associated metadata.
+- [Customer Products](https://developers.newline53.com/reference/customer-products.md)
+- [List Customer Products](https://developers.newline53.com/reference/get_customer-products.md): List Customers and the Products they have onboarded onto, filtered by the given parameters.
+- [Onboard Customer onto a Product](https://developers.newline53.com/reference/post_customer-products.md): Submit a request to onboard a Customer onto a new product. Ensure all required Customer details have been provided with [Adjust Customer Data](https://developers.newline53.com/reference/put_customers-uid) before making this request. An error will be returned if details are missing or invalid.  The request to onboard a Customer serves as explicit confirmation from you that the Customer is ready for account opening. This event initiates the KYC/AML verification process and account opening in your Program. This is a billable event and is isolated intentionally for you to confirm that the Customer record is complete. Customer Onboarding is the event that locks the customer PII and profile responses from further edits.  Customer Onboarding is designed to work as follows:  - The Customer provides complete PII as defined by the Customers endpoint - The Customer provides complete Customer Profile information as defined by the Product endpoint - You submit a request to Customer Products with the specified Product this Customer is onboarding onto - Newline performs a validation on the PII provided and the Customer Profile data to confirm all are valid  If the Customer passes these validations and meets the duration requirements described below, the Customer record is submitted to the KYC process
+- [Get a single Customer Product](https://developers.newline53.com/reference/get_customer-products-uid.md): Retrieves a single Customer Product resource along with its associated Customer and Product
+- [Customer Product Statuses](https://developers.newline53.com/reference/customer-product-statuses.md)
+- [Custodial Accounts](https://developers.newline53.com/reference/custodial-accounts.md)
+- [Custodial Account Statuses](https://developers.newline53.com/reference/custodial-account-statuses.md)
+- [List Custodial Accounts](https://developers.newline53.com/reference/get_custodial-accounts.md): Retrieve a list of Custodial Accounts held by Fifth Third Bank for onboarded Customers. This endpoint returns active and archived accounts along with their balances.
+- [Get a single Custodial Account](https://developers.newline53.com/reference/get_custodial-accounts-uid.md): Returns a single Custodial Account resource along with supporting details and account balances.
+- [List Custodial Account Closing Balances](https://developers.newline53.com/reference/get_custodial-account-closing-balances.md): Retrieves a paginated list of Custodial Account Closing balances, filtered by various parameters.
+- [Get a single Custodial Account Closing Balance](https://developers.newline53.com/reference/get_custodial-account-closing-balances-uid.md)
+- [Transfers](https://developers.newline53.com/reference/transfers.md)
+- [List Transfers](https://developers.newline53.com/reference/get_transfers.md): Retrieves a list of Transfers filtered by the given parameters. Transfers facilitate the movement of assets between accounts, enabling transactions such as payments and withdrawals.
+- [Initiate a Transfer](https://developers.newline53.com/reference/post_transfers.md): Attempt to initiate a Transfer between two Synthetic Accounts. Before the Transfer will be initiated, several checks will be performed to ensure there is sufficient balance in the source account and that the initiating Customer has all the necessary access to both Synthetic Accounts.  The Synthetic Accounts allowed in a Transfer request are listed below  - between a liability Synthetic Account in the `general` category and a Synthetic Account in the `ach_external`, `wire_external`, or `instant_payment_external` category - between two liability Synthetic Accounts in the `general` category that are also owned by the same Customer.  > **Note** > Please note that if utilizing the Transmitter information, the initiator type should be set to transmitter. If not set, the field defaults to customer and any data provided in that field will be ignored.
+- [Get a single Transfer](https://developers.newline53.com/reference/get_transfers-uid.md): Retrieves a single Transfer resource along with its details, including status, participating accounts, and associated Transactions.  Filter parameters are not case sensitive but will only return exact matches.
+- [Cancel a Transfer](https://developers.newline53.com/reference/put_transfers-uid-cancel.md): Transfers must be canceled by the originating Customer (or Authorized Representative).  Transfers can only enter the canceled state if Newline receives a request while the Transfer is in `queued` or `pending states`.  A cancellation request during the `pending` state is not guaranteed, as this state may include payment execution. At that stage, a cancel request will result in an error.
+- [Transfer Statuses](https://developers.newline53.com/reference/transfer-statuses.md)
+- [Transactions](https://developers.newline53.com/reference/transactions.md)
+- [List Transactions](https://developers.newline53.com/reference/get_transactions.md): Retrieves a list of Transactions. Transactions representing expired authorizations or expired reversals are suppressed by default.
+- [Get a single Transaction](https://developers.newline53.com/reference/get_transactions-uid.md): Retrieves a single Transaction resource along with its details, including amount, origin, destination, and status.
+- [Approve or deny a transaction](https://developers.newline53.com/reference/put_transactions-uid-authorize.md): Approves or denies a pending Transaction. This endpoint is used to explicitly authorize or reject a Transaction before it is executed.
+- [List Transaction Events](https://developers.newline53.com/reference/get_transaction-events.md): Retrieves a list of Transaction Events. Transaction Events represent the steps required to complete a Transaction and can be used to track its progress or review its history.
+- [Get a single Transaction Event](https://developers.newline53.com/reference/get_transaction-events-uid.md): Retrieves a single Transaction Event resource, including its status, timestamps, and associated Transaction details.
+- [List Synthetic Line Items](https://developers.newline53.com/reference/get_synthetic-line-items.md): Retrieves a list of Synthetic Line Items. These represent individual debits and credits associated with Synthetic Accounts as part of a Transaction Event.
+- [Get a single Synthetic Line Item](https://developers.newline53.com/reference/get_synthetic-line-items-uid.md): Retrieves a single Synthetic Line Item resource, including the amount, account, and associated Transaction Event.
+- [List Custodial Line Items](https://developers.newline53.com/reference/get_custodial-line-items.md): Retrieves a list of Custodial Line Items. These represent individual debits and credits associated with Custodial Accounts as part of a Transaction Event.
+- [Get a single Custodial Line Item](https://developers.newline53.com/reference/get_custodial-line-items-uid.md): Retrieves a single Custodial Line Item resource, including the amount, account, and associated Transaction Event.
+- [Transaction Statuses and Types](https://developers.newline53.com/reference/transaction-statuses-and-transaction-types.md)
+- [Synthetic Accounts](https://developers.newline53.com/reference/synthetic-accounts.md)
+- [List Synthetic Account Types](https://developers.newline53.com/reference/get_synthetic-account-types.md): Retrieve a list of Synthetic Account Types available for use in your Program. These types define the behavior and characteristics of Synthetic Accounts.
+- [Get a Single Synthetic Account Type](https://developers.newline53.com/reference/get_synthetic-account-types-uid.md): Returns a single Synthetic Account Type resource along with supporting details.  Enables changes to the Synthetic Account fields, including the Master Synthetic Account. The Master Synthetic Account remains identifiable by the `master_account` flag stored with the Synthetic Account record.
+- [List Synthetic Accounts](https://developers.newline53.com/reference/get_synthetic-accounts.md): Retrieve a list of Synthetic Accounts associated with the specified Customer and Pool. This endpoint supports filtering by account type, category, status, and sorting by balance or name.
+- [Create a New Synthetic Account](https://developers.newline53.com/reference/post_synthetic-accounts.md): Create a new Synthetic Account in the Pool with the provided specification.  External Synthetic Accounts are counterparty records that represent accounts at external financial institutions. They contain all the necessary information to execute a payment. For specifics about each payment rail's requirements, refer to our [Payment Rails](https://developers.newline53.com/docs/payment-rails) guides.
+- [Get a single Synthetic Account](https://developers.newline53.com/reference/get_synthetic-accounts-uid.md): Returns a single Synthetic Account resource along with supporting details and account balances.  Note: Newline will suppress the `account_number` value for Synthetic Accounts in the `ach_external`, `wire_external`, and `instant_payment_external` categories. The `account_number_last_four` value will be returned in the response to help identify these Synthetic Accounts.
+- [Update the Synthetic Account metadata](https://developers.newline53.com/reference/put_synthetic-accounts-uid.md): Enables changes to the Synthetic Account fields, including the Master Synthetic Account. The Master Synthetic Account remains identifiable by the `master_account` flag stored with the Synthetic Account record.
+- [Archive a Synthetic Account](https://developers.newline53.com/reference/delete_synthetic-accounts-uid.md): In order to archive a Synthetic Account, the account must:  - not be a Master Synthetic Account i.e. `master_account` must be false. - have zero balance. - have no pending Transfers.  Master Synthetic Accounts are archived when the Program Customer is archived ([DELETE /customers/:uid](https://developers.newline53.com/reference/delete_customers-uid)).
+- [List Synthetic Account Closing Balances](https://developers.newline53.com/reference/get_synthetic-account-closing-balances.md): Retrieves a paginated list of Synthetic Account Closing balances, filtered by various parameters.
+- [Get a single Synthetic Account Closing Balance](https://developers.newline53.com/reference/get_synthetic-account-closing-balances-uid.md)
+- [Synthetic Account Categories](https://developers.newline53.com/reference/synthetic-account-categories.md)
+- [Synthetic Account Statuses](https://developers.newline53.com/reference/synthetic-account-statuses.md)
+- [Returns](https://developers.newline53.com/reference/returns.md)
+- [List Returns](https://developers.newline53.com/reference/get_returns.md): Retrieves a list of return transactions. You can filter the results based on parameters such as status, date, and transaction type. This endpoint is available in Sandbox and Production environments.
+- [Create a new Return](https://developers.newline53.com/reference/post_returns.md): Initiates a Return of an ACH or wire payment. A full ACH addenda is not available for ACH returns because an addenda record is used for the return itself; the `addenda_info` field contains the remaining available space. For wire returns, the `wire_instruction` field is limited to 70 characters because Newline prefixes the instructions with the original wire transaction identifier (e.g., IMAD).
+- [Get a single Return](https://developers.newline53.com/reference/get_returns-uid.md): Retrieves details about a specific return transaction, including its status, original transaction reference, and any associated metadata.
+- [Sandbox](https://developers.newline53.com/reference/sandbox.md)
+- [Simulate a Transaction](https://developers.newline53.com/reference/post_sandbox-mock-transactions.md): > **Note** This endpoint is only available in Sandbox.  Create a Transaction by simulating the attributes that would be expected from reading an actual transaction received from a third party system. The simulated Transaction will appear in the respective [Transaction list](https://developers.newline53.com/reference/get_transactions) after it is successfully processed.  Transactions can be simulated against either a Synthetic Account, or a VRN that is created and mapped to a Synthetic Account.
+- [Virtual Reference Numbers](https://developers.newline53.com/reference/virtual-reference-numbers.md)
+- [List Virtual Reference Numbers](https://developers.newline53.com/reference/get_virtual-reference-numbers.md): Retrieves a list of Virtual Reference Numbers (VRNs) associated with the specified Synthetic Account. Supports filtering by status and other attributes.
+- [Create a new Virtual Reference Number](https://developers.newline53.com/reference/post_virtual-reference-numbers.md): Creates a new Virtual Reference Number (VRN) for the specified Synthetic Account.
+- [Get a single Virtual Reference Number](https://developers.newline53.com/reference/get_virtual-reference-numbers-uid.md): Retrieves a single Virtual Reference Number resource along with its details, including status, linked Synthetic Account, and registration metadata.
+- [Edit a Virtual Reference Number](https://developers.newline53.com/reference/put_virtual-reference-numbers-uid.md): Updates the metadata of an existing Virtual Reference Number. This may include changes to labels, descriptions, or Instant Payment registration settings.
+- [Archive a single Virtual Reference Number](https://developers.newline53.com/reference/delete_virtual-reference-numbers-uid.md): Archives a Virtual Reference Number, removing it from active use. Archived VRNs cannot be used for incoming payments or reconciliation.
+- [Lock a single Virtual Reference Number](https://developers.newline53.com/reference/put_virtual-reference-numbers-uid-lock.md): Locks a Virtual Reference Number to prevent new transactions or usage. This is typically used for fraud prevention or temporary deactivation.
+- [Unlock a single Virtual Reference Number](https://developers.newline53.com/reference/put_virtual-reference-numbers-uid-unlock.md): Unlocks a previously locked Virtual Reference Number, restoring its ability to receive payments and participate in reconciliation workflows.
+- [Virtual Reference Number Statuses](https://developers.newline53.com/reference/virtual-reference-number-statuses.md)
+- [Combined Transfers](https://developers.newline53.com/reference/combined-transfers.md)
+- [List Combined Transfers](https://developers.newline53.com/reference/get_combined-transfers.md): Retrieves a list of Combined Transfers. These represent transactions where both a counterparty Synthetic Account and a Transfer were created in a single API call. You can filter results by status and other parameters.
+- [Create a new Combined Transfer](https://developers.newline53.com/reference/post_combined-transfers.md): Creates a Combined Transfer by simultaneously creating a counterparty Synthetic Account and initiating a Transfer. This streamlines asset movement by reducing the number of steps required to set up and execute a transaction.
+- [Get a single Combined Transfer](https://developers.newline53.com/reference/get_combined-transfers-uid.md): Retrieves details about a specific Combined Transfer, including the status, participating accounts, and associated metadata. Statuses include `queued`, `pending`, `failed`, and `completed`.
+
+## Recipes
+- [Create an ACH debit](https://developers.newline53.com/recipes/create-an-ach-debit.md)
+- [Send a wire](https://developers.newline53.com/recipes/send-a-wire.md)
+- [Send an instant payment](https://developers.newline53.com/recipes/send-an-instant-payment.md)
+
+## Changelog
+- [June '26 Updates](https://developers.newline53.com/changelog/june-26-updates.md)
+- [May '26 Updates](https://developers.newline53.com/changelog/may-26-updates.md)
+- [April '26 Updates](https://developers.newline53.com/changelog/april-26.md)
+- [March '26 Updates](https://developers.newline53.com/changelog/march-26-updates.md)
+- [Feb '26 Updates](https://developers.newline53.com/changelog/feb-26-updates.md)

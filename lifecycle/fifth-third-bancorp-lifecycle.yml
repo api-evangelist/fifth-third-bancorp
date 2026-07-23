@@ -1,0 +1,24 @@
+generated: '2026-07-23'
+method: searched
+source: https://developers.newline53.com/
+versioning:
+  scheme: uri-path
+  current: v1
+  base: https://sandbox.newline53.com/api/v1
+  docs: https://developers.newline53.com/docs/openapi-guide
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No formal deprecation/Sunset-header policy published; no operations flagged deprecated in the OpenAPI.
+sla:
+  url: null
+  uptime_target: null
+status_page: https://status.newline53.com
+status_page_docs: https://developers.newline53.com/docs/newline-status-page
+changelog: https://developers.newline53.com/changelog
+environments:
+  - name: sandbox
+    base: https://sandbox.newline53.com/api/v1
+  - name: production
+    note: Program-scoped access provisioned via the Newline Relationship team
+deprecated_operations: []

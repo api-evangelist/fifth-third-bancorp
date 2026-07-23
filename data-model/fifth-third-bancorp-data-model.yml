@@ -1,0 +1,66 @@
+generated: '2026-07-23'
+method: derived
+source: openapi/newline-platform-api.json
+notes: >-
+  Derived from the OpenAPI path structure and id-reference query parameters
+  (the spec declares no component schemas). Relationships are inferred from
+  *_uid reference parameters (customer_uid, pool_uid, source/destination
+  synthetic_account_uid, custodial_account_uid, transfer_uid, transaction_uid,
+  synthetic_account_type_uid, etc.).
+entities:
+  - name: Customer
+    id: uid
+    external_ref: external_uid
+  - name: CustomerProduct
+    id: uid
+  - name: Product
+    id: uid
+  - name: Pool
+    id: uid
+  - name: CustodialAccount
+    id: uid
+  - name: CustodialAccountClosingBalance
+    id: uid
+  - name: SyntheticAccountType
+    id: uid
+  - name: SyntheticAccount
+    id: uid
+    external_ref: external_uid
+  - name: SyntheticAccountClosingBalance
+    id: uid
+  - name: Transfer
+    id: uid
+    external_ref: external_uid
+  - name: CombinedTransfer
+    id: uid
+  - name: Transaction
+    id: uid
+  - name: TransactionEvent
+    id: uid
+  - name: SyntheticLineItem
+    id: uid
+  - name: CustodialLineItem
+    id: uid
+  - name: Return
+    id: uid
+  - name: VirtualReferenceNumber
+    id: uid
+relationships:
+  - {from: CustomerProduct, type: belongs_to, to: Customer, via: customer_uid}
+  - {from: CustomerProduct, type: belongs_to, to: Product, via: product_uid}
+  - {from: SyntheticAccount, type: belongs_to, to: Customer, via: customer_uid}
+  - {from: SyntheticAccount, type: belongs_to, to: SyntheticAccountType, via: synthetic_account_type_uid}
+  - {from: SyntheticAccount, type: belongs_to, to: Pool, via: synthetic_account_pool_uid}
+  - {from: CustodialAccount, type: belongs_to, to: Pool, via: pool_uid}
+  - {from: CustodialAccount, type: has_one, to: SyntheticAccount, via: 1:1 master-account mapping}
+  - {from: Transfer, type: belongs_to, to: SyntheticAccount, via: source_synthetic_account_uid}
+  - {from: Transfer, type: belongs_to, to: SyntheticAccount, via: destination_synthetic_account_uid}
+  - {from: Transfer, type: belongs_to, to: Customer, via: transfer_customer_uid}
+  - {from: CombinedTransfer, type: has_many, to: Transfer, via: combined transfer bundle}
+  - {from: Transaction, type: has_many, to: TransactionEvent, via: transaction_uid}
+  - {from: SyntheticLineItem, type: belongs_to, to: SyntheticAccount, via: synthetic_account_uid}
+  - {from: CustodialLineItem, type: belongs_to, to: CustodialAccount, via: custodial_account_uid}
+  - {from: Return, type: belongs_to, to: Transfer, via: transfer_uid}
+  - {from: VirtualReferenceNumber, type: belongs_to, to: SyntheticAccount, via: synthetic_account_uid}
+  - {from: CustodialAccountClosingBalance, type: belongs_to, to: CustodialAccount, via: custodial_account_uid}
+  - {from: SyntheticAccountClosingBalance, type: belongs_to, to: SyntheticAccount, via: synthetic_account_uid}

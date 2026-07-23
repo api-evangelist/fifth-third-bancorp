@@ -1,0 +1,101 @@
+generated: '2026-07-23'
+method: searched
+status: published
+source: https://github.com/newline53/newline-mcp-server
+docs: https://developers.newline53.com/docs/mcp-guide
+server:
+  name: newline
+  transport: stdio
+  command: npx
+  args:
+    - -y
+    - git+https://github.com/newline53/newline-mcp-server
+  env:
+    - NEWLINE_HMAC_KEY
+    - NEWLINE_PROGRAM_ID
+    - NEWLINE_BASE_URL
+  base_url_default: https://sandbox.newline53.com/api/v1
+  auth: JWS/HMAC (credentials held server-side; agents call permissioned tools)
+  clients:
+    - Claude Desktop
+    - VS Code
+    - Cursor
+    - Windsurf
+notes: >-
+  Official Newline MCP server exposing the Newline Banking API to AI agents.
+  Distributed from the newline53 GitHub org and run locally over stdio via npx.
+  34 tools cover customers, products, pools, synthetic/custodial accounts and
+  line items, transfers, combined transfers, transactions and events, returns,
+  and virtual reference numbers. The surface is read-heavy (list/get) plus three
+  write tools (create-newline-transfer, create-synthetic-account,
+  delete-synthetic-accounts). Live tools/list requires the stdio server with
+  HMAC credentials; tool names below are read verbatim from the server source.
+tools:
+  - name: list-customers
+    source_operation: openapi/newline-platform-api.json#GET /customers
+  - name: get-customer
+    source_operation: openapi/newline-platform-api.json#GET /customers/{uid}
+  - name: list-customer-products
+    source_operation: openapi/newline-platform-api.json#GET /customer_products
+  - name: get-customer-product
+    source_operation: openapi/newline-platform-api.json#GET /customer_products/{uid}
+  - name: list-customer-activities
+    source_operation: null
+  - name: get-customer-activity
+    source_operation: null
+  - name: list-products
+    source_operation: openapi/newline-platform-api.json#GET /products
+  - name: get-product
+    source_operation: openapi/newline-platform-api.json#GET /products/{uid}
+  - name: list-pools
+    source_operation: openapi/newline-platform-api.json#GET /pools
+  - name: get-pool
+    source_operation: openapi/newline-platform-api.json#GET /pools/{uid}
+  - name: get-synthetic-account-types
+    source_operation: openapi/newline-platform-api.json#GET /synthetic_account_types
+  - name: get-synthetic-accounts
+    source_operation: openapi/newline-platform-api.json#GET /synthetic_accounts
+  - name: get-synthetic-account
+    source_operation: openapi/newline-platform-api.json#GET /synthetic_accounts/{uid}
+  - name: create-synthetic-account
+    source_operation: openapi/newline-platform-api.json#POST /synthetic_accounts
+  - name: delete-synthetic-accounts
+    source_operation: openapi/newline-platform-api.json#DELETE /synthetic_accounts/{uid}
+  - name: list-synthetic-line-items
+    source_operation: openapi/newline-platform-api.json#GET /synthetic_line_items
+  - name: get-synthetic-line-item
+    source_operation: openapi/newline-platform-api.json#GET /synthetic_line_items/{uid}
+  - name: list-custodial-accounts
+    source_operation: openapi/newline-platform-api.json#GET /custodial_accounts
+  - name: get-custodial-account
+    source_operation: openapi/newline-platform-api.json#GET /custodial_accounts/{uid}
+  - name: list-custodial-line-items
+    source_operation: openapi/newline-platform-api.json#GET /custodial_line_items
+  - name: get-custodial-line-item
+    source_operation: openapi/newline-platform-api.json#GET /custodial_line_items/{uid}
+  - name: list-newline-transfers
+    source_operation: openapi/newline-platform-api.json#GET /transfers
+  - name: get-newline-transfer
+    source_operation: openapi/newline-platform-api.json#GET /transfers/{uid}
+  - name: create-newline-transfer
+    source_operation: openapi/newline-platform-api.json#POST /transfers
+  - name: list-combined-transfers
+    source_operation: openapi/newline-platform-api.json#GET /combined_transfers
+  - name: get-combined-transfer
+    source_operation: openapi/newline-platform-api.json#GET /combined_transfers/{uid}
+  - name: list-transactions
+    source_operation: openapi/newline-platform-api.json#GET /transactions
+  - name: get-transaction
+    source_operation: openapi/newline-platform-api.json#GET /transactions/{uid}
+  - name: list-transaction-events
+    source_operation: openapi/newline-platform-api.json#GET /transaction_events
+  - name: get-transaction-event
+    source_operation: openapi/newline-platform-api.json#GET /transaction_events/{uid}
+  - name: list-returns
+    source_operation: openapi/newline-platform-api.json#GET /returns
+  - name: get-return
+    source_operation: openapi/newline-platform-api.json#GET /returns/{uid}
+  - name: list-virtual-reference-numbers
+    source_operation: openapi/newline-platform-api.json#GET /virtual_reference_numbers
+  - name: get-virtual-reference-number
+    source_operation: openapi/newline-platform-api.json#GET /virtual_reference_numbers/{uid}

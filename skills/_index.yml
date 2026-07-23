@@ -1,0 +1,48 @@
+generated: '2026-07-23'
+method: searched
+source: https://github.com/newline53/newline-mcp-server/tree/main/skills
+notes: >-
+  Agent Skills published verbatim by Newline in the official newline-mcp-server
+  repository (skills/*/SKILL.md). Each is a packaged operating procedure grounded
+  in the real Newline MCP tool names (list-customers, create-newline-transfer,
+  get-synthetic-accounts, ...). Saved unmodified under skills/newline-published/.
+api: openapi/newline-platform-api.json
+mcp: mcp/fifth-third-bancorp-mcp.yml
+skills:
+  - file: newline-published/create-transfer.md
+    name: create-transfer
+    description: Create a Wire, ACH, or Instant Payment transfer between two synthetic accounts.
+    operations: [list-customers, get-synthetic-accounts, create-newline-transfer]
+  - file: newline-published/making-payments.md
+    name: making-payments
+    description: Guide for making payments across Newline payment rails.
+  - file: newline-published/payment-operations.md
+    name: payment-operations
+    description: Operate and monitor payment flows on the Newline platform.
+  - file: newline-published/new-account-setup.md
+    name: new-account-setup
+    description: Set up new customers and synthetic/custodial accounts.
+    operations: [list-customers, create-synthetic-account, get-synthetic-account-types]
+  - file: newline-published/managing-users-and-accounts.md
+    name: managing-users-and-accounts
+    description: Manage users and account records.
+  - file: newline-published/customer-overview.md
+    name: customer-overview
+    description: Assemble a full overview of a customer and their accounts.
+    operations: [list-customers, get-customer, list-customer-products]
+  - file: newline-published/account-reconciliation.md
+    name: account-reconciliation
+    description: Reconcile Newline transactions against Fifth Third bank statements.
+    operations: [list-custodial-line-items, list-synthetic-line-items, list-transactions]
+  - file: newline-published/transaction-reporting.md
+    name: transaction-reporting
+    description: Report on transactions and transaction events.
+    operations: [list-transactions, get-transaction, list-transaction-events]
+  - file: newline-published/investigate-transfer.md
+    name: investigate-transfer
+    description: Investigate the status and history of a transfer.
+    operations: [get-newline-transfer, list-transaction-events]
+  - file: newline-published/return-resolution.md
+    name: return-resolution
+    description: Resolve returns (e.g. ACH returns) on the Newline platform.
+    operations: [list-returns, get-return]

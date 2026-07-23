@@ -1,0 +1,50 @@
+generated: '2026-07-23'
+method: derived
+source: openapi/newline-platform-api.json
+format: json
+docs: https://developers.newline53.com/docs/api-errors
+docs_pages:
+  - https://developers.newline53.com/docs/errors-and-support
+  - https://developers.newline53.com/docs/api-errors
+  - https://developers.newline53.com/docs/general-errors
+  - https://developers.newline53.com/docs/customer-related-errors
+  - https://developers.newline53.com/docs/synthetic-account-errors
+  - https://developers.newline53.com/docs/custodial-account-errors
+  - https://developers.newline53.com/docs/transfer-related-errors
+  - https://developers.newline53.com/docs/transaction-specific-errors
+  - https://developers.newline53.com/docs/return-errors
+  - https://developers.newline53.com/docs/virtual-reference-number-vrn-errors
+  - https://developers.newline53.com/docs/compliance-and-security-errors
+notes: >-
+  Status codes and counts are derived from the OpenAPI 4xx/5xx responses across
+  53 operations; error responses are plain JSON (not RFC 9457 problem+json).
+  Newline additionally publishes a large product-scoped error registry in the
+  docs (general, customer, synthetic/custodial account, pool, transfer,
+  transaction, return, VRN, compliance/security, program, product, client, and
+  sandbox error catalogs) plus ACH Return Reason Codes and Instant Payment
+  reject codes (see errors/fifth-third-bancorp-decline-codes.yml).
+problems:
+  - status: 400
+    title: Bad Request
+    occurrences: 6
+    meaning: Malformed request or invalid parameters
+  - status: 403
+    title: Forbidden
+    occurrences: 7
+    meaning: Authentication token missing/invalid or access not permitted for the program
+  - status: 404
+    title: Not Found
+    occurrences: 7
+    meaning: Referenced resource (customer, account, transfer, VRN, ...) does not exist
+  - status: 409
+    title: Conflict
+    occurrences: 1
+    meaning: Request conflicts with current resource state (e.g. duplicate/locked)
+  - status: 422
+    title: Unprocessable Entity
+    occurrences: 13
+    meaning: Validation failed (KYC, balance/access checks, business rules)
+  - status: 500
+    title: Internal Server Error
+    occurrences: 2
+    meaning: Unexpected server-side error

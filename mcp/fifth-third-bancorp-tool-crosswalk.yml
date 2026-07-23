@@ -1,0 +1,93 @@
+generated: '2026-07-23'
+method: derived
+source: mcp/fifth-third-bancorp-mcp.yml + openapi/newline-platform-api.json
+notes: >-
+  Binds each Newline MCP tool to its backing Newline Platform API operation. The
+  OpenAPI declares no operationIds, so REST operations are referenced by method +
+  path (verified verbatim in the spec). The MCP surface is read-heavy: it exposes
+  list/get across every resource plus three write tools, and omits most REST
+  writes (customer create/update/archive, transfer cancel, transaction authorize,
+  VRN lifecycle, returns create, mock transactions). Two MCP tools
+  (customer-activities) have no public REST operation in the OpenAPI.
+surfaces:
+  openapi: openapi/newline-platform-api.json
+  graphql: null
+  mcp:
+    url: git+https://github.com/newline53/newline-mcp-server
+    transport: stdio
+    gated: true
+    note: live tools/list requires the stdio server with HMAC credentials; mapped by source + name
+crosswalk:
+  - {tool: list-customers, category: customers, rest: ["GET /customers"], binding: rest, confidence: high}
+  - {tool: get-customer, category: customers, rest: ["GET /customers/{uid}"], binding: rest, confidence: high}
+  - {tool: list-customer-products, category: customer-products, rest: ["GET /customer_products"], binding: rest, confidence: high}
+  - {tool: get-customer-product, category: customer-products, rest: ["GET /customer_products/{uid}"], binding: rest, confidence: high}
+  - {tool: list-products, category: products, rest: ["GET /products"], binding: rest, confidence: high}
+  - {tool: get-product, category: products, rest: ["GET /products/{uid}"], binding: rest, confidence: high}
+  - {tool: list-pools, category: pools, rest: ["GET /pools"], binding: rest, confidence: high}
+  - {tool: get-pool, category: pools, rest: ["GET /pools/{uid}"], binding: rest, confidence: high}
+  - {tool: get-synthetic-account-types, category: synthetic-accounts, rest: ["GET /synthetic_account_types"], binding: rest, confidence: high}
+  - {tool: get-synthetic-accounts, category: synthetic-accounts, rest: ["GET /synthetic_accounts"], binding: rest, confidence: high}
+  - {tool: get-synthetic-account, category: synthetic-accounts, rest: ["GET /synthetic_accounts/{uid}"], binding: rest, confidence: high}
+  - {tool: create-synthetic-account, category: synthetic-accounts, rest: ["POST /synthetic_accounts"], binding: rest, confidence: high}
+  - {tool: delete-synthetic-accounts, category: synthetic-accounts, rest: ["DELETE /synthetic_accounts/{uid}"], binding: rest, confidence: high}
+  - {tool: list-synthetic-line-items, category: transactions, rest: ["GET /synthetic_line_items"], binding: rest, confidence: high}
+  - {tool: get-synthetic-line-item, category: transactions, rest: ["GET /synthetic_line_items/{uid}"], binding: rest, confidence: high}
+  - {tool: list-custodial-accounts, category: custodial-accounts, rest: ["GET /custodial_accounts"], binding: rest, confidence: high}
+  - {tool: get-custodial-account, category: custodial-accounts, rest: ["GET /custodial_accounts/{uid}"], binding: rest, confidence: high}
+  - {tool: list-custodial-line-items, category: transactions, rest: ["GET /custodial_line_items"], binding: rest, confidence: high}
+  - {tool: get-custodial-line-item, category: transactions, rest: ["GET /custodial_line_items/{uid}"], binding: rest, confidence: high}
+  - {tool: list-newline-transfers, category: transfers, rest: ["GET /transfers"], binding: rest, confidence: high}
+  - {tool: get-newline-transfer, category: transfers, rest: ["GET /transfers/{uid}"], binding: rest, confidence: high}
+  - {tool: create-newline-transfer, category: transfers, rest: ["POST /transfers"], binding: rest, confidence: high, note: write tool; supports wire/ACH/instant-payment}
+  - {tool: list-combined-transfers, category: transfers, rest: ["GET /combined_transfers"], binding: rest, confidence: high}
+  - {tool: get-combined-transfer, category: transfers, rest: ["GET /combined_transfers/{uid}"], binding: rest, confidence: high}
+  - {tool: list-transactions, category: transactions, rest: ["GET /transactions"], binding: rest, confidence: high}
+  - {tool: get-transaction, category: transactions, rest: ["GET /transactions/{uid}"], binding: rest, confidence: high}
+  - {tool: list-transaction-events, category: transactions, rest: ["GET /transaction_events"], binding: rest, confidence: high}
+  - {tool: get-transaction-event, category: transactions, rest: ["GET /transaction_events/{uid}"], binding: rest, confidence: high}
+  - {tool: list-returns, category: returns, rest: ["GET /returns"], binding: rest, confidence: high}
+  - {tool: get-return, category: returns, rest: ["GET /returns/{uid}"], binding: rest, confidence: high}
+  - {tool: list-virtual-reference-numbers, category: vrn, rest: ["GET /virtual_reference_numbers"], binding: rest, confidence: high}
+  - {tool: get-virtual-reference-number, category: vrn, rest: ["GET /virtual_reference_numbers/{uid}"], binding: rest, confidence: high}
+mcp_only:
+  - {tool: list-customer-activities, reason: no /customer_activities path in the published OpenAPI}
+  - {tool: get-customer-activity, reason: no /customer_activities path in the published OpenAPI}
+rest_only:
+  auth:
+    - POST /auth
+  customers (write):
+    - POST /customers
+    - PUT /customers/{uid}
+    - DELETE /customers/{uid}
+  customer-products (write):
+    - POST /customer_products
+  synthetic-accounts (write/detail):
+    - PUT /synthetic_accounts/{uid}
+    - GET /synthetic_account_types/{uid}
+  closing-balances:
+    - GET /custodial_account_closing_balances
+    - GET /custodial_account_closing_balances/{uid}
+    - GET /synthetic_account_closing_balances
+    - GET /synthetic_account_closing_balances/{uid}
+  transfers (write):
+    - PUT /transfers/{uid}/cancel
+    - POST /combined_transfers
+  transactions (write):
+    - PUT /transactions/{uid}/authorize
+  vrn (write):
+    - POST /virtual_reference_numbers
+    - PUT /virtual_reference_numbers/{uid}
+    - DELETE /virtual_reference_numbers/{uid}
+    - PUT /virtual_reference_numbers/{uid}/lock
+    - PUT /virtual_reference_numbers/{uid}/unlock
+  returns (write):
+    - POST /returns
+  sandbox:
+    - POST /sandbox/mock_transactions
+coverage:
+  tools_named: 34
+  tools_bound_to_rest: 32
+  mcp_only: 2
+  rest_ops_total: 53
+  rest_ops_with_tool: 32

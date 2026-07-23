@@ -338,6 +338,10 @@ apis:
       - type: Documentation
         url: https://developers.newline53.com/docs/sandbox-walkthrough
 common:
+  - type: AgenticAccess
+    url: agentic-access/fifth-third-bancorp-agentic-access.yml
+  - type: Authentication
+    url: authentication/fifth-third-bancorp-authentication.yml
   - type: Website
     url: https://www.53.com/
   - type: DeveloperPortal
@@ -366,6 +370,42 @@ common:
     url: https://newline53.com/
   - type: DomainSecurity
     url: security/fifth-third-bancorp-domain-security.yml
+  - type: MCPServer
+    url: mcp/fifth-third-bancorp-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/fifth-third-bancorp-tool-crosswalk.yml
+  - type: Packages
+    url: packages/fifth-third-bancorp-packages.yml
+  - type: SDKs
+    url: packages/fifth-third-bancorp-packages.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Webhooks
+    url: asyncapi/fifth-third-bancorp-newline-webhooks.yml
+  - type: LLMsTxt
+    url: llms/fifth-third-bancorp-llms.txt
+  - type: Overlay
+    url: overlays/fifth-third-bancorp-newline-platform-overlay.yaml
+  - type: Conformance
+    url: conformance/fifth-third-bancorp-conformance.yml
+  - type: ErrorCatalog
+    url: errors/fifth-third-bancorp-problem-types.yml
+  - type: DeclineCodes
+    url: errors/fifth-third-bancorp-decline-codes.yml
+  - type: Lifecycle
+    url: lifecycle/fifth-third-bancorp-lifecycle.yml
+  - type: Conventions
+    url: conventions/fifth-third-bancorp-conventions.yml
+  - type: ChangeLog
+    url: changelog/fifth-third-bancorp-changelog.yml
+  - type: Sandbox
+    url: sandbox/fifth-third-bancorp-sandbox.yml
+  - type: DataModel
+    url: data-model/fifth-third-bancorp-data-model.yml
+  - type: GettingStarted
+    url: https://developers.newline53.com/docs/quickstart-guide-completing-a-transfer
+  - type: TermsOfService
+    url: https://developers.newline53.com/docs/terms-conditions
 integrations:
   - name: Fifth Third Bank
   - name: Newline by Fifth Third

@@ -1,0 +1,35 @@
+generated: '2026-07-23'
+method: derived
+source: openapi/newline-platform-api.json + Newline developer docs
+standards:
+  - id: oauth2
+    conforms: false
+    evidence: securityScheme is apiKey (JWS/HMAC bearer), no oauth2 flows declared
+  - id: oidc
+    conforms: false
+  - id: jws-hs512
+    conforms: true
+    evidence: access tokens are JWS payloads signed with a shared HMAC using HS512 (POST /auth)
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: 4xx/5xx responses are plain JSON, not application/problem+json
+  - id: pagination-offset-limit
+    conforms: true
+    evidence: list operations expose limit + offset query parameters
+  - id: nacha-ach
+    conforms: true
+    evidence: ACH rails plus published ACH Return Reason Codes (R01-R70) and NOC codes
+  - id: rtp-instant-payments
+    conforms: true
+    evidence: Real-Time Payments/RTP rail with instant-payment reject codes and RTP settlement events
+  - id: fedwire
+    conforms: true
+    evidence: wire transfer rail documented in Payment Rails
+  - id: fdic-insured-deposits
+    conforms: true
+    evidence: FDIC-insured custodial deposit accounts held at Fifth Third Bank
+  - id: psd2
+    conforms: false
+    evidence: US embedded-finance program, not an EU PSD2 open-banking API
+  - id: fapi
+    conforms: false

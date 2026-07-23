@@ -1,0 +1,45 @@
+generated: '2026-07-23'
+method: searched
+source: https://developers.newline53.com/docs/webhooks
+spec_type: Webhooks
+docs_pages:
+  - https://developers.newline53.com/docs/webhooks
+  - https://developers.newline53.com/docs/webhooks-authentication
+  - https://developers.newline53.com/docs/webhooks-topics
+  - https://developers.newline53.com/docs/webhooks-topic-definitions
+  - https://developers.newline53.com/docs/webhooks-subscriptions
+  - https://developers.newline53.com/docs/message-queue
+  - https://developers.newline53.com/docs/messagequeue-topics
+notes: >-
+  Newline delivers real-time event notifications via two surfaces: Webhooks
+  (topic-subscribed HTTP callbacks) and a Message Queue. No published AsyncAPI
+  document exists, so this captures the webhook topic catalog. All webhook
+  payloads are PGP-encrypted in transit in both sandbox and production; clients
+  decrypt to read the event. There is no AsyncAPI spec to save verbatim.
+delivery:
+  transport: [webhooks, message-queue]
+  encryption: PGP (payloads encrypted in transit; sandbox and production)
+  subscription: topic-based
+topics:
+  - topic: Transfers
+    reference: https://developers.newline53.com/reference/transfers
+    events:
+      - Transfer Initiated — a transfer has been created
+      - Transfer Status Changed — the status of a transfer has been updated
+      - RTP Settlement — an instant payment transfer has settled
+  - topic: Transactions
+    reference: https://developers.newline53.com/reference/transactions
+    events:
+      - Transaction Created — a transaction record has been generated
+      - Transaction Status Updated — the transaction status has changed
+  - topic: Synthetic Accounts
+    reference: https://developers.newline53.com/reference/synthetic-accounts
+    events:
+      - Account Created — a synthetic account has been created
+      - Status Changed — the account status has changed
+      - Name Updated — the account name has been updated
+  - topic: Virtual Reference Numbers
+    reference: https://developers.newline53.com/reference/virtual-reference-numbers
+    events:
+      - VRN Created — a new VRN has been issued
+      - Instant Payment Rail Registration Status Changed — the registration status has changed
