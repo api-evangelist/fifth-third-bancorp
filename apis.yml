@@ -1,43 +1,374 @@
 aid: fifth-third-bancorp
 name: Fifth Third Bancorp
+kind: company
 description: >-
-  Fifth Third Bancorp is a diversified financial services company providing
-  commercial banking, branch banking, consumer lending, and wealth and asset
-  management services across multiple U.S. states. Fifth Third operates
-  treasury management and digital payment platforms used by corporate clients,
-  but does not currently publish a public developer API portal.
+  Fifth Third Bancorp is a diversified super-regional financial services company
+  providing commercial banking, branch banking, consumer lending, and wealth and
+  asset management services across multiple U.S. states. Its embedded-finance
+  arm, Newline by Fifth Third (built on the 2023 Rize Money acquisition),
+  operates a documented, API-first Banking-as-a-Service platform: the Newline
+  Platform API exposes payments (ACH, wire, Real-Time Payments/RTP, book
+  transfers), FDIC-insured deposit and custodial accounts, synthetic accounts,
+  virtual reference numbers, card issuing, customer/KYC onboarding, transactions,
+  returns, and webhook/message-queue notifications so fintechs and enterprises
+  can embed financial products directly with Fifth Third Bank.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: partner
+  onboarding: contact-sales
+  trial: true
+  try_now: false
+  public: true
+  label: Sandbox available · Partner onboarding
+  confidence: high
+  source:
+    - developer-portal
+    - openapi
+    - authentication
+  generated: '2026-07-23'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/fifth-third-bancorp.png
 tags:
   - Banking
+  - United States
+  - Embedded Finance
+  - Banking as a Service
+  - Payments
+  - ACH
+  - Real-Time Payments
+  - Deposits
+  - Card Issuing
   - Commercial Banking
   - Consumer Lending
   - Wealth Management
   - Treasury Management
+  - Super-Regional Bank
   - Fortune 500
 url: >-
   https://raw.githubusercontent.com/api-evangelist/fifth-third-bancorp/refs/heads/main/apis.yml
 created: '2026-03-21'
-modified: '2026-04-28'
+modified: '2026-07-23'
 specificationVersion: '0.19'
-apis: []
+apis:
+  - aid: fifth-third-bancorp:newline-auth-api
+    name: Newline Auth API
+    description: >-
+      Authentication for the Newline by Fifth Third platform. A client exchanges
+      a refresh token for an access token by POSTing a JWS whose payload carries
+      the Program UID (sub) and current epoch time (iat), signed with a
+      previously shared HMAC using HS512. The returned access token (prefixed
+      auth-) is valid for up to 8 hours and is supplied in the Authorization
+      header of every subsequent request.
+    humanURL: https://developers.newline53.com/reference/auth
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Authentication
+      - JWT
+      - HMAC
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: Documentation
+        url: https://developers.newline53.com/docs/api-authentication
+      - type: APIReference
+        url: https://developers.newline53.com/reference/post_auth
+  - aid: fifth-third-bancorp:newline-customers-api
+    name: Newline Customers API
+    description: >-
+      Create, list, retrieve, update, and archive the Customers who hold accounts
+      on a Newline program. Handles personally identifiable information (PII),
+      Tax Identifier/SSN capture and validation, customer types (primary and
+      others), customer statuses, and triggers the KYC/AML evaluation lifecycle
+      that Fifth Third runs when a Customer is onboarded to a product.
+    humanURL: https://developers.newline53.com/reference/customers
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Customers
+      - KYC
+      - Onboarding
+      - Compliance
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/customers
+      - type: Documentation
+        url: https://developers.newline53.com/reference/overview-of-customer-types
+  - aid: fifth-third-bancorp:newline-customer-products-api
+    name: Newline Customer Products API
+    description: >-
+      Onboard Customers onto Newline banking Products and manage the resulting
+      Customer Product records. Submitting a Customer Product confirms the
+      Customer is ready for account opening, locks their PII, and initiates the
+      billable KYC/AML verification and account-opening workflow with Fifth
+      Third Bank. Includes listing, retrieval, and customer-product status
+      tracking.
+    humanURL: https://developers.newline53.com/reference/customer-products
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Customer Products
+      - Onboarding
+      - Account Opening
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/customer-products
+      - type: Documentation
+        url: https://developers.newline53.com/reference/customer-product-statuses
+  - aid: fifth-third-bancorp:newline-products-api
+    name: Newline Products API
+    description: >-
+      List and retrieve the banking Products configured for a Newline program,
+      including each Product's configuration, availability, required Customer
+      Profile fields, and associated metadata. Products define the deposit,
+      payment, and card offerings a Customer can be onboarded onto within the
+      Fifth Third embedded-finance network.
+    humanURL: https://developers.newline53.com/reference/products
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Products
+      - Deposits
+      - Configuration
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/products
+  - aid: fifth-third-bancorp:newline-pools-api
+    name: Newline Pools API
+    description: >-
+      List and retrieve Pools, the constructs that group Synthetic and Custodial
+      Accounts and report aggregate asset balances across the accounts
+      associated with them. Pools give program operators a roll-up view of funds
+      held at Fifth Third Bank across a set of end-customer accounts.
+    humanURL: https://developers.newline53.com/reference/pools
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Pools
+      - Balances
+      - Deposits
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/pools
+  - aid: fifth-third-bancorp:newline-custodial-accounts-api
+    name: Newline Custodial Accounts API
+    description: >-
+      Retrieve the FDIC-insured Custodial Accounts held by Fifth Third Bank on
+      behalf of onboarded Customers, including active and archived accounts,
+      their balances, and daily closing balances. Provides list and single-record
+      endpoints for both accounts and their closing-balance history to support
+      reconciliation and reporting.
+    humanURL: https://developers.newline53.com/reference/custodial-accounts
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Custodial Accounts
+      - Deposits
+      - FDIC
+      - Reconciliation
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/custodial-accounts
+      - type: Documentation
+        url: https://developers.newline53.com/reference/custodial-account-statuses
+  - aid: fifth-third-bancorp:newline-synthetic-accounts-api
+    name: Newline Synthetic Accounts API
+    description: >-
+      Create and manage Synthetic Accounts, the ledger accounts that route money
+      through Newline. Includes liability accounts in the general category and
+      external accounts in the ach_external, wire_external, and
+      instant_payment_external categories that represent the counterparties for
+      ACH, wire, and Real-Time Payments transfers. Nine operations cover
+      creation, listing, retrieval, updates, and account-category and status
+      handling.
+    humanURL: https://developers.newline53.com/reference/synthetic-accounts
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Synthetic Accounts
+      - Ledger
+      - Payments
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/synthetic-accounts
+      - type: Documentation
+        url: https://developers.newline53.com/reference/synthetic-account-categories
+  - aid: fifth-third-bancorp:newline-transfers-api
+    name: Newline Transfers API
+    description: >-
+      Initiate, list, retrieve, and cancel Transfers that move assets between
+      Synthetic Accounts across payment rails — ACH, wire, Real-Time Payments
+      (RTP), and internal book transfers. Balance and access checks run before a
+      Transfer is initiated, and Transfers can be canceled only while queued or
+      pending. This is the core money-movement endpoint of the Newline platform.
+    humanURL: https://developers.newline53.com/reference/transfers
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Transfers
+      - Payments
+      - ACH
+      - Wire
+      - Real-Time Payments
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/transfers
+      - type: Documentation
+        url: https://developers.newline53.com/reference/transfer-statuses
+  - aid: fifth-third-bancorp:newline-combined-transfers-api
+    name: Newline Combined Transfers API
+    description: >-
+      Orchestrate Combined Transfers, which bundle multiple related money
+      movements into a single coordinated operation across a program's Synthetic
+      Accounts. Provides endpoints to create, list, and retrieve combined
+      transfer requests for multi-leg payment flows on the Fifth Third
+      embedded-finance rails.
+    humanURL: https://developers.newline53.com/reference/combined-transfers
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Combined Transfers
+      - Payments
+      - Orchestration
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/combined-transfers
+  - aid: fifth-third-bancorp:newline-transactions-api
+    name: Newline Transactions API
+    description: >-
+      List and retrieve Transactions and their Transaction Events, and approve or
+      deny pending Transactions before execution. Transaction Events expose the
+      individual steps required to complete a Transaction so operators can track
+      progress and review history. Nine operations cover transaction listing,
+      detail, authorization, and event tracking for reconciliation and monitoring.
+    humanURL: https://developers.newline53.com/reference/transactions
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Transactions
+      - Reconciliation
+      - Monitoring
+      - Authorization
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/transactions
+      - type: Documentation
+        url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - aid: fifth-third-bancorp:newline-returns-api
+    name: Newline Returns API
+    description: >-
+      Create, list, and retrieve Returns — the reversal of settled payments such
+      as ACH returns — on the Newline platform. Returns move funds back across
+      the originating rail and update the associated Transfer and Transaction
+      records, supporting exception handling in embedded payment programs at
+      Fifth Third Bank.
+    humanURL: https://developers.newline53.com/reference/returns
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Returns
+      - ACH
+      - Payments
+      - Exceptions
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/returns
+  - aid: fifth-third-bancorp:newline-virtual-reference-numbers-api
+    name: Newline Virtual Reference Numbers API
+    description: >-
+      Create and manage Virtual Reference Numbers (VRNs), the unique account and
+      routing number pairs that let a program receive inbound ACH, wire, and
+      Real-Time Payments and attribute them to a specific Synthetic Account or
+      Customer. Seven operations cover VRN creation, listing, retrieval, updates,
+      and status management for inbound money attribution.
+    humanURL: https://developers.newline53.com/reference/virtual-reference-numbers
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Virtual Reference Numbers
+      - Inbound Payments
+      - Payments
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/virtual-reference-numbers
+      - type: Documentation
+        url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - aid: fifth-third-bancorp:newline-sandbox-api
+    name: Newline Sandbox API
+    description: >-
+      Simulation endpoints for the Newline sandbox environment that let
+      developers mock transactions and transfers, exercise error scenarios, and
+      clear sandbox state while building against the platform. The sandbox uses
+      the same JWT authentication strategy as production so integrations can be
+      validated end to end before go-live with Fifth Third Bank.
+    humanURL: https://developers.newline53.com/reference/sandbox
+    baseURL: https://sandbox.newline53.com/api/v1
+    tags:
+      - Sandbox
+      - Testing
+      - Simulation
+      - United States
+    properties:
+      - type: OpenAPI
+        url: openapi/newline-platform-api.json
+      - type: APIReference
+        url: https://developers.newline53.com/reference/sandbox
+      - type: Documentation
+        url: https://developers.newline53.com/docs/sandbox-walkthrough
 common:
-  - type: DomainSecurity
-    url: security/fifth-third-bancorp-domain-security.yml
-  - type: GitHubOrganization
-    url: https://github.com/newline53
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/fifth-third-bank
   - type: Website
     url: https://www.53.com/
+  - type: DeveloperPortal
+    url: https://developers.newline53.com/
+  - type: Documentation
+    url: https://developers.newline53.com/docs/welcome
+  - type: OpenAPI
+    url: https://developers.newline53.com/openapi/newline-platform-api.json
+  - type: PostmanCollection
+    url: https://www.postman.com/newline53
+  - type: GitHubOrganization
+    url: https://github.com/newline53
+  - type: StatusPage
+    url: https://status.newline53.com
+  - type: Changelog
+    url: https://developers.newline53.com/changelog
+  - type: PrivacyPolicy
+    url: https://www.53.com/content/fifth-third/en/privacy-security.html
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/fifth-third-bank
   - type: InvestorRelations
     url: https://ir.53.com/
   - type: TreasuryManagement
     url: https://www.53.com/content/fifth-third/en/commercial-banking/payments-and-treasury-management.html
-  - type: Integrations
-    url: https://www.53.com/integrations
+  - type: EmbeddedFinance
+    url: https://newline53.com/
+  - type: DomainSecurity
+    url: security/fifth-third-bancorp-domain-security.yml
 integrations:
   - name: Fifth Third Bank
+  - name: Newline by Fifth Third
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

@@ -1,0 +1,105 @@
+reviewer: API Evangelist
+date: '2026-07-23'
+provider: fifth-third-bancorp
+name: Fifth Third Bancorp
+summary: >-
+  Fifth Third Bancorp is a super-regional U.S. bank whose public, documented API
+  surface is delivered through its embedded-finance brand, Newline by Fifth Third
+  (developers.newline53.com), built on the 2023 Rize Money acquisition. Unlike
+  many U.S. banks that expose only aggregator-mediated data access, Newline
+  publishes a genuine first-party Banking-as-a-Service developer platform with a
+  full API reference, a downloadable OpenAPI 3.0.2 specification, official SDKs,
+  a Postman collection, and an MCP server.
+
+developer_portal: https://developers.newline53.com/
+documentation: https://developers.newline53.com/docs/welcome
+status_page: https://status.newline53.com
+
+api_surface:
+  platform: Newline Platform API (Newline by Fifth Third)
+  base_url_sandbox: https://sandbox.newline53.com/api/v1
+  base_url_production: by contact / partner provisioning
+  openapi_version: 3.0.2
+  operations: 53
+  resource_tags:
+    - Auth
+    - Customers
+    - Customer Products
+    - Products
+    - Pools
+    - Custodial Accounts
+    - Synthetic Accounts
+    - Transfers
+    - Combined Transfers
+    - Transactions
+    - Returns
+    - Virtual Reference Numbers
+    - Sandbox
+  capabilities:
+    - ACH, wire, Real-Time Payments (RTP), and book transfers
+    - FDIC-insured deposit and custodial accounts
+    - Synthetic (ledger) accounts and virtual reference numbers (inbound attribution)
+    - Card issuing sponsorship (virtual/physical, commercial credit and prepaid debit)
+    - Customer onboarding with KYC/AML lifecycle
+    - Transactions, returns, reconciliation, and reporting (CSV + intraday/prior-day)
+    - Webhooks and message-queue notifications
+
+authentication:
+  model: JWT / JWS bearer token
+  mechanism: >-
+    Client signs a JWS (payload contains Program UID as `sub` and current epoch
+    as `iat`) with a pre-shared HMAC using HS512, POSTs it to /auth to exchange a
+    refresh token for an access token. The returned access token is prefixed
+    `auth-` and passed in the Authorization header; tokens are valid up to 8
+    hours. OpenAPI declares an ApiKeyAuth (apiKey) security scheme. API
+    credentials are provisioned by Newline via secure delivery after onboarding.
+  sandbox_parity: Sandbox uses an authentication strategy identical to production.
+
+spec_provenance:
+  harvested: true
+  file: openapi/newline-platform-api.json
+  source_url: https://developers.newline53.com/openapi/newline-platform-api.json
+  http_status: 200
+  format: OpenAPI 3.0.2 (JSON, harvested verbatim)
+  note: >-
+    Single canonical platform spec, 40 paths / 53 operations across 13 tags.
+    Not split per-tag on ingest because the spec uses internal path-to-path
+    ($ref to #/paths/...) deduplication rather than reusable component schemas,
+    so naive per-tag splitting would break references; refine-openapis can split
+    it safely downstream.
+
+sdks_and_tooling:
+  github_org: https://github.com/newline53
+  sdks:
+    - newline-ts-sdk (TypeScript, Apache-2.0)
+    - newline-java-sdk (Java, Apache-2.0)
+    - newline-dotnet-sdk (.NET/C#, Apache-2.0)
+  mcp_server: https://github.com/newline53/newline-mcp-server
+  mcp_notes: >-
+    Official MCP server exposes 35+ tools plus ~10 bundled agent Skills over the
+    Newline API (accounts, transfers, customers, transactions); auth via
+    NEWLINE_HMAC_KEY + NEWLINE_PROGRAM_ID against NEWLINE_BASE_URL.
+  postman: https://www.postman.com/newline53
+  llms_txt: https://developers.newline53.com/llms.txt
+
+open_finance_posture:
+  aggregator_access:
+    - Plaid (consumer-permissioned data access to Fifth Third accounts)
+    - Documented Stripe Treasury partnership (Fifth Third as sponsor bank)
+  fdx_1033: >-
+    No first-party FDX or CFPB 1033 consumer data-access API is published at the
+    53.com retail brand; consumer account data access is aggregator-mediated
+    (Plaid). The published first-party developer surface is the Newline BaaS
+    platform aimed at fintech/enterprise partners, not a retail 1033 endpoint.
+
+findings:
+  - Genuine first-party developer platform exists (Newline), a step above the
+    aggregator-only posture common to U.S. super-regionals.
+  - Downloadable OpenAPI 3.0.2 spec (53 operations) harvested verbatim; strong
+    machine-readability including an llms.txt index and an official MCP server.
+  - Official multi-language SDKs (TS/Java/.NET) and a public Postman workspace.
+  - Auth is JWS/HMAC-HS512 token exchange (8h access tokens), production-grade.
+  - Access is partner-gated (contact/onboarding) with a self-serve sandbox; not
+    fully open self-service signup.
+  - Retail-brand (53.com) consumer data sharing remains aggregator-mediated;
+    no published FDX/1033 first-party endpoint.
