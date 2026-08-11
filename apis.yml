@@ -378,7 +378,7 @@ common:
     url: packages/fifth-third-bancorp-packages.yml
   - type: SDKs
     url: packages/fifth-third-bancorp-packages.yml
-  - type: AgentSkill
+  - type: AgentSkills
     url: skills/_index.yml
   - type: Webhooks
     url: asyncapi/fifth-third-bancorp-newline-webhooks.yml
