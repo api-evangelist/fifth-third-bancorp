@@ -13,6 +13,17 @@ description: >-
   returns, and webhook/message-queue notifications so fintechs and enterprises
   can embed financial products directly with Fifth Third Bank.
 type: Index
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-11'
+  method: derived
 accessModel:
   pricing: partner
   onboarding: contact-sales
