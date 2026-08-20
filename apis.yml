@@ -119,6 +119,11 @@ apis:
     humanURL: https://developers.newline53.com/reference/customer-products
     baseURL: https://sandbox.newline53.com/api/v1
     tags:
+      - Customer > Products
+      - Onboarding
+      - Account Opening
+      - United States
+    tags_raw:
       - Customer Products
       - Onboarding
       - Account Opening
@@ -141,6 +146,11 @@ apis:
     humanURL: https://developers.newline53.com/reference/products
     baseURL: https://sandbox.newline53.com/api/v1
     tags:
+      - Product
+      - Deposits
+      - Configuration
+      - United States
+    tags_raw:
       - Products
       - Deposits
       - Configuration
@@ -271,6 +281,12 @@ apis:
     humanURL: https://developers.newline53.com/reference/transactions
     baseURL: https://sandbox.newline53.com/api/v1
     tags:
+      - Transaction
+      - Reconciliation
+      - Monitoring
+      - Authorization
+      - United States
+    tags_raw:
       - Transactions
       - Reconciliation
       - Monitoring
