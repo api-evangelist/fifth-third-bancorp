@@ -61,309 +61,956 @@ created: '2026-03-21'
 modified: '2026-07-23'
 specificationVersion: '0.23'
 apis:
-  - aid: fifth-third-bancorp:newline-auth-api
-    name: Newline Auth API
-    description: >-
-      Authentication for the Newline by Fifth Third platform. A client exchanges
-      a refresh token for an access token by POSTing a JWS whose payload carries
-      the Program UID (sub) and current epoch time (iat), signed with a
-      previously shared HMAC using HS512. The returned access token (prefixed
-      auth-) is valid for up to 8 hours and is supplied in the Authorization
-      header of every subsequent request.
-    humanURL: https://developers.newline53.com/reference/auth
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Authentication
-      - JWT
-      - HMAC
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: Documentation
-        url: https://developers.newline53.com/docs/api-authentication
-      - type: APIReference
-        url: https://developers.newline53.com/reference/post_auth
-  - aid: fifth-third-bancorp:newline-customers-api
-    name: Newline Customers API
-    description: >-
-      Create, list, retrieve, update, and archive the Customers who hold accounts
-      on a Newline program. Handles personally identifiable information (PII),
-      Tax Identifier/SSN capture and validation, customer types (primary and
-      others), customer statuses, and triggers the KYC/AML evaluation lifecycle
-      that Fifth Third runs when a Customer is onboarded to a product.
-    humanURL: https://developers.newline53.com/reference/customers
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Customers
-      - KYC
-      - Onboarding
-      - Compliance
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/customers
-      - type: Documentation
-        url: https://developers.newline53.com/reference/overview-of-customer-types
-  - aid: fifth-third-bancorp:newline-customer-products-api
-    name: Newline Customer Products API
-    description: >-
-      Onboard Customers onto Newline banking Products and manage the resulting
-      Customer Product records. Submitting a Customer Product confirms the
-      Customer is ready for account opening, locks their PII, and initiates the
-      billable KYC/AML verification and account-opening workflow with Fifth
-      Third Bank. Includes listing, retrieval, and customer-product status
-      tracking.
-    humanURL: https://developers.newline53.com/reference/customer-products
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Customer > Products
-      - Onboarding
-      - Account Opening
-      - United States
-    tags_raw:
-      - Customer Products
-      - Onboarding
-      - Account Opening
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/customer-products
-      - type: Documentation
-        url: https://developers.newline53.com/reference/customer-product-statuses
-  - aid: fifth-third-bancorp:newline-products-api
-    name: Newline Products API
-    description: >-
-      List and retrieve the banking Products configured for a Newline program,
-      including each Product's configuration, availability, required Customer
-      Profile fields, and associated metadata. Products define the deposit,
-      payment, and card offerings a Customer can be onboarded onto within the
-      Fifth Third embedded-finance network.
-    humanURL: https://developers.newline53.com/reference/products
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Product
-      - Deposits
-      - Configuration
-      - United States
-    tags_raw:
-      - Products
-      - Deposits
-      - Configuration
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/products
-  - aid: fifth-third-bancorp:newline-pools-api
-    name: Newline Pools API
-    description: >-
-      List and retrieve Pools, the constructs that group Synthetic and Custodial
-      Accounts and report aggregate asset balances across the accounts
-      associated with them. Pools give program operators a roll-up view of funds
-      held at Fifth Third Bank across a set of end-customer accounts.
-    humanURL: https://developers.newline53.com/reference/pools
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Pools
-      - Balances
-      - Deposits
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/pools
-  - aid: fifth-third-bancorp:newline-custodial-accounts-api
-    name: Newline Custodial Accounts API
-    description: >-
-      Retrieve the FDIC-insured Custodial Accounts held by Fifth Third Bank on
-      behalf of onboarded Customers, including active and archived accounts,
-      their balances, and daily closing balances. Provides list and single-record
-      endpoints for both accounts and their closing-balance history to support
-      reconciliation and reporting.
-    humanURL: https://developers.newline53.com/reference/custodial-accounts
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Custodial Accounts
-      - Deposits
-      - FDIC
-      - Reconciliation
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/custodial-accounts
-      - type: Documentation
-        url: https://developers.newline53.com/reference/custodial-account-statuses
-  - aid: fifth-third-bancorp:newline-synthetic-accounts-api
-    name: Newline Synthetic Accounts API
-    description: >-
-      Create and manage Synthetic Accounts, the ledger accounts that route money
-      through Newline. Includes liability accounts in the general category and
-      external accounts in the ach_external, wire_external, and
-      instant_payment_external categories that represent the counterparties for
-      ACH, wire, and Real-Time Payments transfers. Nine operations cover
-      creation, listing, retrieval, updates, and account-category and status
-      handling.
-    humanURL: https://developers.newline53.com/reference/synthetic-accounts
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Synthetic Accounts
-      - Ledger
-      - Payments
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/synthetic-accounts
-      - type: Documentation
-        url: https://developers.newline53.com/reference/synthetic-account-categories
-  - aid: fifth-third-bancorp:newline-transfers-api
-    name: Newline Transfers API
-    description: >-
-      Initiate, list, retrieve, and cancel Transfers that move assets between
-      Synthetic Accounts across payment rails — ACH, wire, Real-Time Payments
-      (RTP), and internal book transfers. Balance and access checks run before a
-      Transfer is initiated, and Transfers can be canceled only while queued or
-      pending. This is the core money-movement endpoint of the Newline platform.
-    humanURL: https://developers.newline53.com/reference/transfers
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Transfers
-      - Payments
-      - ACH
-      - Wire
-      - Real-Time Payments
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/transfers
-      - type: Documentation
-        url: https://developers.newline53.com/reference/transfer-statuses
-  - aid: fifth-third-bancorp:newline-combined-transfers-api
-    name: Newline Combined Transfers API
-    description: >-
-      Orchestrate Combined Transfers, which bundle multiple related money
-      movements into a single coordinated operation across a program's Synthetic
-      Accounts. Provides endpoints to create, list, and retrieve combined
-      transfer requests for multi-leg payment flows on the Fifth Third
-      embedded-finance rails.
-    humanURL: https://developers.newline53.com/reference/combined-transfers
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Combined Transfers
-      - Payments
-      - Orchestration
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/combined-transfers
-  - aid: fifth-third-bancorp:newline-transactions-api
-    name: Newline Transactions API
-    description: >-
-      List and retrieve Transactions and their Transaction Events, and approve or
-      deny pending Transactions before execution. Transaction Events expose the
-      individual steps required to complete a Transaction so operators can track
-      progress and review history. Nine operations cover transaction listing,
-      detail, authorization, and event tracking for reconciliation and monitoring.
-    humanURL: https://developers.newline53.com/reference/transactions
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Transaction
-      - Reconciliation
-      - Monitoring
-      - Authorization
-      - United States
-    tags_raw:
-      - Transactions
-      - Reconciliation
-      - Monitoring
-      - Authorization
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/transactions
-      - type: Documentation
-        url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
-  - aid: fifth-third-bancorp:newline-returns-api
-    name: Newline Returns API
-    description: >-
-      Create, list, and retrieve Returns — the reversal of settled payments such
-      as ACH returns — on the Newline platform. Returns move funds back across
-      the originating rail and update the associated Transfer and Transaction
-      records, supporting exception handling in embedded payment programs at
-      Fifth Third Bank.
-    humanURL: https://developers.newline53.com/reference/returns
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Returns
-      - ACH
-      - Payments
-      - Exceptions
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/returns
-  - aid: fifth-third-bancorp:newline-virtual-reference-numbers-api
-    name: Newline Virtual Reference Numbers API
-    description: >-
-      Create and manage Virtual Reference Numbers (VRNs), the unique account and
-      routing number pairs that let a program receive inbound ACH, wire, and
-      Real-Time Payments and attribute them to a specific Synthetic Account or
-      Customer. Seven operations cover VRN creation, listing, retrieval, updates,
-      and status management for inbound money attribution.
-    humanURL: https://developers.newline53.com/reference/virtual-reference-numbers
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Virtual Reference Numbers
-      - Inbound Payments
-      - Payments
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/virtual-reference-numbers
-      - type: Documentation
-        url: https://developers.newline53.com/reference/virtual-reference-number-statuses
-  - aid: fifth-third-bancorp:newline-sandbox-api
-    name: Newline Sandbox API
-    description: >-
-      Simulation endpoints for the Newline sandbox environment that let
-      developers mock transactions and transfers, exercise error scenarios, and
-      clear sandbox state while building against the platform. The sandbox uses
-      the same JWT authentication strategy as production so integrations can be
-      validated end to end before go-live with Fifth Third Bank.
-    humanURL: https://developers.newline53.com/reference/sandbox
-    baseURL: https://sandbox.newline53.com/api/v1
-    tags:
-      - Sandbox
-      - Testing
-      - Simulation
-      - United States
-    properties:
-      - type: OpenAPI
-        url: openapi/newline-platform-api.json
-      - type: APIReference
-        url: https://developers.newline53.com/reference/sandbox
-      - type: Documentation
-        url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-auth-api
+  name: Fifth Third Bancorp Auth API
+  description: "The Authentication section explains how to securely interact with Newline's API using\
+    \ access tokens and static IP addresses. Learn how to generate and refresh tokens to access protected\
+    \ resources.  \n\n**Endpoints:**\n\n- POST [Generate an authentication token: POST /auth](https://developers.newline53.com/reference/post_auth)\n\
+    \nNewline requires access tokens and static IP addresses for authentication and authorization when\
+    \ requesting any resource endpoints. [POST /auth](https://developers.newline53.com/reference/post_auth)\
+    \ is used to obtain and refresh the required access tokens. Please work with your Relationship Team\
+    \ or the Newline Team in all environments to set up the IP Allowlist for your Program.  \nTo obtain\
+    \ an access token, you must submit a refresh token. After a program is set up, Newline will share\
+    \ your Program UID and HMAC key offline. These values are required for the refresh token and access\
+    \ token requests.\n\n## Auth Flow\n\nThe authentication flow is as follows:\n\n1. Create a JWT using\
+    \ the following claim:\n```\n{\n  \"iat\": <current Epoch time>,\n  \"sub\": <Program UID>\n}\n ```\n\
+    \n1. Sign the JWT to create a JWS with the shared key using HS512 / SHA-512.\n\n2. Exchange for an\
+    \ access token by sending a request to [POST /auth](https://developers.newline53.com/reference/post_auth),\
+    \ using the JWS in the `Authorization` header.\n\n3. Access resources through other endpoints using\
+    \ the returned token in the `Authorization` header for up to 8 hours.\n\n4. Repeat the process as\
+    \ needed to continue authenticating successfully.\n\n> **Note** \n> If a new access token is requested\
+    \ within the 8 hours of a previous token being successfully exchanged, the new token will still be\
+    \ generated. This does not expire the last token, and both tokens are usable simultaneously until\
+    \ their respective time is up. However, it is encouraged to use the new token and discard the old\
+    \ one if possible, as this behavior may change in the future."
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-auth-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-combined-transfers-api
+  name: Fifth Third Bancorp Combined Transfers API
+  description: "The Combined Transfers endpoint allows clients to create both a transfer and a counterparty\
+    \ in a single API call. This simplifies the process by eliminating the need to first create an external\
+    \ synthetic account and then reference it when initiating a transfer.\n\n## Endpoints:\n\n- GET List\
+    \ Combined Transfers: [GET /combined_transfers](https://developers.newline53.com/reference/get_combined-transfers)\n\
+    - POST Create a Combined Transfer: [POST/combined_transfers](https://developers.newline53.com/reference/post_combined-transfers)\n\
+    - GET Get a Single Combined Transfer: [GET /combined_transfers/{uid}](https://developers.newline53.com/reference/get_combined-transfers-uid)\n\
+    \nTransfers facilitate the movement of assets between accounts, enabling transactions such as payments\
+    \ and withdrawals. Combined Transfers work by creating both a synthetic account and a transfer in\
+    \ one API call, streamlining the process and reducing the steps required for asset movement.\n\nThe\
+    \ types and distribution of assets, the number of customers, and other rules governing the usage of\
+    \ Combined Transfers can be configured for each account on a program-by-program basis. This includes\
+    \ setting up the synthetic account types and defining the rules for asset movement between accounts.\n\
+    \n## Combined Transfers Statuses:\n\n**Queued:** The combined transfer request has been received and\
+    \ is waiting to be processed.  \n**Pending:** The combined transfer is currently being processed.\
+    \  \n**Failed:** The combined transfer could not be completed due to an error.  \n**Completed:** The\
+    \ combined transfer has been successfully completed."
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Combined Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-combined-transfers-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-custodial-accounts-api
+  name: Fifth Third Bancorp Custodial Accounts API
+  description: "Fifth Third Bank holds Custodial Accounts and represents funds managed for Customers.\
+    \ Through these endpoints, you can manage balances and track account statuses.\n\n**Endpoints:**\n\
+    \n- GET [List Custodial Accounts: GET /custodial_accounts](https://developers.newline53.com/reference/get_custodial-accounts)\n\
+    \    \n- GET [Get a single Custodial Account: GET /custodial_accounts/{uid}](https://developers.newline53.com/reference/get_custodial-accounts-uid)\n\
+    \nA Custodial Account is the account held by Fifth Third Bank. Custodial Accounts in a Program can\
+    \ only be created for the Service Offerings that have been configured for that Program.\n\nA Customer\
+    \ must successfully complete onboarding and pass all KYC/AML checks before their Custodial Accounts\
+    \ can be opened. This endpoint can be used to retrieve the accounts (active and archived) and their\
+    \ balances for your Customers. All funds must be emptied from a Custodial Account before it can be\
+    \ archived."
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Custodial Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-custodial-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-customer-products-api
+  name: Fifth Third Bancorp Customer Products API
+  description: "Customer Products link Customers to financial products. This section outlines how to onboard\
+    \ customers, manage their product relationships, and track statuses.\n\n**Endpoints:**\n\n- GET [List\
+    \ Customer Products: GET /customer_products](https://developers.newline53.com/reference/get_customer-products)\n\
+    \    \n- POST [Onboard a Customer onto a Product: POST /customer_products](https://developers.newline53.com/reference/post_customer-products)\n\
+    \    \n- GET [Get a single Customer Product: GET /customer_products/{uid}](https://developers.newline53.com/reference/get_customer-products-uid)\n\
+    \nCustomer Product records are generated when a Customer is submitted for onboarding to a specific\
+    \ Product.\n\n## Newline preset-Customers\n\nIf the Client is also the Customer, the Customer Product\
+    \ record will be autogenerated during the Client's onboarding to our production environment.\n\n##\
+    \ Client-initiated Customers\n\nWhen clients onboard a Customer, the Customer must fulfill the prerequisite\
+    \ Product requirements. Newline will then verify that the Product requirements have been met.\n\n\
+    If the Product requirements are met, Newline will proceed with account opening and feature enablement\
+    \ as specified by the Product. If the product requirements are unmet, Newline will return an error\
+    \ response indicating which element of the product validation failed."
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Customer Products
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-customer-products-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-customers-api
+  name: Fifth Third Bancorp Customers API
+  description: "The Customers section provides details on managing end-user accounts. Learn how to create,\
+    \ update, and archive customer records and onboard them to financial products while meeting KYC/AML\
+    \ requirements.\n\n**Endpoints:**\n\n- GET [List Customers: GET /customers](https://developers.newline53.com/reference/get_customers)\n\
+    \    \n- POST [Create a new Customer: POST /customers](https://developers.newline53.com/reference/post_customers)\n\
+    \    \n- GET [Get a single Customer: GET /customers/{uid}](https://developers.newline53.com/reference/get_customers-uid)\n\
+    \    \n- PUT [Adjust Customer Data: PUT /customers/{uid}](https://developers.newline53.com/reference/put_customers-uid)\n\
+    \    \n- DELETE [Archive a Customer: DELETE /customers/{uid}](https://developers.newline53.com/reference/delete_customers-uid)\n\
+    \    \nA Customer on the Newline Platform is the end user of your application. Customers are unique\
+    \ to each Program, and managing all accounts and identifying information is handled on a Program-by-Program\
+    \ basis.  \nThe ability to create new Customers is also a preset condition of your Program at Newline.\
+    \ Please see the below sections for more details.\n\n## Newline preset-Customers\n\nIn cases where\
+    \ the Client also serves as the Customer (i.e., the Client is both the end-user and the managing entity\
+    \ over any financial products), Newline will create Customers upon Program onboarding. Clients will\
+    \ also be precluded from creating new Customers.\n\n## Client-initiated Customers\n\n**Customer Onboarding\
+    \ Process for Clients**  \nWhen managing customer onboarding, follow the outlined steps and key considerations\
+    \ below.\n\n### Steps for Onboarding Customers:\n\n1. Initial Submission:\n\n    1. Submit the external_uid\
+    \ and email using the Customers Endpoint.\n\n2. Provide Personally Identifiable Information (PII):\n\
+    \n    1. After the initial submission, supply the remaining PII for the customer.\n\n    2. Ensure\
+    \ that all required PII fields are complete. Requests with complete or missing fields will be accepted.\n\
+    \n3. Edit PII (Optional):\n\n    1. PII can be updated until a valid request is sent to onboard the\
+    \ customer to a product using the Customer Product Endpoint.\n\n4. Submit Profile Responses:\n\n \
+    \   1. Provide profile responses to meet the product's profile requirements.\n\n    2. Profile Requirements\
+    \ can include data such as:\n\n        1. Risk tolerance\n\n        2. Income level\n\n        3.\
+    \ Other product-specific information\n\n5. Verify Profile Requirements:\n\n    1. Use the Product\
+    \ Endpoint to access the Profile Requirements and ensure the customer satisfies all prerequisites\
+    \ for onboarding.\n\n6. Initiate Onboarding Request:\n\n    1. Submit a valid onboarding request for\
+    \ the customer using the Customer Products Endpoint.\n\n## Additional Considerations:\n\nKYC/AML Verification:\n\
+    \n- To join a program, customers must pass Know Your Customer (KYC) and Anti-Money Laundering (AML)\
+    \ identity verification as required by Fifth Third Bank.\n\n- KYC_status on the customer record will\
+    \ indicate the current state of the KYC/AML workflow.\n\nOnce a valid onboarding request is received,\
+    \ Newline initiates KYC/AML verification using the customer's PII.  \n**Verification statuses include:**\n\
+    \n- Approved\n\n- Manual Review\n\n- Documents Required\n\n- Denied\n\nNewline will work with clients\
+    \ to define these states.\n\n## Program-Specific Records:\n\n- A new customer record must be created\
+    \ for each program, even if an identical customer exists in another program.\n\n- Customer records\
+    \ are not accessible outside of their associated program.\n\n## Customer Management Functions:\n\n\
+    The Customers Endpoint can also be used to perform management actions such as:\n\n- Freezing or unfreezing\
+    \ a customer\n\n- Archiving a customer"
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-customers-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-pools-api
+  name: Fifth Third Bancorp Pools API
+  description: "Pools group multiple Customers for asset sharing and distributed account ownership. Each\
+    \ Pool is unique to a Customer or program.\n\n**Endpoints:**\n\n- GET [List Pools: GET /pools](https://developers.newline53.com/reference/get_pools)\n\
+    \    \n- GET [Get a single Pool: GET /pools/{uid}](https://developers.newline53.com/reference/get_pools-uid)\n\
+    \nA pool is a construct that Newline uses to associate multiple customers with each other. A Pool\
+    \ is always associated with at least one Customer, but all accounts are only ever associated with\
+    \ a single Pool. This enables asset sharing and distributed ownership of accounts across multiple\
+    \ Customers.\n\nNewline currently supports single Customer Pools, where **one Customer is associated\
+    \ with one Pool and vice versa**. All accounts, transfers, and transactions are related to the Customer's\
+    \ Pool, not the Customer. The Pool UID appears on several endpoint responses and may be required by\
+    \ the API in some instances."
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Pools
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-pools-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-products-api
+  name: Fifth Third Bancorp Products API
+  description: "Products represent financial services available in your program. Discover onboarding requirements,\
+    \ prerequisites, and detailed product configurations.\n\n**Endpoints:**\n\n- GET [List Products: GET\
+    \ /products](https://developers.newline53.com/reference/get_products)\n    \n- GET [Get a single Product:\
+    \ GET /products/{uid}](https://developers.newline53.com/reference/get_products-uid)\n\nThe Products\
+    \ endpoint represents the financial products available to your Customers. It exposes the accounts,\
+    \ compliance, and Customer Profile Requirements necessary for your Customer to access the Product.\
+    \ For some programs, a customer must onboard one product before another product is made available.\
+    \ Newline will work with clients to define the required Product onboarding sequence as part of your\
+    \ Program.\n\nUse the Products endpoint to view the Products available to your Program and the prerequisite\
+    \ information or actions that must be taken for a Customer to access the Product.\n\nFor more information\
+    \ about Newline's products and their utilization, please refer to the [Products Programs](https://developers.newline53.com/docs/product-programs)\
+    \ guides."
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-products-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-returns-api
+  name: Fifth Third Bancorp Returns API
+  description: >-
+    The Returns endpoints help initiate, track, and manage returns of received and originated payments.
+    These endpoints are accessible within the Sandbox and Production environments.
+
+
+    **Endpoints:**
+
+
+    - GET [List Returns: GET /returns](https://developers.newline53.com/reference/get_returns)
+
+    - POST [Create a new Return: POST /returns](https://developers.newline53.com/reference/post_returns)
+
+    - GET [Get a single Return: GET /returns/{uid}](https://developers.newline53.com/reference/get_returns-uid)
+
+
+    The returns endpoint allows for the retrieval and creation of return transactions within the system.
+
+
+    [GET List Returns](https://newline-enterprise-group.readme.io/reference/get_returns)- Use this endpoint
+    to retrieve a list of all return transactions. You can filter the results based on various parameters
+    such as status or date.
+
+
+    [POST Create a New Return](https://newline-enterprise-group.readme.io/reference/post_returns)- This
+    endpoint is used to Create a new return transaction. Return can only be created for eligible transactions
+    that have already been completed.
+
+
+    [GET a Single Return](https://newline-enterprise-group.readme.io/reference/get_returns-uid)- Use this
+    endpoint to retrieve details about a specific return transaction.
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Returns
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-returns-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-sandbox-api
+  name: Fifth Third Bancorp Sandbox API
+  description: >-
+    The Sandbox section provides tools to test and simulate interactions with the Newline API in a controlled
+    environment.
+
+
+    **Endpoints:**
+
+
+    - POST [Simulate a Transaction: POST /sandbox/mock_transactions](https://developers.newline53.com/reference/post_sandbox-mock-transactions)
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Sandbox
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-sandbox-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-synthetic-accounts-api
+  name: Fifth Third Bancorp Synthetic Accounts API
+  description: >-
+    Synthetic Accounts serve as the foundation for asset tracking in Newline. They allow for flexible
+    configurations tailored to your program.
+
+
+    **Endpoints:**
+
+
+    - GET [List Synthetic Account Types: GET /synthetic_account_types](https://developers.newline53.com/reference/get_synthetic-account-types)
+
+
+    - GET [Get a single Synthetic Account Type: GET /synthetic_account_types/{uid}](https://developers.newline53.com/reference/get_synthetic-account-types-uid)
+
+
+    - GET [List Synthetic Accounts: GET /synthetic_accounts](https://developers.newline53.com/reference/get_synthetic-accounts)
+
+
+    - POST [Create a New Synthetic Account: POST /synthetic_accounts](https://developers.newline53.com/reference/post_synthetic-accounts)
+
+
+    - GET [Get a single Synthetic Account: GET /synthetic_accounts/{uid}](https://developers.newline53.com/reference/get_synthetic-accounts-uid)
+
+
+    - PUT [Update Synthetic Account metadata: PUT /synthetic_accounts/{uid}](https://developers.newline53.com/reference/put_synthetic-accounts-uid)
+
+
+    - DELETE [Archive a Synthetic Account: DELETE /synthetic_accounts/{uid}](https://developers.newline53.com/reference/delete_synthetic-accounts-uid)
+
+
+    Synthetic Accounts are the foundation of your application and the interface between your Customers.
+    They are designed to track any asset type for any Customer at Newline. A single Synthetic Account
+    can be configured to blend assets from multiple core accounts for multiple Customers.
+
+
+    The types and distribution of assets, the number of Customers, and many other rules governing a Synthetic
+    Account's usage can be configured for each Account on a Program-by-Program basis via the Synthetic
+    Account Types.
+
+
+    The list of Synthetic Account Types and their rules for each Program are set up during Program configuration.
+    Each Synthetic Account Type belongs to one of a handful of Synthetic Account Categories that govern
+    their primary purpose and handling by the Newline platform, such as general use or external accounts.
+    You may retrieve the complete list of available types via the [GET /synthetic_account_types](https://developers.newline53.com/reference/get_synthetic-account-types)
+    endpoint.
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Synthetic Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-synthetic-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-transactions-api
+  name: Fifth Third Bancorp Transactions API
+  description: "Transactions represent asset movements, such as ACH payments, wire transfers, or card\
+    \ purchases. Track transaction statuses and events through these endpoints.  \n**Endpoints:**\n\n\
+    - GET [List Transactions: GET /transactions](https://developers.newline53.com/reference/get_transactions)\n\
+    \n- GET [Get a single Transaction: GET /transactions/{uid}](https://developers.newline53.com/reference/get_transactions-uid)\n\
+    \n- PUT [Approve or deny a Transaction: PUT /transactions/{uid}/authorize](https://developers.newline53.com/reference/put_transactions-uid-authorize)\n\
+    \n- GET [List Transaction Events: GET /transaction_events](https://developers.newline53.com/reference/get_transaction-events)\n\
+    \n- GET [Get a single Transaction Event: GET /transaction_events/{uid}](https://developers.newline53.com/reference/get_transaction-events-uid)\n\
+    \n- GET [List Synthetic Line Items: GET /synthetic_line_items](https://developers.newline53.com/reference/get_synthetic-line-items)\n\
+    \n- GET [Get a single Synthetic Line Item: GET /synthetic_line_items/{uid}](https://developers.newline53.com/reference/get_synthetic-line-items-uid)\n\
+    \n- GET [List Custodial Line Items: GET /custodial_line_items](https://developers.newline53.com/reference/get_custodial-line-items)\n\
+    \n- GET [Get a single Custodial Line Item: GET /custodial_line_items/{uid}](https://developers.newline53.com/reference/get_custodial-line-items-uid)\n\
+    \nTransactions are created based on how you instruct Newline to move assets (a Transfer) or how assets\
+    \ are moved or spent outside your application (ATM withdrawals, debit card purchases, wire transfers,\
+    \ etc…). The Transaction contains the amount, origin, and destination of assets. Newline categorizes\
+    \ Transactions into types to assist in their classification and representation.\n\nTransactions fall\
+    \ into many categories, including debit card purchases, direct deposits, interest, and fees. This\
+    \ endpoint can retrieve a list of Transactions or track the status of an ongoing Transaction.\n\n\
+    Transaction Events are created as a result of a Transaction. They capture the steps required to complete\
+    \ the Transaction. These can be used to view the progress of an in-flight Transaction or see the history\
+    \ of a completed Transaction.\n\nLine Items are created for each Transaction Event. They catalog the\
+    \ individual credits and debits associated with the accounts involved in the Transaction."
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-transfers-api
+  name: Fifth Third Bancorp Transfers API
+  description: "Transfers facilitate the movement of assets between accounts, enabling transactions such\
+    \ as payments and withdrawals.\n\n**Endpoints:**\n\n- GET [List Transfers: GET /transfers](https://developers.newline53.com/reference/get_transfers)\n\
+    \n- POST [Initiate a Transfer: POST /transfers](https://developers.newline53.com/reference/post_transfers)\n\
+    \n- GET [Get a single Transfer: GET /transfers/{uid}](https://developers.newline53.com/reference/get_transfers-uid)\n\
+    \n- PUT [Cancel a Transfer: PUT /transfers/{uid}/cancel](https://developers.newline53.com/reference/put_transfers-uid-cancel)\n\
+    \nA Transfer is the Action of moving assets between two Synthetic Accounts. Most asset movement initiated\
+    \ by your application will result in a Transfer. Asset movement is determined by the makeup of assets\
+    \ in both participating accounts, the Synthetic Account Type of the participating accounts, the available\
+    \ Custodial Accounts for all participating Customers, and the overall Program configuration. A Transfer\
+    \ can never be initiated between two external accounts.\n\n### Company ID Behavior\n\nThe company_id\
+    \ field is optional when initiating a transfer. However, it becomes required if your organization\
+    \ has multiple company IDs or multiple custodial accounts, to ensure accurate routing of funds. If\
+    \ provided, the value will be validated.\n\nIn sandbox environments:\n\n- `company_id` is optional\
+    \ and will be validated if supplied.\n- `company_id` and custodial accounts are always in a 1:1 relationship.\n\
+    \n> **Note** \n> Any time a Transfer is created, it creates 1+ Transactions, which are returned in\
+    \ the response payload for a successful Transfer. Please note or record these uids, as they will be\
+    \ needed to query the Transaction object and any associated key data points. For instance, Fed IMAD\
+    \ or CHIPS SSN is used for outgoing wires."
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-transfers-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
+- aid: fifth-third-bancorp:fifth-third-bancorp-virtual-reference-numbers-api
+  name: Fifth Third Bancorp Virtual Reference Numbers API
+  description: "VRNs act as aliases for accounts, enabling unique use cases like accounts receivable segmentation\
+    \ or reconciliation.  \n\n**Endpoints:**\n\n- GET [List Virtual Reference Numbers: GET /virtual_reference_numbers](https://developers.newline53.com/reference/get_virtual-reference-numbers)\n\
+    \n- POST [Create a new Virtual Reference Number: POST /virtual_reference_numbers](https://developers.newline53.com/reference/post_virtual-reference-numbers)\n\
+    \n- GET [Get a single Virtual Reference Number: GET /virtual_reference_numbers/{uid}](https://developers.newline53.com/reference/get_virtual-reference-numbers-uid)\n\
+    \n- PUT [Edit a Virtual Reference Number: PUT /virtual_reference_numbers/{uid}](https://developers.newline53.com/reference/put_virtual-reference-numbers-uid)\n\
+    \n- DELETE [Archive a Virtual Reference Number: DELETE /virtual_reference_numbers/{uid}](https://developers.newline53.com/reference/delete_virtual-reference-numbers-uid)\n\
+    \n- PUT [Lock a Virtual Reference Number: PUT /virtual_reference_numbers/{uid}/lock](https://developers.newline53.com/reference/put_virtual-reference-numbers-uid-lock)\n\
+    \n- PUT [Unlock a Virtual Reference Number: PUT /virtual_reference_numbers/{uid}/unlock](https://developers.newline53.com/reference/put_virtual-reference-numbers-uid-unlock)\n\
+    \nVirtual Reference Numbers (or VRNs) are virtualized account numbers that point to a single deposit\
+    \ account. They are aliases to a Synthetic Account and can form a many-to-one relationship with their\
+    \ parent Synthetic Account.\n\n**Common VRNs Use Cases:**\n\n- This is to reference a stored funds\
+    \ product that is client-managed on a separate ledger. Clients can then provide VRNs to external merchants\
+    \ or counterparties who wish to pay for that stored fund's product.\n\n- This provides Clients with\
+    \ another layer of network-addressable account numbers with which to accept payments. This many-to-one\
+    \ relationship affords Clients account segmentation. For instance, one VRN is utilized for Accounts\
+    \ Receivable (AR) while the other is used for Accounts Payable (AP), all while referencing the same\
+    \ underlying Account.\n\nThese same VRNs can then be aligned with Custodial Accounts transactions\
+    \ to allow for quick reconciliation or accounting.\n\n> **Note**\n> For certain payment rails, like\
+    \ Instant Payments, VRNs must be registered with Newline and Fifth Third before being used, as this\
+    \ will allow for network acceptance. Please review the fields in each API reference to confirm Instant\
+    \ Payment registration."
+  humanURL: https://developers.newline53.com/reference/auth
+  baseURL: https://sandbox.newline53.com/api/v1
+  tags:
+  - Virtual Reference Numbers
+  properties:
+  - type: OpenAPI
+    url: openapi/fifth-third-bancorp-virtual-reference-numbers-api-openapi.yml
+  - type: Documentation
+    url: https://developers.newline53.com/docs/api-authentication
+  - type: APIReference
+    url: https://developers.newline53.com/reference/post_auth
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/overview-of-customer-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/customer-products
+  - type: Documentation
+    url: https://developers.newline53.com/reference/customer-product-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/products
+  - type: APIReference
+    url: https://developers.newline53.com/reference/pools
+  - type: APIReference
+    url: https://developers.newline53.com/reference/custodial-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/custodial-account-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/synthetic-accounts
+  - type: Documentation
+    url: https://developers.newline53.com/reference/synthetic-account-categories
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transfers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transfer-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/combined-transfers
+  - type: APIReference
+    url: https://developers.newline53.com/reference/transactions
+  - type: Documentation
+    url: https://developers.newline53.com/reference/transaction-statuses-and-transaction-types
+  - type: APIReference
+    url: https://developers.newline53.com/reference/returns
+  - type: APIReference
+    url: https://developers.newline53.com/reference/virtual-reference-numbers
+  - type: Documentation
+    url: https://developers.newline53.com/reference/virtual-reference-number-statuses
+  - type: APIReference
+    url: https://developers.newline53.com/reference/sandbox
+  - type: Documentation
+    url: https://developers.newline53.com/docs/sandbox-walkthrough
 common:
   - type: AgenticAccess
     url: agentic-access/fifth-third-bancorp-agentic-access.yml
