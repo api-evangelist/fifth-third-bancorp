@@ -1012,6 +1012,9 @@ apis:
   - type: Documentation
     url: https://developers.newline53.com/docs/sandbox-walkthrough
 common:
+  - type: CapabilityMap
+    url: capabilities/fifth-third-bancorp-capability-edges.yml
+    name: Fifth Third Bancorp Business Capability Map
   - type: AgenticAccess
     url: agentic-access/fifth-third-bancorp-agentic-access.yml
   - type: Authentication
