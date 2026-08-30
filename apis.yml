@@ -86,6 +86,8 @@ apis:
   humanURL: https://developers.newline53.com/reference/auth
   baseURL: https://sandbox.newline53.com/api/v1
   tags:
+  - Authentication
+  tags_raw:
   - Auth
   properties:
   - type: OpenAPI
@@ -502,6 +504,8 @@ apis:
   humanURL: https://developers.newline53.com/reference/auth
   baseURL: https://sandbox.newline53.com/api/v1
   tags:
+  - Product
+  tags_raw:
   - Products
   properties:
   - type: OpenAPI
@@ -818,6 +822,8 @@ apis:
   humanURL: https://developers.newline53.com/reference/auth
   baseURL: https://sandbox.newline53.com/api/v1
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
