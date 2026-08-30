@@ -1,0 +1,623 @@
+openapi: 3.2.0
+info:
+  title: Newline Platform Virtual Reference Numbers API
+  version: 1.0.0
+  description: "\nWelcome! In this section of our docs experience, you'll be able to go through common payment scenarios that both you and your end customers may encounter as you start to offer financial products through your own technology stack. These guides will also help to highlight and expand on concepts discussed in our API references, like [Synthetic Accounts](https://developers.newline53.com/reference/synthetic-accounts), [Transfers](https://developers.newline53.com/reference/transfers), [Transactions&nbsp;](https://developers.newline53.com/reference/transactions)  and [Customers](https://developers.newline53.com/reference/customers).\n\nOur guides are broken out by supported use cases. If you find there isn't a specific use case that fits your business, reach out to our [Sales &amp; Partnership team](https://newline53.com/contact-us.html) and they'll be able to help determine how we can support your business and provide any other questions or feedback.\n\nLastly, when you're ready to build, check out our [Onboarding Overview](https://developers.newline53.com/docs/overview) and [Sandbox Walkthrough](https://developers.newline53.com/docs/sandbox-walkthrough) guides.\n\n## About our API\n\nThe Newline API is organized around REST. With a few exceptions, our API has standard resource-oriented URLs, accepts form-encoded OR JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.\n\n## FAQs\n\nWant to quickly review some common questions about Newline and our financial experiences, check out our [FAQs](https://developers.newline53.com/docs/faqs) guide.\n\n# Overview\n\n## Newline Onboarding 101\n\nOnboarding to any SaaS product can be a daunting task, and at Newline we seek to make this experience as smooth as possible. Part of that is getting you, our Client, familiar with the process by which we establish key resources like your Program, Products, Customers, Custodial Accounts, and Synthetic Accounts.\n\nThe following guide details, in short order, the Program and resources that Newline will configure for you and how each of these components affect your ability to use our API Reference.\n\n<img src=\"https://files.readme.io/955347d-image.png\">\n\nThe above visualization shows the Program and resources Newline will provide and maintain for Clients going through onboarding and implementation, but we'll enumerate the details for each resource above.\n\n> **Note**\n> In the above visualization, the lighter color items are preset and created by Newline for any Client implementation. Synthetic Accounts is a special case where general Synthetic Accounts are preset and Clients will be responsible for creating their own external Synthetic Accounts and VRNs..\n\n- **Program** - the Program dictates the origination terms to which the Client and Newline mutually agree. This could include payment limitations like amounts, frequency, and the need for pre-funding (ex. ACH). Your Program will be created and configured by Newline.\n\n- **Products** - these are distinct Product offerings supported by Newline. For instance, this can include payment rails like ACH, Wire, and Instant Payments that are configured as available synthetic_account_types. Newline creates and configures a Program's Products.\n\n    - Products can be applied across multiple Customers, and Customers can be attached to multiple Products. Essentially there is a many-to-many relationship between these resources, which make them, in some cases, parallel.\n\n    - A Product can support multiple payment rails.\n\n- **Customer Type** - Customers are provided a Customer Type at creation. For instance, Primary Customers are considered full account owners and have complete authority to take any actions associated with their accounts and associated resources. You can also limit certain Customer Types to have access to only certain Products. Permitted Customer Types are configured by Newline.\n\n- **Pool** - Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. Newline will create Pools.\n\n- **Customer** - This is the entity that owns the Account and Funds stored at Newline. This entity also is deemed the Originator when it comes to any payment creation. Clients can also be Customers in the event they meet those criteria. Customers are created by Newline or by the Client depending on the use case.\n\n- **Custodial Account** - This is the Account that exists in our Synthetic Core and represents the reciprocal Account on Fifth Third's ledger. These are the accounts you can access via Fifth Third Direct. Custodial Accounts will be created by Newline.\n\n- **Synthetic Account** - How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts that your Customers will likely use within your application. Synthetic Accounts of the general category will be created by Newline or by the Client depending on your use case. Clients will create external Synthetic Accounts like wire_external, ach_external, and instant_payment_external.\n\n- **Virtual Reference Number** - Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a synthetic account and can form a many-to-one relationship with their parent synthetic account.\n\n# Postman Collection\n\nHow to set up Postman, add our Newline collection, and use it to test Newline platform APIs.\n\n## Installing Postman\n\nPostman is available on a variety of platforms. Visit [Postman](https://www.postman.com/downloads/) to see if your platform is supported.  \nTo install Postman:\n\n1. Go to [Postman downloads](https://www.postman.com/downloads/).\n\n<img src=\"https://files.readme.io/fd1743f-Postman_Dowload_snip.jpg\">\n\n1. Download the required version.\n\n2. After your download is complete, run the downloaded file to install Postman.\n\n## Import the Newline Collection\n\nTo import our collection, click on the following [▶ Newline Collection](https://www.postman.com/newline53) button, and you will be redirected to our Newline Postman workspace, where you can download our collection.\n\nFor further information, see the [Postman documentation on importing data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).\n\n## Configure Your Postman Environment\n\n1. Create a Sandbox Environment.\n\n2. Set Sandbox variables.\n\n3. Save the environment.\n\n4. Ensure the new environment is selected.\n\n**Set API Keys**  \nYou will need to set your HMAC Key and Program UID as environment variables. You can set the variables in the headers in the environment tab within the Postman Collection.\n\n# Terminology\n\nThe terms, which represent API resource objects in Newline, below are referenced in our API documentation and endpoint definitions.  \nSome important notes while reading through this list:\n\nResource Objects often interact with one another, so please be sure to review our endpoints to see which serve as required inputs or are collected as outputs.\n\nCertain objects, like Transfers, are described differently in the payments industry depending on the Transaction Type. For instance, ach transactions are often referred to as entries rather than payments, as they can represent both credits (i.e., ODFI pushes) and debits (i.e., ODFI pulls).  \nWhile Resource Objects are distinct, they, in some cases, can represent the same entity.\n\n- Ex. 1 - Clients can also be Customers if they manage and own the financial products in question.\n\n- Ex. 2 - Transfers produce Transactions, but the produced Transactions (in aggregate) represent the original money movement.\n\n| Term | Definition |\n| --- | --- |\n| Customer | The end user of your application and the owner of assets in your Program. For example, when initiating a payment, this entity would be considered the **originator**. |\n| Client | The application or product owning organization that is affording end users (i.e., Customers) the ability to access the financial products.<br><br><br>**Note**<br>Clients can also be Customers in the event they own and have management over the financial products or the funds involved. |\n| Transmitter | Transmitters are the parties who have _requested_ the Transfer in question. When the Transmitter and Customer are the same party, Newline pulls origination information from the created Customer record. When the Transmitter and Customer are not the same party, it's the Client's responsibility to provide that information when making a Transfer.  <br>  <br>Transmitters are only required for the `wire` and `instant_payment` types (see the `wire_transmitter` and `instant_payment_transmitter` objects in the [Initiate a Transfer](https://developers.newline53.com/reference/post_transfers) reference). Client's should also take note of the `initiator_type` field, which dictates from where Transmitter information is pulled. For more context on Transmitters, refer to the [Payment Rail Regulation](https://newline-enterprise-group.readme.io/docs/transfer#payment-rail-regulation) section below. |\n| Partner | Any infrastructure partner integrated within the Newline Platform. |\n| Program | The Program is custom tailored to your offering and purpose built to enable financial products on your application. The Program defines what Synthetic and Custodial Account types, Customer Types, and Transactions Types are available for your Customers to utilize. The Program configuration is defined between the Client and Newline based on your (i.e., the Client's) use case. |\n| Product | Products represents the financial products available to your Customers. The Product object contains the account, compliance, and customer profile responses necessary for your Customers to gain access. |\n| Customer Product | The Customer Product is created when the Customer is added to a Product and respective Program. This often includes Newline automatically creating any needed financial products for the Customers' use. For instance, a Synthetic Account to represent the origination account at Fifth Third. |\n| Service Offering | The financial product offered by the Newline platform. These can be (but are not limited to) checking, savings, brokerage, or retirement accounts. |\n| Pool | Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. |\n| Custodial Accounts | This resource within Newline represents the assets held by your Customers, with direct alignment to accounts opened at Fifth Third. Custodial Accounts have the following relationships: one-to-one with Customers, and one-to-Many with Synthetic Accounts. |\n| Synthetic Accounts | How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts (i.e., Counterparties) that your Customers will likely use within your application. |\n| Virtual Reference Number (VRN) | Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a Synthetic Account, and can form a many-to-one relationship with their parent Synthetic Account. |\n| Transfer | The movement of assets from one Synthetic Account to another Synthetic Account. Most of asset movement initiated by your application will result in a Transfer. A successful Transfer will result in at least one Transaction. |\n| Transaction | Transactions are created based on how you instruct Newline to move assets (a Transfer) or how assets are moved or spent outside of your application (For example, ACH, Wire, and Instant Payments Transfers). The Transaction contains the amount, origin, and destination of assets. Newline categorizes Transactions into types to assist in their classification and representation. |\n| Transaction Events | The steps taken to complete the Transaction. These can be used to view the progress of an in-flight Transaction or see the history of a completed Transaction. |"
+servers:
+- url: https://sandbox.newline53.com/api/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Virtual Reference Numbers
+  description: "VRNs act as aliases for accounts, enabling unique use cases like accounts receivable segmentation or reconciliation.  \n\n**Endpoints:**\n\n- GET [List Virtual Reference Numbers: GET /virtual_reference_numbers](https://developers.newline53.com/reference/get_virtual-reference-numbers)\n\n- POST [Create a new Virtual Reference Number: POST /virtual_reference_numbers](https://developers.newline53.com/reference/post_virtual-reference-numbers)\n\n- GET [Get a single Virtual Reference Number: GET /virtual_reference_numbers/{uid}](https://developers.newline53.com/reference/get_virtual-reference-numbers-uid)\n\n- PUT [Edit a Virtual Reference Number: PUT /virtual_reference_numbers/{uid}](https://developers.newline53.com/reference/put_virtual-reference-numbers-uid)\n\n- DELETE [Archive a Virtual Reference Number: DELETE /virtual_reference_numbers/{uid}](https://developers.newline53.com/reference/delete_virtual-reference-numbers-uid)\n\n- PUT [Lock a Virtual Reference Number: PUT /virtual_reference_numbers/{uid}/lock](https://developers.newline53.com/reference/put_virtual-reference-numbers-uid-lock)\n\n- PUT [Unlock a Virtual Reference Number: PUT /virtual_reference_numbers/{uid}/unlock](https://developers.newline53.com/reference/put_virtual-reference-numbers-uid-unlock)\n\nVirtual Reference Numbers (or VRNs) are virtualized account numbers that point to a single deposit account. They are aliases to a Synthetic Account and can form a many-to-one relationship with their parent Synthetic Account.\n\n**Common VRNs Use Cases:**\n\n- This is to reference a stored funds product that is client-managed on a separate ledger. Clients can then provide VRNs to external merchants or counterparties who wish to pay for that stored fund's product.\n\n- This provides Clients with another layer of network-addressable account numbers with which to accept payments. This many-to-one relationship affords Clients account segmentation. For instance, one VRN is utilized for Accounts Receivable (AR) while the other is used for Accounts Payable (AP), all while referencing the same underlying Account.\n\nThese same VRNs can then be aligned with Custodial Accounts transactions to allow for quick reconciliation or accounting.\n\n> **Note**\n> For certain payment rails, like Instant Payments, VRNs must be registered with Newline and Fifth Third before being used, as this will allow for network acceptance. Please review the fields in each API reference to confirm Instant Payment registration."
+paths:
+  /virtual_reference_numbers:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Virtual Reference Numbers
+      summary: List Virtual Reference Numbers
+      description: 'Retrieves a list of Virtual Reference Numbers (VRNs) associated with the specified Synthetic Account. Supports filtering by status and other attributes.
+
+        '
+      parameters:
+      - name: instant_payment_rail_registration_status
+        in: query
+        schema:
+          type: string
+          description: Registration status with Newline and Fifth Third, for RTP network acceptance.
+          example: registered
+          enum:
+          - failed
+          - pending
+          - registered
+          - unregistered
+      - name: status
+        in: query
+        schema:
+          description: A value indicating the overall state of this VRN.
+          type: string
+          example: active
+          enum:
+          - active
+          - archived
+      - name: synthetic_account_uid
+        in: query
+        schema:
+          type: string
+          description: A unique id referring to the mapped, general Synthetic Account.
+          example: Dg1EPao8XukUpHG8
+      - name: virtual_reference_number
+        in: query
+        schema:
+          type: string
+          description: The VRN
+          example: '1234567890123456'
+      responses:
+        '200':
+          description: A list of Virtual Reference Numbers is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        allOf:
+                        - $ref: '#/paths/~1pools~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/0'
+                        - $ref: '#/paths/~1virtual_reference_numbers/post/responses/201/content/application~1json/schema/allOf/0'
+              examples:
+                virtual_reference_numbers_list:
+                  value:
+                    total_count: 4
+                    count: 2
+                    limit: 2
+                    offset: 0
+                    data:
+                    - archived_at: null
+                      created_at: '2023-10-04T13:23:04.345Z'
+                      custodial_account_uid: tcvYpQ1ip76LaL4a
+                      external_uid: null
+                      name: greenfield1
+                      routing_number: '123456789'
+                      instant_payment_rail_registration_status: registered
+                      locked_at: '2023-10-15T15:53:13.591Z'
+                      lock_reason: customer_request
+                      status: active
+                      synthetic_account_uid: Dg1EPao8XukUpHG8
+                      uid: dYTG8WAWAh5UyvY7
+                      virtual_reference_number_last_four: 3456
+                    - archived_at: '2023-10-15T15:53:13.591Z'
+                      created_at: '2023-10-04T13:23:04.345Z'
+                      custodial_account_uid: tcvYpQ1ip76LaL4a
+                      external_uid": abcdefg1
+                      name: greenfield2
+                      routing_number: '123456789'
+                      instant_payment_rail_registration_status: registered
+                      locked_at: null
+                      lock_reason: null
+                      status: archived
+                      synthetic_account_uid: Dg1EPao8XukUpHG8
+                      uid: dYTG8WAWAh5UyvY7
+                      virtual_reference_number_last_four: 4321
+        '422':
+          description: Failed to retrieve Virtual Reference Numbers
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                failed_to_retrieve_vrns:
+                  value:
+                    errors:
+                    - code: 30003
+                      title: Failed to retrieve VRNs
+                      detail: An exception occurred while retrieving VRNs
+                      occurred_at: '2023-10-04T13:23:04.345Z'
+                    status: 422
+    post:
+      tags:
+      - Virtual Reference Numbers
+      summary: Create a new Virtual Reference Number
+      description: Creates a new Virtual Reference Number (VRN) for the specified Synthetic Account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                external_uid:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/put/requestBody/content/application~1json/schema/properties/external_uid'
+                name:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/put/requestBody/content/application~1json/schema/properties/name'
+                synthetic_account_uid:
+                  type: string
+                  description: A unique id referring to the mapped, general Synthetic Account.
+                  example: Dg1EPao8XukUpHG8
+                routing_number:
+                  description: The ABA routing number associated with this VRN.
+                  allOf:
+                  - type: string
+                    maxLength: 9
+                    minLength: 9
+                    pattern: ^[0-9]{9}$
+                    example: '123456789'
+              required:
+              - synthetic_account_uid
+              - routing_number
+            examples:
+              create_payload:
+                value:
+                  external_uid: YrfDrfVRgpPgnhF5
+                  name: greenfield1
+                  synthetic_account_uid: Dg1EPao8XukUpHG8
+                  routing_number: '123456789'
+      responses:
+        '201':
+          description: A single registered Virtual Reference Number is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  properties:
+                    archived_at:
+                      type: string
+                      description: The DateTime at which this VRN was archived. This value will be present if the status is archived. If in another state, the value will be null.
+                      example: null
+                    created_at:
+                      type: string
+                      description: The DateTime at which this VRN was created
+                      example: '2023-10-04T13:23:04.345Z'
+                    custodial_account_uid:
+                      type: string
+                      description: A unique id referring to the mapped, Custodial Account.
+                      example: tcvYpQ1ip76LaL4a
+                    external_uid:
+                      $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/put/requestBody/content/application~1json/schema/properties/external_uid'
+                    instant_payment_rail_registration_status:
+                      $ref: '#/paths/~1virtual_reference_numbers/get/parameters/0/schema'
+                    locked_at:
+                      type: string
+                      description: The DateTime at which this VRN was locked. This value will be present if the status is locked. If in another state, the value will be null.
+                      example: null
+                    lock_reason:
+                      type: string
+                      enum:
+                      - admin
+                      - customer_request
+                      description: Provided reason for locking the VRN.
+                      example: null
+                    name:
+                      $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/put/requestBody/content/application~1json/schema/properties/name'
+                    routing_number:
+                      type: string
+                      description: The ABA routing number (if any) associated with this VRN.
+                      example: '123456789'
+                    status:
+                      $ref: '#/paths/~1virtual_reference_numbers/get/parameters/1/schema'
+                    synthetic_account_uid:
+                      $ref: '#/paths/~1virtual_reference_numbers/get/parameters/2/schema'
+                    uid:
+                      type: string
+                      description: Unique identifier for the VRN
+                      example: dYTG8WAWAh5UyvY7
+                    virtual_reference_number_last_four:
+                      type: string
+                      description: Last 4 digits of the VRN
+                      example: '3456'
+                - type: object
+                  properties:
+                    virtual_reference_number:
+                      type: string
+                      description: The VRN
+                      example: '1234567890123456'
+              examples:
+                pending:
+                  value:
+                    archived_at: null
+                    created_at: '2023-10-04T13:23:04.345Z'
+                    custodial_account_uid: tcvYpQ1ip76LaL4a
+                    external_uid: null
+                    instant_payment_rail_registration_status: pending
+                    locked_at: null
+                    lock_reason: null
+                    name: greenfield1
+                    routing_number: '123456789'
+                    status: active
+                    synthetic_account_uid: Dg1EPao8XukUpHG8
+                    uid: dYTG8WAWAh5UyvY7
+                    virtual_reference_number: 1234567890123456
+                    virtual_reference_number_last_four: 3456
+        '422':
+          description: Creation Error
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                vrn_creation_error_sync:
+                  value:
+                    errors:
+                    - code: 30001
+                      title: Failed to create VRNs
+                      detail: An exception occurred while creating VRNs
+                      occurred_at: '2023-10-04T13:23:04.345Z'
+                    status: 422
+                synthetic_account_ineligible_for_vrn:
+                  value:
+                    errors:
+                    - code: 30002
+                      title: The Synthetic Account provided is ineligible for VRNs
+                      detail: The Synthetic Account must be an active, general, liability account
+                      occurred_at: '2023-10-04T13:23:04.345Z'
+                    status: 422
+  /virtual_reference_numbers/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Virtual Reference Numbers
+      summary: Get a single Virtual Reference Number
+      description: Retrieves a single Virtual Reference Number resource along with its details, including status, linked Synthetic Account, and registration metadata.
+      responses:
+        '200':
+          description: A single Virtual Reference Number is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1virtual_reference_numbers/post/responses/201/content/application~1json/schema'
+              examples:
+                registered:
+                  value:
+                    archived_at: null
+                    created_at: '2023-10-04T13:23:04.345Z'
+                    custodial_account_uid: tcvYpQ1ip76LaL4a
+                    external_uid: null
+                    instant_payment_rail_registration_status: registered
+                    locked_at: null
+                    lock_reason: null
+                    name: greenfield1
+                    routing_number: '123456789'
+                    status: active
+                    synthetic_account_uid: Dg1EPao8XukUpHG8
+                    uid: dYTG8WAWAh5UyvY7
+                    virtual_reference_number: 1234567890123456
+                    virtual_reference_number_last_four: 3456
+        '404':
+          description: The Virtual Reference Number is not found
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                unknown_virtual_reference_number:
+                  value:
+                    errors:
+                    - code: 30000
+                      title: Unknown VRN
+                      detail: Could not find Virtual Reference Number. Invalid VRN uid
+                      occurred_at: '2023-10-04T13:23:04.345Z'
+                    status: 404
+    put:
+      tags:
+      - Virtual Reference Numbers
+      summary: Edit a Virtual Reference Number
+      description: Updates the metadata of an existing Virtual Reference Number. This may include changes to labels, descriptions, or Instant Payment registration settings.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                external_uid:
+                  description: 'A unique identifier the Client supplies. It must be unique within the resource type. If the same value is given, no new resource will be created.
+
+                    '
+                  allOf:
+                  - type: string
+                    minLength: 1
+                    maxLength: 255
+                    description: 'A unique identifier the Client supplies. It must be unique within the resource type. If the same value is given, no new resource will be created.
+
+                      '
+                    example: partner-generated-id
+                name:
+                  type: string
+                  description: A unique name, per pool, to identify the resource.
+                  maxLength: 255
+                  example: greenfield1
+      responses:
+        '200':
+          description: The updated Virtual Reference Number resource is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1virtual_reference_numbers/post/responses/201/content/application~1json/schema'
+              examples:
+                registered:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/get/responses/200/content/application~1json/examples/registered'
+        '404':
+          description: The Virtual Reference Number is not found
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                unknown_virtual_reference_number:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/get/responses/404/content/application~1json/examples/unknown_virtual_reference_number'
+        '422':
+          description: Failed to update Virtual Reference Number
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                failed_to_update_vrn:
+                  summary: Lock operation failed
+                  description: An exception occurred while updating VRNs
+                  value:
+                    errors:
+                    - code: 30004
+                      title: Failed to update VRNs
+                      detail: An exception occurred while updating VRNs
+                      occurred_at: '2023-10-04T13:23:04.345Z'
+                    status: 422
+    delete:
+      tags:
+      - Virtual Reference Numbers
+      summary: Archive a single Virtual Reference Number
+      description: Archives a Virtual Reference Number, removing it from active use. Archived VRNs cannot be used for incoming payments or reconciliation.
+      responses:
+        '204':
+          description: Virtual Reference Number is archived successfully
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1virtual_reference_numbers/post/responses/201/content/application~1json/schema'
+              examples:
+                archived:
+                  value:
+                    archived_at: '2023-10-15T15:53:13.591Z'
+                    created_at: '2023-10-04T13:23:04.345Z'
+                    custodial_account_uid: tcvYpQ1ip76LaL4a
+                    external_uid": abcdefg1
+                    name: greenfield2
+                    routing_number: '123456789'
+                    instant_payment_rail_registration_status: registered
+                    locked_at: null
+                    lock_reason: null
+                    status: archived
+                    synthetic_account_uid: Dg1EPao8XukUpHG8
+                    uid: dYTG8WAWAh5UyvY7
+                    virtual_reference_number: 987654321654321
+                    virtual_reference_number_last_four: 4321
+        '404':
+          description: The Virtual Reference Number is not found
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                unknown_virtual_reference_number:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/get/responses/404/content/application~1json/examples/unknown_virtual_reference_number'
+  /virtual_reference_numbers/{uid}/lock:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    put:
+      tags:
+      - Virtual Reference Numbers
+      summary: Lock a single Virtual Reference Number
+      description: Locks a Virtual Reference Number to prevent new transactions or usage. This is typically used for fraud prevention or temporary deactivation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                lock_reason:
+                  type: string
+                  enum:
+                  - admin
+                  - customer_request
+                  description: Lock reason
+                  example: disabled by client request
+              required:
+              - lock_reason
+      responses:
+        '200':
+          description: The locked Virtual Reference Number resource is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1virtual_reference_numbers/post/responses/201/content/application~1json/schema'
+              examples:
+                locked:
+                  value:
+                    archived_at: null
+                    created_at: '2023-10-04T13:23:04.345Z'
+                    custodial_account_uid: tcvYpQ1ip76LaL4a
+                    external_uid: null
+                    name: greenfield1
+                    routing_number: '123456789'
+                    instant_payment_rail_registration_status: registered
+                    locked_at: '2023-10-15T15:53:13.591Z'
+                    lock_reason: customer_request
+                    status: active
+                    synthetic_account_uid: Dg1EPao8XukUpHG8
+                    uid: dYTG8WAWAh5UyvY7
+                    virtual_reference_number: 1234567890123456,
+                    virtual_reference_number_last_four: 3456
+        '404':
+          description: The Virtual Reference Number is not found
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                unknown_virtual_reference_number:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/get/responses/404/content/application~1json/examples/unknown_virtual_reference_number'
+        '422':
+          description: The Virtual Reference Number could not be locked
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                vrn_already_locked:
+                  summary: VRN already locked
+                  description: Returned when the VRN is already locked and cannot be locked again.
+                  value:
+                    errors:
+                    - code: 30010
+                      title: VRN is already locked
+                      detail: The Virtual Reference Number is already locked and cannot be locked again
+                      occurred_at: '2023-10-04T13:23:04.345Z'
+                    status: 422
+                vrn_lock_cooldown_active:
+                  summary: Lock cooldown active
+                  description: Returned when a lock cooldown is active and the VRN cannot be locked again yet.
+                  value:
+                    errors:
+                    - code: 30017
+                      title: VRN cooldown active
+                      detail: VRN cannot be locked/unlocked until the cooldown period has ended
+                      occurred_at: '2023-10-04T13:23:04.345Z'
+                    status: 422
+                virtual_reference_number_archived:
+                  summary: Archived VRN
+                  description: Returned when the VRN is archived and cannot be acted upon.
+                  value:
+                    errors:
+                    - code: 30005
+                      title: Archived VRN
+                      detail: Cannot use archived VRN
+                      occurred_at: '2023-10-04T13:23:04.345Z'
+                    status: 422
+                failed_to_update_vrn:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/put/responses/422/content/application~1json/examples/failed_to_update_vrn'
+  /virtual_reference_numbers/{uid}/unlock:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    put:
+      tags:
+      - Virtual Reference Numbers
+      summary: Unlock a single Virtual Reference Number
+      description: Unlocks a previously locked Virtual Reference Number, restoring its ability to receive payments and participate in reconciliation workflows.
+      responses:
+        '200':
+          description: The locked Virtual Reference Number resource is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1virtual_reference_numbers/post/responses/201/content/application~1json/schema'
+              examples:
+                registered:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/get/responses/200/content/application~1json/examples/registered'
+        '404':
+          description: The Virtual Reference Number is not found
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                unknown_virtual_reference_number:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/get/responses/404/content/application~1json/examples/unknown_virtual_reference_number'
+        '422':
+          description: The Virtual Reference Number could not be unlocked
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                vrn_already_unlocked:
+                  summary: VRN already unlocked
+                  description: Returned when the VRN is already unlocked and cannot be unlocked again.
+                  value:
+                    errors:
+                    - code: 30013
+                      title: VRN is already unlocked
+                      detail: The Virtual Reference Number is already unlocked and cannot be unlocked again
+                      occurred_at: '2023-10-04T13:23:04.345Z'
+                    status: 422
+                vrn_unlock_cooldown_active:
+                  summary: Unlock cooldown active
+                  description: Returned when a unlock cooldown is active and the VRN cannot be unlocked again yet.
+                  value:
+                    errors:
+                    - code: 30018
+                      title: VRN cooldown active
+                      detail: VRN cannot be locked/unlocked until the cooldown period has ended
+                      occurred_at: '2023-10-04T13:23:04.345Z'
+                    status: 422
+                virtual_reference_number_archived:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D~1lock/put/responses/422/content/application~1json/examples/virtual_reference_number_archived'
+                failed_to_update_vrn:
+                  $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/put/responses/422/content/application~1json/examples/failed_to_update_vrn'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Access token signed with shared HMAC
+x-explorer-enabled: false

@@ -1,0 +1,191 @@
+openapi: 3.2.0
+info:
+  title: Newline Platform Customer Products API
+  version: 1.0.0
+  description: "\nWelcome! In this section of our docs experience, you'll be able to go through common payment scenarios that both you and your end customers may encounter as you start to offer financial products through your own technology stack. These guides will also help to highlight and expand on concepts discussed in our API references, like [Synthetic Accounts](https://developers.newline53.com/reference/synthetic-accounts), [Transfers](https://developers.newline53.com/reference/transfers), [Transactions&nbsp;](https://developers.newline53.com/reference/transactions)  and [Customers](https://developers.newline53.com/reference/customers).\n\nOur guides are broken out by supported use cases. If you find there isn't a specific use case that fits your business, reach out to our [Sales &amp; Partnership team](https://newline53.com/contact-us.html) and they'll be able to help determine how we can support your business and provide any other questions or feedback.\n\nLastly, when you're ready to build, check out our [Onboarding Overview](https://developers.newline53.com/docs/overview) and [Sandbox Walkthrough](https://developers.newline53.com/docs/sandbox-walkthrough) guides.\n\n## About our API\n\nThe Newline API is organized around REST. With a few exceptions, our API has standard resource-oriented URLs, accepts form-encoded OR JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.\n\n## FAQs\n\nWant to quickly review some common questions about Newline and our financial experiences, check out our [FAQs](https://developers.newline53.com/docs/faqs) guide.\n\n# Overview\n\n## Newline Onboarding 101\n\nOnboarding to any SaaS product can be a daunting task, and at Newline we seek to make this experience as smooth as possible. Part of that is getting you, our Client, familiar with the process by which we establish key resources like your Program, Products, Customers, Custodial Accounts, and Synthetic Accounts.\n\nThe following guide details, in short order, the Program and resources that Newline will configure for you and how each of these components affect your ability to use our API Reference.\n\n<img src=\"https://files.readme.io/955347d-image.png\">\n\nThe above visualization shows the Program and resources Newline will provide and maintain for Clients going through onboarding and implementation, but we'll enumerate the details for each resource above.\n\n> **Note**\n> In the above visualization, the lighter color items are preset and created by Newline for any Client implementation. Synthetic Accounts is a special case where general Synthetic Accounts are preset and Clients will be responsible for creating their own external Synthetic Accounts and VRNs..\n\n- **Program** - the Program dictates the origination terms to which the Client and Newline mutually agree. This could include payment limitations like amounts, frequency, and the need for pre-funding (ex. ACH). Your Program will be created and configured by Newline.\n\n- **Products** - these are distinct Product offerings supported by Newline. For instance, this can include payment rails like ACH, Wire, and Instant Payments that are configured as available synthetic_account_types. Newline creates and configures a Program's Products.\n\n    - Products can be applied across multiple Customers, and Customers can be attached to multiple Products. Essentially there is a many-to-many relationship between these resources, which make them, in some cases, parallel.\n\n    - A Product can support multiple payment rails.\n\n- **Customer Type** - Customers are provided a Customer Type at creation. For instance, Primary Customers are considered full account owners and have complete authority to take any actions associated with their accounts and associated resources. You can also limit certain Customer Types to have access to only certain Products. Permitted Customer Types are configured by Newline.\n\n- **Pool** - Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. Newline will create Pools.\n\n- **Customer** - This is the entity that owns the Account and Funds stored at Newline. This entity also is deemed the Originator when it comes to any payment creation. Clients can also be Customers in the event they meet those criteria. Customers are created by Newline or by the Client depending on the use case.\n\n- **Custodial Account** - This is the Account that exists in our Synthetic Core and represents the reciprocal Account on Fifth Third's ledger. These are the accounts you can access via Fifth Third Direct. Custodial Accounts will be created by Newline.\n\n- **Synthetic Account** - How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts that your Customers will likely use within your application. Synthetic Accounts of the general category will be created by Newline or by the Client depending on your use case. Clients will create external Synthetic Accounts like wire_external, ach_external, and instant_payment_external.\n\n- **Virtual Reference Number** - Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a synthetic account and can form a many-to-one relationship with their parent synthetic account.\n\n# Postman Collection\n\nHow to set up Postman, add our Newline collection, and use it to test Newline platform APIs.\n\n## Installing Postman\n\nPostman is available on a variety of platforms. Visit [Postman](https://www.postman.com/downloads/) to see if your platform is supported.  \nTo install Postman:\n\n1. Go to [Postman downloads](https://www.postman.com/downloads/).\n\n<img src=\"https://files.readme.io/fd1743f-Postman_Dowload_snip.jpg\">\n\n1. Download the required version.\n\n2. After your download is complete, run the downloaded file to install Postman.\n\n## Import the Newline Collection\n\nTo import our collection, click on the following [▶ Newline Collection](https://www.postman.com/newline53) button, and you will be redirected to our Newline Postman workspace, where you can download our collection.\n\nFor further information, see the [Postman documentation on importing data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).\n\n## Configure Your Postman Environment\n\n1. Create a Sandbox Environment.\n\n2. Set Sandbox variables.\n\n3. Save the environment.\n\n4. Ensure the new environment is selected.\n\n**Set API Keys**  \nYou will need to set your HMAC Key and Program UID as environment variables. You can set the variables in the headers in the environment tab within the Postman Collection.\n\n# Terminology\n\nThe terms, which represent API resource objects in Newline, below are referenced in our API documentation and endpoint definitions.  \nSome important notes while reading through this list:\n\nResource Objects often interact with one another, so please be sure to review our endpoints to see which serve as required inputs or are collected as outputs.\n\nCertain objects, like Transfers, are described differently in the payments industry depending on the Transaction Type. For instance, ach transactions are often referred to as entries rather than payments, as they can represent both credits (i.e., ODFI pushes) and debits (i.e., ODFI pulls).  \nWhile Resource Objects are distinct, they, in some cases, can represent the same entity.\n\n- Ex. 1 - Clients can also be Customers if they manage and own the financial products in question.\n\n- Ex. 2 - Transfers produce Transactions, but the produced Transactions (in aggregate) represent the original money movement.\n\n| Term | Definition |\n| --- | --- |\n| Customer | The end user of your application and the owner of assets in your Program. For example, when initiating a payment, this entity would be considered the **originator**. |\n| Client | The application or product owning organization that is affording end users (i.e., Customers) the ability to access the financial products.<br><br><br>**Note**<br>Clients can also be Customers in the event they own and have management over the financial products or the funds involved. |\n| Transmitter | Transmitters are the parties who have _requested_ the Transfer in question. When the Transmitter and Customer are the same party, Newline pulls origination information from the created Customer record. When the Transmitter and Customer are not the same party, it's the Client's responsibility to provide that information when making a Transfer.  <br>  <br>Transmitters are only required for the `wire` and `instant_payment` types (see the `wire_transmitter` and `instant_payment_transmitter` objects in the [Initiate a Transfer](https://developers.newline53.com/reference/post_transfers) reference). Client's should also take note of the `initiator_type` field, which dictates from where Transmitter information is pulled. For more context on Transmitters, refer to the [Payment Rail Regulation](https://newline-enterprise-group.readme.io/docs/transfer#payment-rail-regulation) section below. |\n| Partner | Any infrastructure partner integrated within the Newline Platform. |\n| Program | The Program is custom tailored to your offering and purpose built to enable financial products on your application. The Program defines what Synthetic and Custodial Account types, Customer Types, and Transactions Types are available for your Customers to utilize. The Program configuration is defined between the Client and Newline based on your (i.e., the Client's) use case. |\n| Product | Products represents the financial products available to your Customers. The Product object contains the account, compliance, and customer profile responses necessary for your Customers to gain access. |\n| Customer Product | The Customer Product is created when the Customer is added to a Product and respective Program. This often includes Newline automatically creating any needed financial products for the Customers' use. For instance, a Synthetic Account to represent the origination account at Fifth Third. |\n| Service Offering | The financial product offered by the Newline platform. These can be (but are not limited to) checking, savings, brokerage, or retirement accounts. |\n| Pool | Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. |\n| Custodial Accounts | This resource within Newline represents the assets held by your Customers, with direct alignment to accounts opened at Fifth Third. Custodial Accounts have the following relationships: one-to-one with Customers, and one-to-Many with Synthetic Accounts. |\n| Synthetic Accounts | How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts (i.e., Counterparties) that your Customers will likely use within your application. |\n| Virtual Reference Number (VRN) | Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a Synthetic Account, and can form a many-to-one relationship with their parent Synthetic Account. |\n| Transfer | The movement of assets from one Synthetic Account to another Synthetic Account. Most of asset movement initiated by your application will result in a Transfer. A successful Transfer will result in at least one Transaction. |\n| Transaction | Transactions are created based on how you instruct Newline to move assets (a Transfer) or how assets are moved or spent outside of your application (For example, ACH, Wire, and Instant Payments Transfers). The Transaction contains the amount, origin, and destination of assets. Newline categorizes Transactions into types to assist in their classification and representation. |\n| Transaction Events | The steps taken to complete the Transaction. These can be used to view the progress of an in-flight Transaction or see the history of a completed Transaction. |"
+servers:
+- url: https://sandbox.newline53.com/api/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Customer Products
+  description: "Customer Products link Customers to financial products. This section outlines how to onboard customers, manage their product relationships, and track statuses.\n\n**Endpoints:**\n\n- GET [List Customer Products: GET /customer_products](https://developers.newline53.com/reference/get_customer-products)\n    \n- POST [Onboard a Customer onto a Product: POST /customer_products](https://developers.newline53.com/reference/post_customer-products)\n    \n- GET [Get a single Customer Product: GET /customer_products/{uid}](https://developers.newline53.com/reference/get_customer-products-uid)\n\nCustomer Product records are generated when a Customer is submitted for onboarding to a specific Product.\n\n## Newline preset-Customers\n\nIf the Client is also the Customer, the Customer Product record will be autogenerated during the Client's onboarding to our production environment.\n\n## Client-initiated Customers\n\nWhen clients onboard a Customer, the Customer must fulfill the prerequisite Product requirements. Newline will then verify that the Product requirements have been met.\n\nIf the Product requirements are met, Newline will proceed with account opening and feature enablement as specified by the Product. If the product requirements are unmet, Newline will return an error response indicating which element of the product validation failed."
+paths:
+  /customer_products:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Customer Products
+      summary: List Customer Products
+      description: 'List Customers and the Products they have onboarded onto, filtered by the given parameters.
+
+        '
+      parameters:
+      - name: program_uid
+        in: query
+        schema:
+          type: string
+          example: pQtTCSXz57fuefzp
+        description: Only return Customer Products belonging to the submitted Program
+      - name: product_uid
+        in: query
+        schema:
+          type: string
+          example: zbJbEa72eKMgbbBv
+        description: Only return Customer Products belonging to the submitted Product
+      - $ref: '#/paths/~1pools/get/parameters/0'
+      responses:
+        '200':
+          description: A list of Customer Products is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/paths/~1customer_products~1%7Buid%7D/get/responses/200/content/application~1json/schema'
+    post:
+      tags:
+      - Customer Products
+      summary: Onboard Customer onto a Product
+      description: 'Submit a request to onboard a Customer onto a new product. Ensure all required Customer details have been provided with [Adjust Customer Data](https://developers.newline53.com/reference/put_customers-uid) before making this request. An error will be returned if details are missing or invalid.
+
+
+        The request to onboard a Customer serves as explicit confirmation from you that the Customer is ready for account opening. This event initiates the KYC/AML verification process and account opening in your Program. This is a billable event and is isolated intentionally for you to confirm that the Customer record is complete. Customer Onboarding is the event that locks the customer PII and profile responses from further edits.
+
+
+        Customer Onboarding is designed to work as follows:
+
+
+        - The Customer provides complete PII as defined by the Customers endpoint
+
+        - The Customer provides complete Customer Profile information as defined by the Product endpoint
+
+        - You submit a request to Customer Products with the specified Product this Customer is onboarding onto
+
+        - Newline performs a validation on the PII provided and the Customer Profile data to confirm all are valid
+
+
+        If the Customer passes these validations and meets the duration requirements described below, the Customer record is submitted to the KYC process'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_uid:
+                  type: string
+                  example: S62MaHx6WwsqG9vQ
+                  description: A UID referring to the Customer generated by Newline.
+                product_uid:
+                  type: string
+                  example: pQtTCSXz57fuefzp
+                  description: A UID referring to the Product. Generated by Newline.
+              required:
+              - customer_uid
+              - product_uid
+      responses:
+        '200':
+          description: A single Customer Product is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1customer_products~1%7Buid%7D/get/responses/200/content/application~1json/schema'
+        '422':
+          description: There was a problem with the request body
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                missing-details:
+                  description: The given Customer was missing details.
+                  value:
+                    errors:
+                      code: 4111
+                      title: Incomplete Customer details
+                      detail: Customer is missing required information
+                      occurred_at: '2022-10-21T18:22:22.300Z'
+                      extra: First name can't be blank; Last name can't be blank; City can't be blank; Dob can't be blank; Phone can't be blank; Postal code can't be blank; Ssn can't be blank; State can't be blank; Street1 can't be blank
+                    status: 422
+  /customer_products/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Customer Products
+      summary: Get a single Customer Product
+      description: Retrieves a single Customer Product resource along with its associated Customer and Product
+      responses:
+        '200':
+          description: A single Customer Product is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uid:
+                    type: string
+                    description: A unique identifier for this resource
+                    example: Tegvs2E4TQgVYYMj
+                  status:
+                    type: string
+                    description: the status of the Customer Product onboarding
+                    example: active
+                    enum:
+                    - active
+                    - created
+                    - manual_review
+                    - rejected
+                  customer_uid:
+                    type: string
+                    description: A unique identifier for a Customer
+                    example: DuSzg6Ywr3cY9mw4
+                  customer_email:
+                    type: string
+                    description: The Customer's email address
+                    example: olive.oyl@newline53.com
+                  product_uid:
+                    type: string
+                    description: A unique identifier for a Product
+                    example: b8bemEKjAQhunbah
+                  product_name:
+                    type: string
+                    description: The name of the Product
+                    example: Checking
+                  program_uid:
+                    type: string
+                    description: A unique identifier for a Program
+                    example: F1oFMKafpB2Zm6ng
+                  activated_at:
+                    type: string
+                    description: The date and time at which the Customer Product became active.
+                    format: date-time
+                    example: '2019-10-19T08:15:13Z'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Access token signed with shared HMAC
+x-explorer-enabled: false

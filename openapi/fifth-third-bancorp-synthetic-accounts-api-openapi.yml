@@ -1,0 +1,1147 @@
+openapi: 3.2.0
+info:
+  title: Newline Platform Synthetic Accounts API
+  version: 1.0.0
+  description: "\nWelcome! In this section of our docs experience, you'll be able to go through common payment scenarios that both you and your end customers may encounter as you start to offer financial products through your own technology stack. These guides will also help to highlight and expand on concepts discussed in our API references, like [Synthetic Accounts](https://developers.newline53.com/reference/synthetic-accounts), [Transfers](https://developers.newline53.com/reference/transfers), [Transactions&nbsp;](https://developers.newline53.com/reference/transactions)  and [Customers](https://developers.newline53.com/reference/customers).\n\nOur guides are broken out by supported use cases. If you find there isn't a specific use case that fits your business, reach out to our [Sales &amp; Partnership team](https://newline53.com/contact-us.html) and they'll be able to help determine how we can support your business and provide any other questions or feedback.\n\nLastly, when you're ready to build, check out our [Onboarding Overview](https://developers.newline53.com/docs/overview) and [Sandbox Walkthrough](https://developers.newline53.com/docs/sandbox-walkthrough) guides.\n\n## About our API\n\nThe Newline API is organized around REST. With a few exceptions, our API has standard resource-oriented URLs, accepts form-encoded OR JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.\n\n## FAQs\n\nWant to quickly review some common questions about Newline and our financial experiences, check out our [FAQs](https://developers.newline53.com/docs/faqs) guide.\n\n# Overview\n\n## Newline Onboarding 101\n\nOnboarding to any SaaS product can be a daunting task, and at Newline we seek to make this experience as smooth as possible. Part of that is getting you, our Client, familiar with the process by which we establish key resources like your Program, Products, Customers, Custodial Accounts, and Synthetic Accounts.\n\nThe following guide details, in short order, the Program and resources that Newline will configure for you and how each of these components affect your ability to use our API Reference.\n\n<img src=\"https://files.readme.io/955347d-image.png\">\n\nThe above visualization shows the Program and resources Newline will provide and maintain for Clients going through onboarding and implementation, but we'll enumerate the details for each resource above.\n\n> **Note**\n> In the above visualization, the lighter color items are preset and created by Newline for any Client implementation. Synthetic Accounts is a special case where general Synthetic Accounts are preset and Clients will be responsible for creating their own external Synthetic Accounts and VRNs..\n\n- **Program** - the Program dictates the origination terms to which the Client and Newline mutually agree. This could include payment limitations like amounts, frequency, and the need for pre-funding (ex. ACH). Your Program will be created and configured by Newline.\n\n- **Products** - these are distinct Product offerings supported by Newline. For instance, this can include payment rails like ACH, Wire, and Instant Payments that are configured as available synthetic_account_types. Newline creates and configures a Program's Products.\n\n    - Products can be applied across multiple Customers, and Customers can be attached to multiple Products. Essentially there is a many-to-many relationship between these resources, which make them, in some cases, parallel.\n\n    - A Product can support multiple payment rails.\n\n- **Customer Type** - Customers are provided a Customer Type at creation. For instance, Primary Customers are considered full account owners and have complete authority to take any actions associated with their accounts and associated resources. You can also limit certain Customer Types to have access to only certain Products. Permitted Customer Types are configured by Newline.\n\n- **Pool** - Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. Newline will create Pools.\n\n- **Customer** - This is the entity that owns the Account and Funds stored at Newline. This entity also is deemed the Originator when it comes to any payment creation. Clients can also be Customers in the event they meet those criteria. Customers are created by Newline or by the Client depending on the use case.\n\n- **Custodial Account** - This is the Account that exists in our Synthetic Core and represents the reciprocal Account on Fifth Third's ledger. These are the accounts you can access via Fifth Third Direct. Custodial Accounts will be created by Newline.\n\n- **Synthetic Account** - How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts that your Customers will likely use within your application. Synthetic Accounts of the general category will be created by Newline or by the Client depending on your use case. Clients will create external Synthetic Accounts like wire_external, ach_external, and instant_payment_external.\n\n- **Virtual Reference Number** - Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a synthetic account and can form a many-to-one relationship with their parent synthetic account.\n\n# Postman Collection\n\nHow to set up Postman, add our Newline collection, and use it to test Newline platform APIs.\n\n## Installing Postman\n\nPostman is available on a variety of platforms. Visit [Postman](https://www.postman.com/downloads/) to see if your platform is supported.  \nTo install Postman:\n\n1. Go to [Postman downloads](https://www.postman.com/downloads/).\n\n<img src=\"https://files.readme.io/fd1743f-Postman_Dowload_snip.jpg\">\n\n1. Download the required version.\n\n2. After your download is complete, run the downloaded file to install Postman.\n\n## Import the Newline Collection\n\nTo import our collection, click on the following [▶ Newline Collection](https://www.postman.com/newline53) button, and you will be redirected to our Newline Postman workspace, where you can download our collection.\n\nFor further information, see the [Postman documentation on importing data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).\n\n## Configure Your Postman Environment\n\n1. Create a Sandbox Environment.\n\n2. Set Sandbox variables.\n\n3. Save the environment.\n\n4. Ensure the new environment is selected.\n\n**Set API Keys**  \nYou will need to set your HMAC Key and Program UID as environment variables. You can set the variables in the headers in the environment tab within the Postman Collection.\n\n# Terminology\n\nThe terms, which represent API resource objects in Newline, below are referenced in our API documentation and endpoint definitions.  \nSome important notes while reading through this list:\n\nResource Objects often interact with one another, so please be sure to review our endpoints to see which serve as required inputs or are collected as outputs.\n\nCertain objects, like Transfers, are described differently in the payments industry depending on the Transaction Type. For instance, ach transactions are often referred to as entries rather than payments, as they can represent both credits (i.e., ODFI pushes) and debits (i.e., ODFI pulls).  \nWhile Resource Objects are distinct, they, in some cases, can represent the same entity.\n\n- Ex. 1 - Clients can also be Customers if they manage and own the financial products in question.\n\n- Ex. 2 - Transfers produce Transactions, but the produced Transactions (in aggregate) represent the original money movement.\n\n| Term | Definition |\n| --- | --- |\n| Customer | The end user of your application and the owner of assets in your Program. For example, when initiating a payment, this entity would be considered the **originator**. |\n| Client | The application or product owning organization that is affording end users (i.e., Customers) the ability to access the financial products.<br><br><br>**Note**<br>Clients can also be Customers in the event they own and have management over the financial products or the funds involved. |\n| Transmitter | Transmitters are the parties who have _requested_ the Transfer in question. When the Transmitter and Customer are the same party, Newline pulls origination information from the created Customer record. When the Transmitter and Customer are not the same party, it's the Client's responsibility to provide that information when making a Transfer.  <br>  <br>Transmitters are only required for the `wire` and `instant_payment` types (see the `wire_transmitter` and `instant_payment_transmitter` objects in the [Initiate a Transfer](https://developers.newline53.com/reference/post_transfers) reference). Client's should also take note of the `initiator_type` field, which dictates from where Transmitter information is pulled. For more context on Transmitters, refer to the [Payment Rail Regulation](https://newline-enterprise-group.readme.io/docs/transfer#payment-rail-regulation) section below. |\n| Partner | Any infrastructure partner integrated within the Newline Platform. |\n| Program | The Program is custom tailored to your offering and purpose built to enable financial products on your application. The Program defines what Synthetic and Custodial Account types, Customer Types, and Transactions Types are available for your Customers to utilize. The Program configuration is defined between the Client and Newline based on your (i.e., the Client's) use case. |\n| Product | Products represents the financial products available to your Customers. The Product object contains the account, compliance, and customer profile responses necessary for your Customers to gain access. |\n| Customer Product | The Customer Product is created when the Customer is added to a Product and respective Program. This often includes Newline automatically creating any needed financial products for the Customers' use. For instance, a Synthetic Account to represent the origination account at Fifth Third. |\n| Service Offering | The financial product offered by the Newline platform. These can be (but are not limited to) checking, savings, brokerage, or retirement accounts. |\n| Pool | Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. |\n| Custodial Accounts | This resource within Newline represents the assets held by your Customers, with direct alignment to accounts opened at Fifth Third. Custodial Accounts have the following relationships: one-to-one with Customers, and one-to-Many with Synthetic Accounts. |\n| Synthetic Accounts | How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts (i.e., Counterparties) that your Customers will likely use within your application. |\n| Virtual Reference Number (VRN) | Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a Synthetic Account, and can form a many-to-one relationship with their parent Synthetic Account. |\n| Transfer | The movement of assets from one Synthetic Account to another Synthetic Account. Most of asset movement initiated by your application will result in a Transfer. A successful Transfer will result in at least one Transaction. |\n| Transaction | Transactions are created based on how you instruct Newline to move assets (a Transfer) or how assets are moved or spent outside of your application (For example, ACH, Wire, and Instant Payments Transfers). The Transaction contains the amount, origin, and destination of assets. Newline categorizes Transactions into types to assist in their classification and representation. |\n| Transaction Events | The steps taken to complete the Transaction. These can be used to view the progress of an in-flight Transaction or see the history of a completed Transaction. |"
+servers:
+- url: https://sandbox.newline53.com/api/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Synthetic Accounts
+  description: 'Synthetic Accounts serve as the foundation for asset tracking in Newline. They allow for flexible configurations tailored to your program.
+
+
+    **Endpoints:**
+
+
+    - GET [List Synthetic Account Types: GET /synthetic_account_types](https://developers.newline53.com/reference/get_synthetic-account-types)
+
+
+    - GET [Get a single Synthetic Account Type: GET /synthetic_account_types/{uid}](https://developers.newline53.com/reference/get_synthetic-account-types-uid)
+
+
+    - GET [List Synthetic Accounts: GET /synthetic_accounts](https://developers.newline53.com/reference/get_synthetic-accounts)
+
+
+    - POST [Create a New Synthetic Account: POST /synthetic_accounts](https://developers.newline53.com/reference/post_synthetic-accounts)
+
+
+    - GET [Get a single Synthetic Account: GET /synthetic_accounts/{uid}](https://developers.newline53.com/reference/get_synthetic-accounts-uid)
+
+
+    - PUT [Update Synthetic Account metadata: PUT /synthetic_accounts/{uid}](https://developers.newline53.com/reference/put_synthetic-accounts-uid)
+
+
+    - DELETE [Archive a Synthetic Account: DELETE /synthetic_accounts/{uid}](https://developers.newline53.com/reference/delete_synthetic-accounts-uid)
+
+
+    Synthetic Accounts are the foundation of your application and the interface between your Customers. They are designed to track any asset type for any Customer at Newline. A single Synthetic Account can be configured to blend assets from multiple core accounts for multiple Customers.
+
+
+    The types and distribution of assets, the number of Customers, and many other rules governing a Synthetic Account''s usage can be configured for each Account on a Program-by-Program basis via the Synthetic Account Types.
+
+
+    The list of Synthetic Account Types and their rules for each Program are set up during Program configuration. Each Synthetic Account Type belongs to one of a handful of Synthetic Account Categories that govern their primary purpose and handling by the Newline platform, such as general use or external accounts. You may retrieve the complete list of available types via the [GET /synthetic_account_types](https://developers.newline53.com/reference/get_synthetic-account-types) endpoint.'
+paths:
+  /synthetic_account_types:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Synthetic Accounts
+      summary: List Synthetic Account Types
+      description: Retrieve a list of Synthetic Account Types available for use in your Program. These types define the behavior and characteristics of Synthetic Accounts.
+      parameters:
+      - name: program_uid
+        in: query
+        schema:
+          type: string
+          example: EhrQZJNjCd79LLYq
+        description: Only list Synthetic Account Types that are available to be used by the given Program
+      - $ref: '#/paths/~1pools/get/parameters/1'
+      - $ref: '#/paths/~1pools/get/parameters/2'
+      responses:
+        '200':
+          description: A list of Synthetic Account Types is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/paths/~1synthetic_account_types~1%7Buid%7D/get/responses/200/content/application~1json/schema'
+              examples:
+                synthetic_account_types_list:
+                  value:
+                    total_count: 10
+                    count: 4
+                    limit: 4
+                    offset: 0
+                    data:
+                    - description: This Synthetic Account Type will be used to open Synthetic Accounts that will only contain a USD asset type.
+                      name: General for My Program
+                      program_uid: Sw9DjTGJq5L1ctZN
+                      synthetic_account_category: general
+                      uid: fRMwt6H14ovFUz1s
+                    - description: This Synthetic Account Type will be used to create an external Synthetic Account used for ACH transfers. The external Synthetic Account will be associated with the customer's externally connected financial institution.
+                      name: ACH External Account for My Program
+                      program_uid: Sw9DjTGJq5L1ctZN
+                      synthetic_account_category: ach_external
+                      uid: q4mdMxMtjXfdbrjn
+                    - description: This Synthetic Account Type will be used to create an external Synthetic Account used for wire transfers. The external Synthetic Account will be associated with the customer's externally connected financial institution.
+                      name: Wire External Account for My Program
+                      program_uid: Sw9DjTGJq5L1ctZN
+                      synthetic_account_category: wire_external
+                      uid: LTpFu4XV56kim8vR
+                    - description: This Synthetic Account Type will be used to create an external Synthetic Account used for instant payments. The external Synthetic Account will be associated with the customer's externally connected financial institution.
+                      name: Instant Payments External Account for My Program
+                      program_uid: Sw9DjTGJq5L1ctZN
+                      synthetic_account_category: instant_payment_external
+                      uid: gh6APuePFP2j9iFR
+  /synthetic_account_types/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Synthetic Accounts
+      summary: Get a Single Synthetic Account Type
+      description: 'Returns a single Synthetic Account Type resource along with supporting details.
+
+
+        Enables changes to the Synthetic Account fields, including the Master Synthetic Account. The Master Synthetic Account remains identifiable by the `master_account` flag stored with the Synthetic Account record.'
+      responses:
+        '200':
+          description: A single Synthetic Account Type is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    description:
+                      type: string
+                      description: A description outlining the intended use and requirements for this program's instance of the synthetic_account_type
+                      readOnly: true
+                      example: This synthetic_account_type will be used to open synthetic_accounts for our customers that will only contain a USD asset type.
+                    program_uid:
+                      type: string
+                      description: A UID referring to the Program this synthetic_account_type belongs to
+                      readOnly: true
+                      example: kaxHFJnWvJxRJZxq
+                    synthetic_account_category:
+                      type: string
+                      description: The name of the Synthetic Account Category for this type. Accounts can be in one of several categories that indicate their handling properties and defining characteristics such as 'general' or 'external'. As an example, 'external' accounts do not actually hold any assets and are instead used to represent an account at an external institution for use in initiating transfers.
+                      readOnly: true
+                      enum:
+                      - general
+                      - ach_external
+                      - instant_payment_external
+                      - wire_external
+  /synthetic_accounts:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Synthetic Accounts
+      summary: List Synthetic Accounts
+      description: 'Retrieve a list of Synthetic Accounts associated with the specified Customer and Pool. This endpoint supports filtering by account type, category, status, and sorting by balance or name.
+
+        '
+      parameters:
+      - $ref: '#/paths/~1pools/get/parameters/0'
+      - $ref: '#/paths/~1transfers/get/parameters/1'
+      - $ref: '#/paths/~1transfers/get/parameters/2'
+      - $ref: '#/paths/~1pools/get/parameters/1'
+      - $ref: '#/paths/~1pools/get/parameters/2'
+      - name: synthetic_account_type_uid
+        in: query
+        schema:
+          type: string
+          example: q4mdMxMtjXfdbrjn
+        description: Filter by Synthetic Account Type
+      - name: synthetic_account_category
+        in: query
+        schema:
+          type: string
+          enum:
+          - general
+          - ach_external
+          - wire_external
+          - instant_payment_external
+        description: Filter by Synthetic Account Category
+      - $ref: '#/paths/~1custodial_accounts/get/parameters/4'
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - initiated
+          - active
+          - archived
+          - failed
+          example: active
+          description: 'Filter by status. Multiple values are allowed, e.g. `status[]=archived&status[]=failed`.
+
+            '
+      - name: sort
+        in: query
+        schema:
+          type: string
+          enum:
+          - name_asc
+          - name_desc
+          - net_usd_balance_asc
+          - net_usd_balance_desc
+          - net_usd_pending_balance_asc
+          - net_usd_pending_balance_desc
+          - net_usd_available_balance_asc
+          - net_usd_available_balance_desc
+      responses:
+        '200':
+          description: A list of Synthetic Accounts is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        allOf:
+                        - $ref: '#/paths/~1synthetic_accounts/post/requestBody/content/application~1json/schema/allOf/0/allOf/0'
+                        - $ref: '#/paths/~1synthetic_accounts/post/requestBody/content/application~1json/schema/allOf/0/allOf/1'
+                        - type: object
+                          properties:
+                            ach:
+                              type:
+                              - object
+                              - 'null'
+                              description: 'Contains ACH-specific information. Only populated if the Synthetic Account is in the `ach_external` category.
+
+                                '
+                              allOf:
+                              - $ref: '#/paths/~1synthetic_accounts/post/requestBody/content/application~1json/schema/allOf/1/properties/ach/allOf/0'
+                            instant_payment:
+                              type:
+                              - object
+                              - 'null'
+                              description: 'Contains Instant Payment-specific information. Only populated if the Synthetic Account is in the `instant_payment_external` category.
+
+                                '
+                              allOf:
+                              - type: object
+                                properties:
+                                  counterparty_name:
+                                    description: 'Name of the business or individual who owns the counterparty Account.
+
+                                      '
+                                    allOf:
+                                    - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_name/allOf/0'
+                                  email:
+                                    description: Email address of the counterparty
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: payments@veryexcellentbusiness.com
+                                  phone:
+                                    $ref: '#/paths/~1customers~1%7Buid%7D/put/requestBody/content/application~1json/schema/properties/details/allOf/0/allOf/0/allOf/1/properties/phone'
+                            wire:
+                              type:
+                              - object
+                              - 'null'
+                              description: 'Contains wire-specific information. Only populated if the Synthetic Account is in the `wire_external` category.
+
+                                '
+                              allOf:
+                              - type: object
+                                properties:
+                                  counterparty_name:
+                                    description: 'Name of the business or individual who owns the counterparty Account.
+
+                                      '
+                                    allOf:
+                                    - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_name/allOf/0'
+                                  counterparty_bank_address:
+                                    description: 'Address of the financial institution where the external account is held.
+
+                                      '
+                                    type:
+                                    - object
+                                    - 'null'
+                                    allOf:
+                                    - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0'
+                                  counterparty_bank_name:
+                                    description: 'Name of the financial institution where the counterparty account is held.
+
+                                      '
+                                    type:
+                                    - string
+                                    - 'null'
+                                    allOf:
+                                    - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_bank_name/allOf/0'
+              examples:
+                synthetic_accounts_list:
+                  value:
+                    total_count: 10
+                    count: 4
+                    limit: 4
+                    offset: 0
+                    data:
+                    - uid: 4XkJnsfHsuqrxmeX
+                      external_uid: ea8e1ccd-5893-4fcb-b09a-2b784ba7c73c
+                      name: Primary Account
+                      pool_uid: wTSMX1GubP21ev2h
+                      synthetic_account_type_uid: fRMwt6H14ovFUz1s
+                      synthetic_account_category: general
+                      status: active
+                      liability: true
+                      net_usd_balance: '1567.13'
+                      net_usd_pending_balance: '261.83'
+                      net_usd_available_balance: '1409.88'
+                      asset_balances:
+                      - asset_quantity: '1567.13'
+                        asset_type: USD
+                        current_usd_value: '1567.13'
+                        custodial_account_uid: DXr716uLzBm44HyP
+                        custodial_account_name: First Checking
+                        debit: false
+                      master_account: true
+                      custodial_account_uids:
+                      - DXr716uLzBm44HyP
+                      - 3fRiyDdbSVv9nKW2
+                      account_number_last_four: '5372'
+                      routing_number: '123456789'
+                      opened_at: '2018-05-26T23:14:27.012Z'
+                      closed_at: null
+                      instant_payment: null
+                      wire: null
+                    - uid: exMDShw6yM3NHLYV
+                      external_uid: 60689018-94e9-4870-970a-cc22f52c9c65
+                      name: Wire Account
+                      pool_uid: wTSMX1GubP21ev2h
+                      synthetic_account_type_uid: VMwzNGctNAbSmHXJ
+                      synthetic_account_category: wire_external
+                      status: active
+                      liability: false
+                      net_usd_balance: null
+                      net_usd_pending_balance: null
+                      net_usd_available_balance: null
+                      asset_balances: null
+                      master_account: false
+                      custodial_account_uids:
+                      - NPeYkNMDVBWnKVXJ
+                      account_number_last_four: '5372'
+                      routing_number: '123456789'
+                      opened_at: '2018-03-08T19:07:18.049Z'
+                      closed_at: null
+                      instant_payment: null
+                      wire:
+                        counterparty_name: Aunt Sandy
+                        counterparty_bank_address:
+                          line1: 334 Swamp St
+                          line2: Bagdad, FL 32530
+                          line3: null
+                          country: US
+                        counterparty_bank_name: First Beach Bank
+                    - uid: nbDrqhrFAjqUdxBG
+                      external_uid: f03fd9ff-a0a1-4e3c-981f-4d845836a2ce
+                      name: Instant Payments Account
+                      pool_uid: wTSMX1GubP21ev2h
+                      synthetic_account_type_uid: fRMwt6H14ovFUz1s
+                      synthetic_account_category: instant_payment_external
+                      status: active
+                      liability: false
+                      net_usd_balance: null
+                      net_usd_pending_balance: null
+                      net_usd_available_balance: null
+                      asset_balances: null
+                      master_account: false
+                      custodial_account_uids:
+                      - DcMfBTHj94dsi471
+                      account_number_last_four: '5372'
+                      routing_number: '123456789'
+                      opened_at: '2022-02-22T23:14:27.012Z'
+                      closed_at: null
+                      instant_payment:
+                        counterparty_name: Paloma's Premium Polymers
+                        email: paloma@premiumpolymers.co
+                        phone: '5555551212'
+                      wire: null
+                    - uid: uu2XSYPAB57iX5wi
+                      external_uid: g13fd9ff-a0a1-4a3c-782f-1b8458f6a2ce
+                      name: ACH Account
+                      pool_uid: wTSMX1GubP21ev2h
+                      synthetic_account_type_uid: 9gdN9noL2L1nj9R8
+                      synthetic_account_category: ach_external
+                      status: active
+                      liability: false
+                      net_usd_balance: null
+                      net_usd_pending_balance: null
+                      net_usd_available_balance: null
+                      asset_balances: null
+                      master_account: false
+                      custodial_account_uids:
+                      - zH9WRBskMKiyu3D9
+                      account_number_last_four: '7890'
+                      routing_number: '123456789'
+                      opened_at: '2021-05-12T23:14:27.012Z'
+                      closed_at: null
+                      ach:
+                        counterparty_name: Arnold Arnoldson
+                        account_type: checking
+    post:
+      tags:
+      - Synthetic Accounts
+      summary: Create a New Synthetic Account
+      description: 'Create a new Synthetic Account in the Pool with the provided specification.
+
+
+        External Synthetic Accounts are counterparty records that represent accounts at external financial institutions. They contain all the necessary information to execute a payment. For specifics about each payment rail''s requirements, refer to our [Payment Rails](https://developers.newline53.com/docs/payment-rails) guides.'
+      requestBody:
+        required: true
+        description: 'See [GET /synthetic_account_types](/reference/get_synthetic-account-types) for the list of available types
+
+          '
+        content:
+          application/json:
+            schema:
+              allOf:
+              - allOf:
+                - allOf:
+                  - $ref: '#/paths/~1transaction_events~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/0'
+                  - $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/0/allOf/1'
+                  - $ref: '#/paths/~1pools~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/0/allOf/1'
+                - type: object
+                  properties:
+                    pool_uid:
+                      type: string
+                      description: The unique id of the Synthetic Account's pool
+                      example: kaxHFJnWvJxRJZxq
+                    synthetic_account_type_uid:
+                      type: string
+                      description: 'A unique id referring to the Synthetic Account''s type.
+
+                        '
+                      example: fRMwt6H14ovFUz1s
+                    custodial_account_uids:
+                      type: array
+                      description: 'Array of unique ids of the Custodial Accounts this Synthetic Account is associated with.
+
+                        '
+                      items:
+                        type: string
+                      readOnly: true
+                    synthetic_account_category:
+                      type: string
+                      description: The name of the Synthetic Account Category associated with the Synthetic Account Type for this account. Refer to the Synthetic Account Type for details.
+                      readOnly: true
+                      enum:
+                      - general
+                      - ach_external
+                      - instant_payment_external
+                      - wire_external
+                    status:
+                      type: string
+                      description: 'A value indicating the overall state of this Synthetic Account.
+
+                        '
+                      enum:
+                      - initiated
+                      - active
+                      - archived
+                      - failed
+                      example: active
+                      readOnly: true
+                    liability:
+                      type: boolean
+                      description: Liability or asset. Any Synthetic Account created via [POST /synthetic_accounts](/reference/post_synthetic-accounts) is a liability account, except for external accounts. Some asset Synthetic Accounts are automatically created by Newline during Customer onboarding for accounting purposes.
+                      readOnly: true
+                    net_usd_balance:
+                      type:
+                      - string
+                      - 'null'
+                      description: The current settled balance of this account in US Dollars. This field will be null for synthetic_account_types in an external category (`ach_external`, `instant_payment_external`, `wire_external`).
+                      readOnly: true
+                      example: '12.34'
+                    net_usd_pending_balance:
+                      type:
+                      - string
+                      - 'null'
+                      description: The sum of all pending transactions for this account in US Dollars. This field will be null for Synthetic Account Types in an external category (`ach_external`, `instant_payment_external`, `wire_external`).
+                      readOnly: true
+                      example: '-2.56'
+                    net_usd_available_balance:
+                      type:
+                      - string
+                      - 'null'
+                      description: The balance available to spend calculated as the settled balance less any pending withdrawals. Pending deposits are not included. This field will be null for Synthetic Account Types in an external category (`ach_external`, `instant_payment_external`, `wire_external`).
+                      readOnly: true
+                      example: '9.78'
+                    net_usd_closing_balance:
+                      type:
+                      - string
+                      - 'null'
+                      description: The settled balance for the account in US Dollars as of the date in net_usd_closing_balance_as_of. This field will be null for Synthetic Account Types in an external category (`ach_external`, `instant_payment_external`, `wire_external`).
+                      readOnly: true
+                      example: '9.87'
+                    net_usd_closing_balance_as_of:
+                      type: string
+                      description: The date that net_usd_closing_balance was last calculated. This field will be null for Synthetic Account Types in an external category (`ach_external`, `instant_payment_external`, `wire_external`).
+                      readOnly: true
+                      example: '2025-08-19'
+                    asset_balances:
+                      type: array
+                      description: 'A list of balances for the various asset types held in Custodial Accounts associated with this Synthetic Account.
+
+                        '
+                      items:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          asset_quantity:
+                            type: string
+                            example: 12.23
+                          asset_type:
+                            type: string
+                            example: USD
+                          current_usd_value:
+                            type: string
+                            example: 122.12
+                          custodial_account_uid:
+                            type: string
+                            example: wZgfnLrLJcCAscnH
+                          custodial_account_name:
+                            type: string
+                            example: First Checking
+                          debit:
+                            type: boolean
+                            example: true
+                      readOnly: true
+                    master_account:
+                      type: boolean
+                      description: 'Used to identify the Master Synthetic Accounts that exist for every Program Customer. Master Synthetic Accounts are the default accounts where any unknown custodial transactions will settle and cannot be archived while a Program Customer is still active.
+
+                        '
+                      readOnly: true
+                      example: true
+                    routing_number:
+                      description: The ABA routing number (if any) associated with this account. Some Synthetic Account Types require this field to be submitted along with the POST request. For example, any Synthetic Account Type from the `ach_external` or the `wire_external` category will require a `routing_number`. Submitting a `routing_number` with a Synthetic Account Type that does not require one will result in the routing number being ignored.
+                      type:
+                      - string
+                      - 'null'
+                      allOf:
+                      - $ref: '#/paths/~1virtual_reference_numbers/post/requestBody/content/application~1json/schema/properties/routing_number/allOf/0'
+                    account_number_last_four:
+                      type:
+                      - string
+                      - 'null'
+                      description: Last 4 digits of the Synthetic Account number
+                      readOnly: true
+                      example: '9012'
+                    opened_at:
+                      type: string
+                      description: The DateTime at which this account was created
+                      format: date-time
+                      readOnly: true
+                      example: '2019-01-31T17:32:28Z'
+                    closed_at:
+                      type:
+                      - string
+                      - 'null'
+                      description: 'The DateTime at which this account was closed. This value will be present if the status is `archived` or `failed`.
+
+                        '
+                      format: date-time
+                      readOnly: true
+                      example: '2019-10-19T08:15:13Z'
+                - type: object
+                  properties:
+                    account_number:
+                      description: The account number (if any) associated with this account. Some Synthetic Account Types require this field to be submitted along with the POST request. For example, any Synthetic Account Type from the `ach_external` or the `wire_external` category will require an `account_number`. Submitting an `account_number` with a Synthetic Account Type that does not require one will result in the account number being ignored.
+                      type:
+                      - string
+                      - 'null'
+                      allOf:
+                      - $ref: '#/paths/~1custodial_accounts~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/2/properties/account_number/allOf/0'
+              - type: object
+                properties:
+                  external_processor_token:
+                    type:
+                    - string
+                    - 'null'
+                    description: The processor token required to create certain Synthetic Account Types.
+                    example: processor-sandbox-96d86f35-ef58-4e4a-826f-4870b5d677f2
+                  ach:
+                    type: object
+                    description: 'Contains ACH-specific information. Only populated if the Synthetic Account is in the `ach_external` category.
+
+                      '
+                    allOf:
+                    - type: object
+                      properties:
+                        account_type:
+                          description: The type of ACH account
+                          type: string
+                          enum:
+                          - checking
+                          - savings
+                          example: checking
+                        counterparty_name:
+                          description: 'Name of the business or individual who owns the external account. Conditional maximum character length: for all newline supported SEC codes other than CIE, the counterparty_name can be 22 characters. For CIE SEC codes, the counterparty_name can be up to 15 characters.
+
+                            '
+                          maxLength: 22
+                          type: string
+                          example: Thelma's Flooring LLC
+                    required:
+                    - account_type
+                    - counterparty_name
+                  instant_payment:
+                    description: 'Contains Instant Payment-specific information. Only populated if the Synthetic Account is in the `instant_payment_external` category.
+
+                      '
+                    allOf:
+                    - $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/schema/allOf/1/properties/instant_payment'
+                    required:
+                    - counterparty_address
+                    - counterparty_name
+                  wire:
+                    type: object
+                    description: 'Contains wire-specific information. Only populated if the Synthetic Account is in the `wire_external` category.
+
+                      '
+                    allOf:
+                    - allOf:
+                      - type: object
+                        properties:
+                          counterparty_address:
+                            type:
+                            - object
+                            - 'null'
+                            description: 'Address of the business or individual who owns the external account.
+
+                              '
+                            allOf:
+                            - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0'
+                            example:
+                              line1: 234 Xyz Rd
+                              line2: APT 5
+                              line3: Boston, MA 02110
+                              country: US
+                          counterparty_name:
+                            description: 'Name of the business or individual who owns the counterparty Account. Required for synthetic accounts in the wire_external category. Maximum 35 characters.
+
+                              '
+                            allOf:
+                            - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_name/allOf/0'
+                          counterparty_bank_address:
+                            type:
+                            - object
+                            - 'null'
+                            description: 'Address of the financial institution where the external account is held.
+
+                              '
+                            allOf:
+                            - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0'
+                          counterparty_bank_name:
+                            type:
+                            - string
+                            - 'null'
+                            description: 'Name of the financial institution where the counterparty account is held.
+
+                              '
+                            allOf:
+                            - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_bank_name/allOf/0'
+                    required:
+                    - counterparty_name
+              required:
+              - external_uid
+              - name
+              - pool_uid
+              - synthetic_account_type_uid
+            examples:
+              new_synthetic_account:
+                value:
+                  name: Spinach Fund
+                  pool_uid: wTSMX1GubP21ev2h
+                  synthetic_account_type_uid: fRMwt6H14ovFUz1s
+      responses:
+        '201':
+          description: A new Synthetic Account is created
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1synthetic_accounts/post/requestBody/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    ach:
+                      type: object
+                      description: 'Contains ACH-specific information. Only populated if the Synthetic Account is in the `ach_external` category.
+
+                        '
+                      allOf:
+                      - $ref: '#/paths/~1synthetic_accounts/post/requestBody/content/application~1json/schema/allOf/1/properties/ach/allOf/0'
+                    instant_payment:
+                      type: object
+                      properties:
+                        counterparty_address:
+                          description: 'Address of the business or individual who owns the external account.
+
+                            '
+                          allOf:
+                          - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/1'
+                        counterparty_name:
+                          description: 'Name of the business or individual who owns the counterparty Account.
+
+                            '
+                          type: string
+                          maxLength: 140
+                          pattern: ^[a-zA-Z0-9.' -]{1,140}$
+                          example: Marge's Roofing Inc
+                        email:
+                          description: Email address of the counterparty
+                          type:
+                          - string
+                          - 'null'
+                          example: payments@veryexcellentbusiness.com
+                        phone:
+                          $ref: '#/paths/~1customers~1%7Buid%7D/put/requestBody/content/application~1json/schema/properties/details/allOf/0/allOf/0/allOf/1/properties/phone'
+                    wire:
+                      type: object
+                      description: 'Contains wire-specific information. Only populated if the Synthetic Account is in the `wire_external` category.
+
+                        '
+                      allOf:
+                      - $ref: '#/paths/~1synthetic_accounts/post/requestBody/content/application~1json/schema/allOf/1/properties/wire/allOf/0'
+              examples:
+                general_synthetic_account:
+                  value:
+                    uid: exMDShw6yM3NHLYV
+                    external_uid: 60689018-94e9-4870-970a-cc22f52c9c65
+                    name: Spinach Fund
+                    pool_uid: wTSMX1GubP21ev2h
+                    synthetic_account_type_uid: fRMwt6H14ovFUz1s
+                    synthetic_account_category: general
+                    status: active
+                    liability: true
+                    net_usd_balance: '0'
+                    net_usd_pending_balance: '0'
+                    net_usd_available_balance: '0'
+                    asset_balances:
+                    - asset_quantity: '769.65'
+                      asset_type: USD
+                      current_usd_value: '769.65'
+                      custodial_account_uid: 4uJMJjNd5wjzPaCj
+                      custodial_account_name: Second Checking
+                      debit: false
+                    master_account: false
+                    routing_number: '123456789'
+                    account_number: '1234567890'
+                    account_number_last_four: '7890'
+                    opened_at: '2018-03-08T19:07:18.049Z'
+                    closed_at: null
+                    custodial_account_uids:
+                    - 4uJMJjNd5wjzPaCj
+                    - 3fRiyDdbSVv9nKW2
+                    wire: null
+                instant_payment_synthetic_account:
+                  value:
+                    uid: nbDrqhrFAjqUdxBG
+                    external_uid: f03fd9ff-a0a1-4e3c-981f-4d845836a2ce
+                    name: Instant Payments Account
+                    pool_uid: wTSMX1GubP21ev2h
+                    synthetic_account_type_uid: fRMwt6H14ovFUz1s
+                    synthetic_account_category: instant_payment_external
+                    status: active
+                    liability: false
+                    net_usd_balance: null
+                    net_usd_pending_balance: null
+                    net_usd_available_balance: null
+                    asset_balances: null
+                    master_account: false
+                    custodial_account_uids:
+                    - DcMfBTHj94dsi471
+                    account_number: null
+                    account_number_last_four: '9012'
+                    routing_number: '123456789'
+                    opened_at: '2022-02-22T23:14:27.012Z'
+                    closed_at: null
+                    instant_payment:
+                      counterparty_address:
+                        street_number: '242'
+                        street1: Marble St
+                        city: Marblehead
+                        state: MA
+                        postal_code: '21945'
+                        country: US
+                      counterparty_name: Paloma's Premium Polymers
+                      email: paloma@premiumpolymers.co
+                      phone: '5555551212'
+                wire_synthetic_account:
+                  value:
+                    uid: exMDShw6yM3NHLYV
+                    external_uid: 60689018-94e9-4870-970a-cc22f52c9c65
+                    name: Wire Account
+                    pool_uid: wTSMX1GubP21ev2h
+                    synthetic_account_type_uid: VMwzNGctNAbSmHXJ
+                    synthetic_account_category: wire_external
+                    status: active
+                    liability: false
+                    net_usd_balance: null
+                    net_usd_pending_balance: null
+                    net_usd_available_balance: null
+                    asset_balances: null
+                    master_account: false
+                    custodial_account_uids:
+                    - NPeYkNMDVBWnKVXJ
+                    account_number: null
+                    account_number_last_four: '9012'
+                    routing_number: '123456789'
+                    opened_at: '2018-03-08T19:07:18.049Z'
+                    closed_at: null
+                    wire:
+                      counterparty_name: Aunt Sandy
+                      counterparty_bank_address:
+                        line1: 334 Swamp St
+                        line2: Bagdad, FL 32530
+                        line3: null
+                        country: US
+                      counterparty_bank_name: First Beach Bank
+                      counterparty_address:
+                        line1: 333 Swamp St
+                        line2: Bagdad, FL 32530
+                        line3: null
+                        country: US
+                ach_account:
+                  value:
+                    uid: uu2XSYPAB57iX5wi
+                    external_uid: g13fd9ff-a0a1-4a3c-782f-1b8458f6a2ce
+                    name: ACH Account
+                    pool_uid: wTSMX1GubP21ev2h
+                    synthetic_account_type_uid: 9gdN9noL2L1nj9R8
+                    synthetic_account_category: ach_external
+                    status: active
+                    liability: false
+                    net_usd_balance: null
+                    net_usd_pending_balance: null
+                    net_usd_available_balance: null
+                    asset_balances: null
+                    master_account: false
+                    custodial_account_uids:
+                    - zH9WRBskMKiyu3D9
+                    account_number: null
+                    account_number_last_four: '7890'
+                    routing_number: '123456789'
+                    opened_at: '2021-05-12T23:14:27.012Z'
+                    closed_at: null
+                    ach:
+                      counterparty_name: Arnold Arnoldson
+                      account_type: checking
+        '409':
+          description: 'A new Synthetic Account is NOT created if the external_uid given is present but not unique
+
+            '
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                post_error_response:
+                  value:
+                    errors:
+                    - code: 2002
+                      title: Synthetic Account already exists
+                      detail: Synthetic Account could not be created or updated
+                      occurred_at: '2018-03-08T19:07:18.049Z'
+                    status: 409
+  /synthetic_accounts/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Synthetic Accounts
+      summary: Get a single Synthetic Account
+      description: 'Returns a single Synthetic Account resource along with supporting details and account balances.
+
+
+        Note: Newline will suppress the `account_number` value for Synthetic Accounts in the `ach_external`, `wire_external`, and `instant_payment_external` categories. The `account_number_last_four` value will be returned in the response to help identify these Synthetic Accounts.'
+      responses:
+        '200':
+          description: A single Synthetic Account is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/schema'
+              examples:
+                general_synthetic_account:
+                  $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/examples/general_synthetic_account'
+                instant_payment_synthetic_account:
+                  $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/examples/instant_payment_synthetic_account'
+                wire_synthetic_account:
+                  $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/examples/wire_synthetic_account'
+                ach_account:
+                  $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/examples/ach_account'
+    put:
+      tags:
+      - Synthetic Accounts
+      summary: Update the Synthetic Account metadata
+      description: Enables changes to the Synthetic Account fields, including the Master Synthetic Account. The Master Synthetic Account remains identifiable by the `master_account` flag stored with the Synthetic Account record.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/paths/~1synthetic_accounts/post/requestBody/content/application~1json/schema/allOf/0'
+              - type: object
+                properties:
+                  note:
+                    type: string
+                    description: 'A reason for the Synthetic Account metadata change
+
+                      '
+                  ach:
+                    type: object
+                    description: 'Contains ACH-specific information. Only populated if the Synthetic Account is in the `ach_external` category.
+
+                      '
+                    allOf:
+                    - $ref: '#/paths/~1synthetic_accounts/post/requestBody/content/application~1json/schema/allOf/1/properties/ach/allOf/0'
+                  instant_payment:
+                    type: object
+                    description: 'Contains Instant Payment-specific information. Only populated if the Synthetic Account is in the `instant_payment_external` category.
+
+                      '
+                    allOf:
+                    - $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/schema/allOf/1/properties/instant_payment'
+                  wire:
+                    type: object
+                    description: 'Contains wire-specific information. Only populated if the Synthetic Account is in the `wire_external` category.
+
+                      '
+                    allOf:
+                    - $ref: '#/paths/~1synthetic_accounts/post/requestBody/content/application~1json/schema/allOf/1/properties/wire/allOf/0'
+      responses:
+        '200':
+          description: The updated Synthetic Account resource is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/schema'
+              examples:
+                general_synthetic_account:
+                  $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/examples/general_synthetic_account'
+                instant_payment_synthetic_account:
+                  $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/examples/instant_payment_synthetic_account'
+                wire_synthetic_account:
+                  $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/examples/wire_synthetic_account'
+                ach_account:
+                  $ref: '#/paths/~1synthetic_accounts/post/responses/201/content/application~1json/examples/ach_account'
+        '400':
+          description: 'A Synthetic Account is not updated if a required parameter is missing
+
+            '
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                missing_param_error:
+                  value:
+                    errors:
+                    - code: 1003
+                      title: Missing Request Parameter
+                      detail: At least one parameter is missing. Cannot continue with the request
+                      extra: name cannot be null or blank
+                      occurred_at: '2018-03-08T19:07:18.049Z'
+                    status: 400
+    delete:
+      tags:
+      - Synthetic Accounts
+      summary: Archive a Synthetic Account
+      description: 'In order to archive a Synthetic Account, the account must:
+
+
+        - not be a Master Synthetic Account i.e. `master_account` must be false.
+
+        - have zero balance.
+
+        - have no pending Transfers.
+
+
+        Master Synthetic Accounts are archived when the Program Customer is archived ([DELETE /customers/:uid](https://developers.newline53.com/reference/delete_customers-uid)).'
+      responses:
+        '204':
+          description: Synthetic Account is archived successfully
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+        '422':
+          description: 'A Synthetic Account is not archived
+
+            '
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                outstanding_balance_error:
+                  value:
+                    errors:
+                    - code: 2004
+                      title: Cannot archive Synthetic Account with balance
+                      detail: A Synthetic Account with a non-zero balance cannot be archived
+                      extra: Its balance is not 0
+                      occurred_at: '2018-03-08T19:07:18.049Z'
+                    status: 422
+                pending_transfer_error:
+                  value:
+                    errors:
+                    - code: 2005
+                      title: Cannot archive Synthetic Account with pending Transfer
+                      detail: A Synthetic Account with a pending Transfer cannot be archived
+                      extra: It has a pending transfer
+                      occurred_at: '2018-03-08T19:07:18.049Z'
+                    status: 422
+  /synthetic_account_closing_balances:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Synthetic Accounts
+      summary: List Synthetic Account Closing Balances
+      description: Retrieves a paginated list of Synthetic Account Closing balances, filtered by various parameters.
+      parameters:
+      - $ref: '#/paths/~1transfers/get/parameters/3'
+      - name: synthetic_account_external_uid
+        in: query
+        schema:
+          type: string
+          example: 4XkJnsfHsuqrxmeX
+        description: 'Filter by Synthetic Account External. Multiple values are allowed, e.g. `synthetic_account_external_uid[]=4XkJnsfHsuqrxmeX&synthetic_account_external_uid[]=exMDShw6yM3NHLYV`.
+
+          '
+      - $ref: '#/paths/~1pools/get/parameters/1'
+      - $ref: '#/paths/~1pools/get/parameters/2'
+      - name: net_usd_closing_balance_as_of
+        in: query
+        required: false
+        schema:
+          $ref: '#/paths/~1transactions/get/parameters/17/schema'
+      - name: net_usd_closing_balance_before
+        in: query
+        required: false
+        schema:
+          $ref: '#/paths/~1transactions/get/parameters/17/schema'
+      - name: net_usd_closing_balance_after
+        in: query
+        required: false
+        schema:
+          $ref: '#/paths/~1transactions/get/parameters/17/schema'
+      responses:
+        '200':
+          description: A list of Synthetic Account Closing balances is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        allOf:
+                        - $ref: '#/paths/~1transaction_events~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/0'
+                        - $ref: '#/paths/~1synthetic_account_closing_balances~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/1'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+  /synthetic_account_closing_balances/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Synthetic Accounts
+      summary: Get a single Synthetic Account Closing Balance
+      responses:
+        '200':
+          description: A single Synthetic Account Closing Balance is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1transaction_events~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    synthetic_account_uid:
+                      type: string
+                      description: A unique id referring to the Synthetic Account
+                      example: Jy8degj6iv2QngLo
+                    synthetic_account_external_uid:
+                      type: string
+                      description: A unique id referring to the External Synthetic Account
+                      example: ptRLF7nQvy8VoqM1
+                    net_usd_closing_balance:
+                      type: string
+                      description: The USD amount of the Synthetic Account's closing balance
+                      example: '12.34'
+                    net_usd_closing_balance_as_of:
+                      type: string
+                      format: date
+                      example: '1978-08-17'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Access token signed with shared HMAC
+x-explorer-enabled: false

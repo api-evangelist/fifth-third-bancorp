@@ -1,0 +1,796 @@
+openapi: 3.2.0
+info:
+  title: Newline Platform Customers API
+  version: 1.0.0
+  description: "\nWelcome! In this section of our docs experience, you'll be able to go through common payment scenarios that both you and your end customers may encounter as you start to offer financial products through your own technology stack. These guides will also help to highlight and expand on concepts discussed in our API references, like [Synthetic Accounts](https://developers.newline53.com/reference/synthetic-accounts), [Transfers](https://developers.newline53.com/reference/transfers), [Transactions&nbsp;](https://developers.newline53.com/reference/transactions)  and [Customers](https://developers.newline53.com/reference/customers).\n\nOur guides are broken out by supported use cases. If you find there isn't a specific use case that fits your business, reach out to our [Sales &amp; Partnership team](https://newline53.com/contact-us.html) and they'll be able to help determine how we can support your business and provide any other questions or feedback.\n\nLastly, when you're ready to build, check out our [Onboarding Overview](https://developers.newline53.com/docs/overview) and [Sandbox Walkthrough](https://developers.newline53.com/docs/sandbox-walkthrough) guides.\n\n## About our API\n\nThe Newline API is organized around REST. With a few exceptions, our API has standard resource-oriented URLs, accepts form-encoded OR JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.\n\n## FAQs\n\nWant to quickly review some common questions about Newline and our financial experiences, check out our [FAQs](https://developers.newline53.com/docs/faqs) guide.\n\n# Overview\n\n## Newline Onboarding 101\n\nOnboarding to any SaaS product can be a daunting task, and at Newline we seek to make this experience as smooth as possible. Part of that is getting you, our Client, familiar with the process by which we establish key resources like your Program, Products, Customers, Custodial Accounts, and Synthetic Accounts.\n\nThe following guide details, in short order, the Program and resources that Newline will configure for you and how each of these components affect your ability to use our API Reference.\n\n<img src=\"https://files.readme.io/955347d-image.png\">\n\nThe above visualization shows the Program and resources Newline will provide and maintain for Clients going through onboarding and implementation, but we'll enumerate the details for each resource above.\n\n> **Note**\n> In the above visualization, the lighter color items are preset and created by Newline for any Client implementation. Synthetic Accounts is a special case where general Synthetic Accounts are preset and Clients will be responsible for creating their own external Synthetic Accounts and VRNs..\n\n- **Program** - the Program dictates the origination terms to which the Client and Newline mutually agree. This could include payment limitations like amounts, frequency, and the need for pre-funding (ex. ACH). Your Program will be created and configured by Newline.\n\n- **Products** - these are distinct Product offerings supported by Newline. For instance, this can include payment rails like ACH, Wire, and Instant Payments that are configured as available synthetic_account_types. Newline creates and configures a Program's Products.\n\n    - Products can be applied across multiple Customers, and Customers can be attached to multiple Products. Essentially there is a many-to-many relationship between these resources, which make them, in some cases, parallel.\n\n    - A Product can support multiple payment rails.\n\n- **Customer Type** - Customers are provided a Customer Type at creation. For instance, Primary Customers are considered full account owners and have complete authority to take any actions associated with their accounts and associated resources. You can also limit certain Customer Types to have access to only certain Products. Permitted Customer Types are configured by Newline.\n\n- **Pool** - Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. Newline will create Pools.\n\n- **Customer** - This is the entity that owns the Account and Funds stored at Newline. This entity also is deemed the Originator when it comes to any payment creation. Clients can also be Customers in the event they meet those criteria. Customers are created by Newline or by the Client depending on the use case.\n\n- **Custodial Account** - This is the Account that exists in our Synthetic Core and represents the reciprocal Account on Fifth Third's ledger. These are the accounts you can access via Fifth Third Direct. Custodial Accounts will be created by Newline.\n\n- **Synthetic Account** - How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts that your Customers will likely use within your application. Synthetic Accounts of the general category will be created by Newline or by the Client depending on your use case. Clients will create external Synthetic Accounts like wire_external, ach_external, and instant_payment_external.\n\n- **Virtual Reference Number** - Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a synthetic account and can form a many-to-one relationship with their parent synthetic account.\n\n# Postman Collection\n\nHow to set up Postman, add our Newline collection, and use it to test Newline platform APIs.\n\n## Installing Postman\n\nPostman is available on a variety of platforms. Visit [Postman](https://www.postman.com/downloads/) to see if your platform is supported.  \nTo install Postman:\n\n1. Go to [Postman downloads](https://www.postman.com/downloads/).\n\n<img src=\"https://files.readme.io/fd1743f-Postman_Dowload_snip.jpg\">\n\n1. Download the required version.\n\n2. After your download is complete, run the downloaded file to install Postman.\n\n## Import the Newline Collection\n\nTo import our collection, click on the following [▶ Newline Collection](https://www.postman.com/newline53) button, and you will be redirected to our Newline Postman workspace, where you can download our collection.\n\nFor further information, see the [Postman documentation on importing data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).\n\n## Configure Your Postman Environment\n\n1. Create a Sandbox Environment.\n\n2. Set Sandbox variables.\n\n3. Save the environment.\n\n4. Ensure the new environment is selected.\n\n**Set API Keys**  \nYou will need to set your HMAC Key and Program UID as environment variables. You can set the variables in the headers in the environment tab within the Postman Collection.\n\n# Terminology\n\nThe terms, which represent API resource objects in Newline, below are referenced in our API documentation and endpoint definitions.  \nSome important notes while reading through this list:\n\nResource Objects often interact with one another, so please be sure to review our endpoints to see which serve as required inputs or are collected as outputs.\n\nCertain objects, like Transfers, are described differently in the payments industry depending on the Transaction Type. For instance, ach transactions are often referred to as entries rather than payments, as they can represent both credits (i.e., ODFI pushes) and debits (i.e., ODFI pulls).  \nWhile Resource Objects are distinct, they, in some cases, can represent the same entity.\n\n- Ex. 1 - Clients can also be Customers if they manage and own the financial products in question.\n\n- Ex. 2 - Transfers produce Transactions, but the produced Transactions (in aggregate) represent the original money movement.\n\n| Term | Definition |\n| --- | --- |\n| Customer | The end user of your application and the owner of assets in your Program. For example, when initiating a payment, this entity would be considered the **originator**. |\n| Client | The application or product owning organization that is affording end users (i.e., Customers) the ability to access the financial products.<br><br><br>**Note**<br>Clients can also be Customers in the event they own and have management over the financial products or the funds involved. |\n| Transmitter | Transmitters are the parties who have _requested_ the Transfer in question. When the Transmitter and Customer are the same party, Newline pulls origination information from the created Customer record. When the Transmitter and Customer are not the same party, it's the Client's responsibility to provide that information when making a Transfer.  <br>  <br>Transmitters are only required for the `wire` and `instant_payment` types (see the `wire_transmitter` and `instant_payment_transmitter` objects in the [Initiate a Transfer](https://developers.newline53.com/reference/post_transfers) reference). Client's should also take note of the `initiator_type` field, which dictates from where Transmitter information is pulled. For more context on Transmitters, refer to the [Payment Rail Regulation](https://newline-enterprise-group.readme.io/docs/transfer#payment-rail-regulation) section below. |\n| Partner | Any infrastructure partner integrated within the Newline Platform. |\n| Program | The Program is custom tailored to your offering and purpose built to enable financial products on your application. The Program defines what Synthetic and Custodial Account types, Customer Types, and Transactions Types are available for your Customers to utilize. The Program configuration is defined between the Client and Newline based on your (i.e., the Client's) use case. |\n| Product | Products represents the financial products available to your Customers. The Product object contains the account, compliance, and customer profile responses necessary for your Customers to gain access. |\n| Customer Product | The Customer Product is created when the Customer is added to a Product and respective Program. This often includes Newline automatically creating any needed financial products for the Customers' use. For instance, a Synthetic Account to represent the origination account at Fifth Third. |\n| Service Offering | The financial product offered by the Newline platform. These can be (but are not limited to) checking, savings, brokerage, or retirement accounts. |\n| Pool | Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. |\n| Custodial Accounts | This resource within Newline represents the assets held by your Customers, with direct alignment to accounts opened at Fifth Third. Custodial Accounts have the following relationships: one-to-one with Customers, and one-to-Many with Synthetic Accounts. |\n| Synthetic Accounts | How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts (i.e., Counterparties) that your Customers will likely use within your application. |\n| Virtual Reference Number (VRN) | Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a Synthetic Account, and can form a many-to-one relationship with their parent Synthetic Account. |\n| Transfer | The movement of assets from one Synthetic Account to another Synthetic Account. Most of asset movement initiated by your application will result in a Transfer. A successful Transfer will result in at least one Transaction. |\n| Transaction | Transactions are created based on how you instruct Newline to move assets (a Transfer) or how assets are moved or spent outside of your application (For example, ACH, Wire, and Instant Payments Transfers). The Transaction contains the amount, origin, and destination of assets. Newline categorizes Transactions into types to assist in their classification and representation. |\n| Transaction Events | The steps taken to complete the Transaction. These can be used to view the progress of an in-flight Transaction or see the history of a completed Transaction. |"
+servers:
+- url: https://sandbox.newline53.com/api/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Customers
+  description: "The Customers section provides details on managing end-user accounts. Learn how to create, update, and archive customer records and onboard them to financial products while meeting KYC/AML requirements.\n\n**Endpoints:**\n\n- GET [List Customers: GET /customers](https://developers.newline53.com/reference/get_customers)\n    \n- POST [Create a new Customer: POST /customers](https://developers.newline53.com/reference/post_customers)\n    \n- GET [Get a single Customer: GET /customers/{uid}](https://developers.newline53.com/reference/get_customers-uid)\n    \n- PUT [Adjust Customer Data: PUT /customers/{uid}](https://developers.newline53.com/reference/put_customers-uid)\n    \n- DELETE [Archive a Customer: DELETE /customers/{uid}](https://developers.newline53.com/reference/delete_customers-uid)\n    \nA Customer on the Newline Platform is the end user of your application. Customers are unique to each Program, and managing all accounts and identifying information is handled on a Program-by-Program basis.  \nThe ability to create new Customers is also a preset condition of your Program at Newline. Please see the below sections for more details.\n\n## Newline preset-Customers\n\nIn cases where the Client also serves as the Customer (i.e., the Client is both the end-user and the managing entity over any financial products), Newline will create Customers upon Program onboarding. Clients will also be precluded from creating new Customers.\n\n## Client-initiated Customers\n\n**Customer Onboarding Process for Clients**  \nWhen managing customer onboarding, follow the outlined steps and key considerations below.\n\n### Steps for Onboarding Customers:\n\n1. Initial Submission:\n\n    1. Submit the external_uid and email using the Customers Endpoint.\n\n2. Provide Personally Identifiable Information (PII):\n\n    1. After the initial submission, supply the remaining PII for the customer.\n\n    2. Ensure that all required PII fields are complete. Requests with complete or missing fields will be accepted.\n\n3. Edit PII (Optional):\n\n    1. PII can be updated until a valid request is sent to onboard the customer to a product using the Customer Product Endpoint.\n\n4. Submit Profile Responses:\n\n    1. Provide profile responses to meet the product's profile requirements.\n\n    2. Profile Requirements can include data such as:\n\n        1. Risk tolerance\n\n        2. Income level\n\n        3. Other product-specific information\n\n5. Verify Profile Requirements:\n\n    1. Use the Product Endpoint to access the Profile Requirements and ensure the customer satisfies all prerequisites for onboarding.\n\n6. Initiate Onboarding Request:\n\n    1. Submit a valid onboarding request for the customer using the Customer Products Endpoint.\n\n## Additional Considerations:\n\nKYC/AML Verification:\n\n- To join a program, customers must pass Know Your Customer (KYC) and Anti-Money Laundering (AML) identity verification as required by Fifth Third Bank.\n\n- KYC_status on the customer record will indicate the current state of the KYC/AML workflow.\n\nOnce a valid onboarding request is received, Newline initiates KYC/AML verification using the customer's PII.  \n**Verification statuses include:**\n\n- Approved\n\n- Manual Review\n\n- Documents Required\n\n- Denied\n\nNewline will work with clients to define these states.\n\n## Program-Specific Records:\n\n- A new customer record must be created for each program, even if an identical customer exists in another program.\n\n- Customer records are not accessible outside of their associated program.\n\n## Customer Management Functions:\n\nThe Customers Endpoint can also be used to perform management actions such as:\n\n- Freezing or unfreezing a customer\n\n- Archiving a customer"
+paths:
+  /customers:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Customers
+      summary: Get a list of Customers
+      description: 'Retrieves a list of Customers filtered by the given parameters. Filter parameters are not case sensitive, but will only return exact matches.
+
+
+        Multiple filter parameters can be provided at once, but a result will not be returned unless there are exact matches for all submitted parameters. As an example: submitting `first_name=Olive&last_name=Oyl` would match exactly "Olive Oyl" but NOT "Olive Boyl" or "Oliver Oyl".
+
+
+        The list endpoint will not include sensitive Customer data such as address or DOB. This can only be retrieved by viewing a specific Customer record. By default we do not display Customers in the `initiated` status, as Customers in this status have not completed onboarding. To cause Customers with this status to be included in the list you must provide the `include_initiated=true` parameter.'
+      parameters:
+      - name: uid
+        in: query
+        schema:
+          type: string
+          example: uKxmLxUEiSj5h4M3
+        description: 'Filter by Customer. Multiple values are allowed e.g. `uid[]=uKxmLxUEiSj5h4M3&uid[]=y9reyPMNEWuuYSC1`.
+
+          '
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - initiated
+          - queued
+          - identity_verified
+          - active
+          - manual_review
+          - rejected
+          - pending_archival
+          - archived
+          - under_review
+        description: 'Filter by onboarding status. Please note that the `initiated` enum value will not be respected unless the `include_initiated=true` parameter is also provided. Multiple values are allowed e.g. `status[]=queued&status[]=active`.
+
+          '
+      - name: include_initiated
+        in: query
+        schema:
+          type: boolean
+          example: true
+        description: 'By default, Customers in `initiated` status are not shown, even if the `status=initiated` parameter is provided. In order for Customers with status `initiated` to appear in search results, parameters must include `include_initiated=true`
+
+          '
+      - name: kyc_status
+        in: query
+        schema:
+          type: string
+          enum:
+          - approved
+          - denied
+          - documents_provided
+          - documents_rejected
+          - manual_review
+          - pending_id_documents
+          - pending_poa_documents
+          - pending_idandpoa_documents
+          - retake_images
+          - pre_verified
+        description: Filter by KYC status. Multiple values are allowed e.g. `kyc_status[]=approved&kyc_status[]=under_review`.
+      - name: customer_type
+        in: query
+        schema:
+          type: string
+          example: primary
+          enum:
+          - primary
+          - secondary
+          - sole_proprietor
+        description: 'Only return Customers with a customer type matching exactly what is submitted. Multiple values are allowed e.g. `customer_type[]=primary&customer_type[]=secondary`.
+
+          '
+      - name: first_name
+        in: query
+        schema:
+          type: string
+          example: Olive
+        description: 'Only return Customers with a first name matching exactly what is submitted. Multiple values are allowed e.g. `first_name[]=Olive&first_name[]=Jack`.
+
+          '
+      - name: last_name
+        in: query
+        schema:
+          type: string
+          example: Oyl
+        description: 'Only return Customers with a last name matching exactly what is submitted. Multiple values are allowed e.g. `last_name[]=Oyl&last_name[]=Hammon`.
+
+          '
+      - name: email
+        in: query
+        schema:
+          type: string
+          example: olive.oyl@popeyes.com
+        description: 'Only return Customers with an email address matching exactly what is submitted. Multiple values are allowed e.g. `email[]=olive.oyl@popeyes.com&email[]=olive.oyl2@gmail.com`.
+
+          '
+      - name: locked
+        in: query
+        schema:
+          type: boolean
+          example: false
+        description: Only return locked Customers if `true` and only return unlocked Customers if `false`
+      - name: program_uid
+        in: query
+        schema:
+          type: string
+          example: pQtTCSXz57fuefzp
+        description: 'Only return Customers belonging to the submitted Program. Multiple values are allowed e.g. `program_uid[]=pQtTCSXz57fuefzp&program_uid[]=oPsSBRWy46etdeyo`.
+
+          '
+      - name: business_name
+        in: query
+        schema:
+          type: string
+          example: Business inc
+        description: 'Only return Customers with a business name at least partially matching what is submitted. Exact matches will be sorted first.
+
+          '
+      - $ref: '#/paths/~1transfers/get/parameters/1'
+      - $ref: '#/paths/~1transfers/get/parameters/2'
+      - $ref: '#/paths/~1pools/get/parameters/1'
+      - $ref: '#/paths/~1pools/get/parameters/2'
+      - name: sort
+        in: query
+        schema:
+          type: string
+          enum:
+          - activated_at_asc
+          - activated_at_desc
+          - first_name_asc
+          - first_name_desc
+          - last_name_asc
+          - last_name_desc
+          - email_asc
+          - email_desc
+      responses:
+        '200':
+          description: A list of Customers is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        allOf:
+                        - $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/0'
+                        - $ref: '#/paths/~1customers/post/responses/201/content/application~1json/schema/allOf/1'
+                        - type: object
+                          properties:
+                            details:
+                              $ref: '#/paths/~1customers~1%7Buid%7D/put/requestBody/content/application~1json/schema/properties/details/allOf/0'
+              examples:
+                customer_list:
+                  value:
+                    total_count: 10
+                    count: 2
+                    limit: 2
+                    offset: 0
+                    data:
+                    - activated_at: '2019-10-14T03:21:53.301Z'
+                      created_at: '2019-10-13T03:21:53.301Z'
+                      customer_type: primary
+                      details:
+                        first_name: Cletus
+                        middle_name: Nathanial
+                        last_name: Borer
+                        suffix: null
+                        phone: '4863567322'
+                      email: Cletus_Borer@hotmail.com
+                      external_uid: 0396a8f6-37d5-4386-bb63-86987ac88132
+                      client_verified: false
+                      kyc_status: pending_id_documents
+                      lock_reason: null
+                      locked_at: null
+                      pool_uids:
+                      - 1rNd8vRVa4GX84vi
+                      primary_customer_uid: null
+                      program_uid: Sw9DjTGJq5L1ctZN
+                      secondary_customer_uids: []
+                      status: manual_review
+                      total_balance: '0'
+                      uid: uKxmLxUEiSj5h4M3
+                      archived_at: null
+                    - activated_at: '2021-10-13T03:22:53.301Z'
+                      created_at: '2021-10-12T03:22:53.103Z'
+                      customer_type: sole_proprietor
+                      details:
+                        first_name: Billy
+                        middle_name: Bob
+                        last_name: Beansmith
+                        business_name: Billy Bob's Beans
+                        suffix: null
+                        phone: '4863567323'
+                      email: billybob@beansmith.name
+                      external_uid: 0396a8f7-37d5-4386-bb63-86987ac8813c
+                      client_verified: false
+                      kyc_status: approved
+                      lock_reason: null
+                      locked_at: null
+                      pool_uids:
+                      - 2rNd8vRVa4GX84vh
+                      primary_customer_uid: null
+                      program_uid: Tw9DjTGJq5L1ctZ1
+                      secondary_customer_uids:
+                      - 6gSxo29K4Q3CLseL
+                      - Hu1B6KMNR8juYwb5
+                      status: active
+                      total_balance: '10'
+                      uid: 3KxmLxUEiSj5h4Mu
+                      archived_at: null
+                    - activated_at: '2019-10-16T03:21:53.301Z'
+                      created_at: '2019-10-14T03:21:53.301Z'
+                      customer_type: primary
+                      details:
+                        first_name: Lemuel
+                        middle_name: Brian
+                        last_name: Olson
+                        suffix: Jr.
+                        phone: '6728868534'
+                      email: Lemuel95@hotmail.com
+                      external_uid: 844b9579-3a5d-47f0-88b2-305548974479
+                      client_verified: false
+                      kyc_status: approved
+                      lock_reason: Customer Reported Fraud
+                      locked_at: '2020-03-30T15:15:06Z'
+                      pool_uids:
+                      - o5oZEkpMte8zGJmR
+                      - 96E5UzZyTXyJmFpm
+                      primary_customer_uid: null
+                      program_uid: Sw9DjTGJq5L1ctZN
+                      secondary_customer_uids: []
+                      status: active
+                      total_balance: '-606.4'
+                      uid: y9reyPMNEWuuYSC1
+                      archived_at: null
+    post:
+      tags:
+      - Customers
+      summary: Create a new Customer
+      description: 'This endpoint is used to initialize a new Customer. All request body data is optional unless otherwise specified. For customer types other than `primary`, `customer_type` must be specified.
+
+
+        The `customer_type` cannot be changed after the customer is created. Customer details accepted by [Adjust Customer Data](https://developers.newline53.com/reference/put_customers-uid) can be sent in this request if desired. See Adjust Customer Data for an example with all customer details provided.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - type: object
+                properties:
+                  customer_type:
+                    type: string
+                    enum:
+                    - primary
+                    - secondary
+                    - sole_proprietor
+                    description: 'The type of Customer. Defaults to `primary`.
+
+                      '
+                  primary_customer_uid:
+                    type:
+                    - string
+                    - 'null'
+                    description: 'The UID of the Primary Customer with whom this Secondary Customer will be affiliated. Required for and only applicable to requests with customer_type `secondary`. Cannot be updated later from the initial value.
+
+                      '
+                  client_verified:
+                    type:
+                    - boolean
+                    - 'null'
+                    description: 'Indicates whether the client has already performed identity verification of the Customer. The client''s Program must be configured to accept this value. All Customers in a Program configured for this value must submit true in this field to complete onboarding. This value defaults to `false`.
+
+                      '
+              - $ref: '#/paths/~1customers~1%7Buid%7D/put/requestBody/content/application~1json/schema'
+            examples:
+              primary:
+                summary: create primary
+                value:
+                  external_uid: client-generated-42
+                  email: tomas@example.com
+              secondary:
+                summary: create secondary
+                value:
+                  external_uid: client-generated-42
+                  email: tomas@example.com
+                  customer_type: secondary
+                  primary_customer_uid: dc6PApa2nn9K3jwL
+              primary-empty:
+                summary: create primary (empty body)
+                value: {}
+      responses:
+        '201':
+          description: A newly created Customer is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    activated_at:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                      example: '2019-10-15T03:21:53.301Z'
+                      description: The date and time at which this Customer was activated.
+                    created_at:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                      example: '2019-10-14T03:21:53.301Z'
+                    customer_type:
+                      type: string
+                      enum:
+                      - primary
+                      - secondary
+                      - sole_proprietor
+                      - sub_ledger
+                      description: 'The type of Customer
+
+                        '
+                      example: primary
+                    email:
+                      type: string
+                      description: Email of the Customer
+                      example: olive.oyl@newline53.com
+                    client_verified:
+                      type: boolean
+                      description: Indicates whether or not the client is responsible for identity verification of this Customer. If true, the `kyc_status` will be "pre_verified".
+                      example: false
+                    kyc_status:
+                      type:
+                      - string
+                      - 'null'
+                      description: 'A value indicating the state of KYC/AML evaluation.
+
+                        '
+                      enum:
+                      - manual_review
+                      - approved
+                      - denied
+                      - pending_id_documents
+                      - pending_poa_documents
+                      - pending_idandpoa_documents
+                      - documents_provided
+                      - documents_rejected
+                      - retake_images
+                      - pre_verified
+                      readOnly: true
+                    kyc_status_reasons:
+                      type:
+                      - array
+                      - 'null'
+                      description: A list of reasons for the current `kyc_status`.
+                      items:
+                        type: string
+                        enum:
+                        - Approved
+                        - Valid Documents Provided
+                        - Archived due to application inactivity
+                        - Further review required
+                        - Minor (age < 18 years)
+                        - Invalid Documents submitted multiple times
+                        - Minimum requirements to open an account were not met
+                        - Invalid documents
+                        - Incorrect document provided for ID document
+                        - Expired ID
+                        - Illegible ID document
+                        - Incorrect document provided for POA document
+                        - Invalid POA provided
+                        - Illegible POA document
+                      readOnly: true
+                    lock_reason:
+                      type:
+                      - string
+                      - 'null'
+                      readOnly: true
+                      example: null
+                      description: 'The lock reason provided by the Client, an admin User, or the system at the time the Customer was locked. This field will be null if and only if the `locked_at` is null.
+
+                        '
+                    locked_at:
+                      type:
+                      - string
+                      - 'null'
+                      format: date-time
+                      readOnly: true
+                      example: null
+                      description: 'The date and time when the Customer was locked. This field will be null if and only if the `lock_reason` is null.
+
+                        '
+                    pii_confirmed_at:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                      example: '2020-10-14T03:21:53.301Z'
+                      description: 'The date and time when the Customer''s PII was last confirmed to be accurate
+
+                        '
+                    pool_uids:
+                      type: array
+                      description: A list of uids referring to Pools belonging to this Customer.
+                      items:
+                        type: string
+                        example: HiuQZJNjCd79LLYq, NoPJB9g9ZQTh5qMv
+                      readOnly: true
+                    primary_customer_uid:
+                      type:
+                      - string
+                      - 'null'
+                      description: The UID of the primary Customer. Null unless the customer type is `secondary`.
+                      readOnly: true
+                      example: null
+                    profile_responses:
+                      type: array
+                      description: A list of Profile Responses submitted by the Customer
+                      items:
+                        type: object
+                        properties:
+                          profile_requirement:
+                            type: string
+                            description: A statement that requires a response in order to onboard a Customer for a Product
+                            example: Please provide your approximate annual income in USD.
+                          profile_response:
+                            type: string
+                            description: The Customer's response to the Profile Requirement as a single string value.
+                            example: Profile response
+                          profile_requirement_uid:
+                            type: string
+                            description: A UID referring to the Profile Requirement
+                            example: ptRLF7nQvy8VoqM1
+                      readOnly: true
+                    program_uid:
+                      type: string
+                      description: A UID referring to the program this customer belongs to
+                      example: kaxHFJnWvJxRJZxr
+                      readOnly: true
+                    secondary_customer_uids:
+                      type:
+                      - array
+                      - 'null'
+                      description: The UIDs of secondary Customers. Null unless the customer type is `primary`.
+                      items:
+                        type: string
+                        example: 464QyebpxbBNrGkX
+                      readOnly: true
+                    status:
+                      type: string
+                      description: 'A value indicating the overall state of this Customer.
+
+                        '
+                      enum:
+                      - initiated
+                      - queued
+                      - identity_verified
+                      - active
+                      - manual_review
+                      - rejected
+                      - pending_archival
+                      - archived
+                      - under_review
+                      readOnly: true
+                    total_balance:
+                      type: string
+                      description: Total asset owned by the customer in US dollars
+                      readOnly: true
+                      example: '12345.67'
+                    archived_at:
+                      type:
+                      - string
+                      - 'null'
+                      format: date-time
+                      readOnly: true
+                      example: null
+                      description: 'If the Customer''s status is `archived` this will have the time at which they were archived.
+
+                        '
+                - type: object
+                  properties:
+                    details:
+                      $ref: '#/paths/~1customers~1%7Buid%7D/put/requestBody/content/application~1json/schema/properties/details'
+              examples:
+                empty_customer:
+                  value:
+                    activated_at: '2019-10-16T03:21:53.301Z'
+                    created_at: '2019-10-15T03:21:53.301Z'
+                    customer_type: primary
+                    details:
+                      first_name: null
+                      middle_name: null
+                      last_name: null
+                      suffix: null
+                      phone: null
+                    email: Cletus_Borer@hotmail.com
+                    external_uid: 0396a8f6-37d5-4386-bb63-86987ac88132
+                    client_verified: false
+                    kyc_status: null
+                    lock_reason: null
+                    locked_at: null
+                    pool_uids:
+                    - 1rNd8vRVa4GX84vi
+                    primary_customer_uid: null
+                    program_uid: Sw9DjTGJq5L1ctZN
+                    secondary_customer_uids: []
+                    status: initiated
+                    total_balance: '0'
+                    uid: uKxmLxUEiSj5h4M3
+                    archived_at: null
+  /customers/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Customers
+      summary: Get a single Customer
+      description: 'Retrieve overall status about a Customer as well as their total Asset Balances across all accounts.
+
+        '
+      responses:
+        '200':
+          description: A single Customer is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1customers/post/responses/201/content/application~1json/schema'
+    put:
+      tags:
+      - Customers
+      summary: Adjust Customer Data
+      description: 'Submit or update a Customer''s personally identifiable information (PII) after the Customer is created. Before a Customer has been onboarded to a product with [Customer Product](https://developers.newline53.com/reference/post_customer-products), this endpoint may be used to update or remove any details without validations. After the Customer has been onboarded to a product, all validations will be enforced.
+
+
+        This endpoint is used to supply the remaining personally identifiable information (PII) for each Customer after they are created. The PII for a Customer must be submitted in full. Newline will not accept your request if any field is incomplete or missing.
+
+
+        PII can be edited for a Customer up until a valid request is sent to the Customer Product endpoint. Once a Customer is in a status of Active, subsequent calls to this endpoint will result in additional KYC/AML evaluations. Each KYC/AML evaluation will result in a billable event for your Program. Please work with Newline on how you plan to implement PII modifications for your Customers.
+
+
+        Only first_name, middle_name, last_name, suffix, email, phone, and address will be editable after a Customer is in a status of Active. Once Customer data is adjusted, the pii_confirmed_at field on the Customer record will be updated.
+
+
+        Newline accepts Tax Identifier Number in the Social Security Number field of the API. Newline performs validation on the SSN field supplied with a Customer to prevent invalid SSN values. Newline will reject a Customer record with a SSN value that does not adhere to the following parameters:
+
+
+        - The 1st part, 3-digits, may not include 000, 666
+
+        - The 2nd part, 2-digits, may range from 01 to 99
+
+        - The 3rd part, 4-digits, may range from 0001 to 9999
+
+
+        We will accept SSN and TIN in the SSN field of the /customers endpoint.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                external_uid:
+                  type:
+                  - string
+                  - 'null'
+                  description: 'An optional Customer identifier supplied by the Partner. If supplied, must be unique among the collection of all Partner''s Customers.
+
+                    '
+                  example: partner-generated-id
+                email:
+                  type:
+                  - string
+                  - 'null'
+                  description: Email of the Customer
+                  example: olive.oyl@newline53.com
+                details:
+                  allOf:
+                  - allOf:
+                    - allOf:
+                      - type: object
+                        description: An object containing the supplied identifying information for the Customer
+                        properties:
+                          first_name:
+                            type:
+                            - string
+                            - 'null'
+                            description: 1-40 characters
+                            example: Olive
+                          middle_name:
+                            type:
+                            - string
+                            - 'null'
+                            description: 1-40 characters
+                            example: Olivia
+                          last_name:
+                            type:
+                            - string
+                            - 'null'
+                            description: 1-40 characters
+                            example: Oyl
+                          suffix:
+                            type:
+                            - string
+                            - 'null'
+                            description: 1-30 characters
+                            example: Jr.
+                      - type: object
+                        properties:
+                          phone:
+                            type:
+                            - string
+                            - 'null'
+                            example: '5555551212'
+                            description: Exactly 10 digits long (no hyphens, parentheses, or spaces)
+                            pattern: ^\d{10}$
+                    - type: object
+                      description: An object containing the supplied identifying information for the Customer
+                      properties:
+                        business_name:
+                          type:
+                          - string
+                          - 'null'
+                          description: Required for customers of type `sole_proprietor` and discarded otherwise. 1-256 alphanumeric characters.
+                          example: Oliver's Olive Emporium
+                  - type: object
+                    properties:
+                      ssn:
+                        type:
+                        - string
+                        - 'null'
+                        writeOnly: true
+                        example: 111-22-3333
+                        description: Follows pattern 'ddd-dd-dddd'. Required for `primary` or `sole_proprietor` customers.
+                        pattern: ^\d{3}-\d{2}-\d{4}$
+                      ssn_last_four:
+                        type:
+                        - string
+                        - 'null'
+                        readOnly: true
+                        example: '3333'
+                      dob:
+                        type:
+                        - string
+                        - 'null'
+                        format: date
+                        description: Follows pattern 'YYYY-MM-DD'
+                        example: '1919-12-08'
+                      address:
+                        type: object
+                        properties:
+                          street1:
+                            type:
+                            - string
+                            - 'null'
+                            description: Maximum 35 characters
+                            maxLength: 35
+                            example: 123 Abc St.
+                          street2:
+                            type:
+                            - string
+                            - 'null'
+                            description: Maximum 35 characters
+                            maxLength: 35
+                            example: Suite 4A
+                          city:
+                            type:
+                            - string
+                            - 'null'
+                            description: Maximum 35 characters
+                            maxLength: 35
+                            example: Chicago
+                          state:
+                            type:
+                            - string
+                            - 'null'
+                            description: 2 characters. Must be a valid US state abbreviation.
+                            pattern: ^\w{2}$
+                            example: IL
+                          postal_code:
+                            type:
+                            - string
+                            - 'null'
+                            description: 5-digit string. ZIP+4 is allowed.
+                            pattern: ^\d{5}(-\d{4})?$
+                            example: '60301'
+                        required:
+                        - street1
+                        - city
+                        - state
+                        - postal_code
+      responses:
+        '200':
+          description: The updated Customer resource is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1customers/post/responses/201/content/application~1json/schema'
+    delete:
+      parameters:
+      - $ref: '#/paths/~1auth/parameters/0'
+      tags:
+      - Customers
+      summary: Archive a Customer
+      description: 'Archiving a Customer refunds any remaining balance, closes all of their active Synthetic and Custodial Accounts and closes their Debit Cards. This process can take up to 8 business days to complete as the Transfers take place.
+
+
+        When archiving a customer, you can prevent them from reapplying to your program by setting `can_apply_again` to false. If you do not set any value, `can_apply_again` defaults to true.
+
+
+        When a request to archive a Customer is first received, the customer status will update to `pending_archival` and their accounts will be locked. When the archival process is complete, their customer status will update to `archived`. For a customer to move to the `archived` status, they must carry a $0 balance and have no pending transactions.
+
+
+        If the Customer has a positive balance across any accounts and a connected external account, Newline will initiate an ACH transfer to zero out the account balance and move the customer to the `archived` status.
+
+
+        If the Customer does not have an external account or the ACH transfer fails, Newline will mail a paper check to the Customer address on file to zero out the account balance and move the customer to the `archived` status.
+
+
+        If the Customer has a negative balance across any accounts, the negative account balances must be brought up to or greater than $0.00 before the archival workflow can continue.
+
+
+        Once archived, a Customer''s records will still be available for historical purposes (according to the bank’s record retention schedule), but they will not be able to open any new Accounts. The Customer can still apply again as long as `can_apply_again` is not set to false.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                archive_note:
+                  type:
+                  - string
+                  - 'null'
+                  example: for inactivity
+                can_apply_again:
+                  type:
+                  - boolean
+                  - 'null'
+                  default: true
+                destination_synthetic_account_uid:
+                  type: string
+                  description: 'UID of an active external Synthetic Account to which the Customer''s funds should be sent, if any. Required if the Customer has multiple active external Synthetic Accounts.
+
+                    '
+                  example: oBASVwLQB4RojU5X
+      responses:
+        '200':
+          description: Customer has begun the archive process.
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1customers/post/responses/201/content/application~1json/schema'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Access token signed with shared HMAC
+x-explorer-enabled: false

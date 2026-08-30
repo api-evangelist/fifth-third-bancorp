@@ -1,0 +1,701 @@
+openapi: 3.2.0
+info:
+  title: Newline Platform Combined Transfers API
+  version: 1.0.0
+  description: "\nWelcome! In this section of our docs experience, you'll be able to go through common payment scenarios that both you and your end customers may encounter as you start to offer financial products through your own technology stack. These guides will also help to highlight and expand on concepts discussed in our API references, like [Synthetic Accounts](https://developers.newline53.com/reference/synthetic-accounts), [Transfers](https://developers.newline53.com/reference/transfers), [Transactions&nbsp;](https://developers.newline53.com/reference/transactions)  and [Customers](https://developers.newline53.com/reference/customers).\n\nOur guides are broken out by supported use cases. If you find there isn't a specific use case that fits your business, reach out to our [Sales &amp; Partnership team](https://newline53.com/contact-us.html) and they'll be able to help determine how we can support your business and provide any other questions or feedback.\n\nLastly, when you're ready to build, check out our [Onboarding Overview](https://developers.newline53.com/docs/overview) and [Sandbox Walkthrough](https://developers.newline53.com/docs/sandbox-walkthrough) guides.\n\n## About our API\n\nThe Newline API is organized around REST. With a few exceptions, our API has standard resource-oriented URLs, accepts form-encoded OR JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.\n\n## FAQs\n\nWant to quickly review some common questions about Newline and our financial experiences, check out our [FAQs](https://developers.newline53.com/docs/faqs) guide.\n\n# Overview\n\n## Newline Onboarding 101\n\nOnboarding to any SaaS product can be a daunting task, and at Newline we seek to make this experience as smooth as possible. Part of that is getting you, our Client, familiar with the process by which we establish key resources like your Program, Products, Customers, Custodial Accounts, and Synthetic Accounts.\n\nThe following guide details, in short order, the Program and resources that Newline will configure for you and how each of these components affect your ability to use our API Reference.\n\n<img src=\"https://files.readme.io/955347d-image.png\">\n\nThe above visualization shows the Program and resources Newline will provide and maintain for Clients going through onboarding and implementation, but we'll enumerate the details for each resource above.\n\n> **Note**\n> In the above visualization, the lighter color items are preset and created by Newline for any Client implementation. Synthetic Accounts is a special case where general Synthetic Accounts are preset and Clients will be responsible for creating their own external Synthetic Accounts and VRNs..\n\n- **Program** - the Program dictates the origination terms to which the Client and Newline mutually agree. This could include payment limitations like amounts, frequency, and the need for pre-funding (ex. ACH). Your Program will be created and configured by Newline.\n\n- **Products** - these are distinct Product offerings supported by Newline. For instance, this can include payment rails like ACH, Wire, and Instant Payments that are configured as available synthetic_account_types. Newline creates and configures a Program's Products.\n\n    - Products can be applied across multiple Customers, and Customers can be attached to multiple Products. Essentially there is a many-to-many relationship between these resources, which make them, in some cases, parallel.\n\n    - A Product can support multiple payment rails.\n\n- **Customer Type** - Customers are provided a Customer Type at creation. For instance, Primary Customers are considered full account owners and have complete authority to take any actions associated with their accounts and associated resources. You can also limit certain Customer Types to have access to only certain Products. Permitted Customer Types are configured by Newline.\n\n- **Pool** - Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. Newline will create Pools.\n\n- **Customer** - This is the entity that owns the Account and Funds stored at Newline. This entity also is deemed the Originator when it comes to any payment creation. Clients can also be Customers in the event they meet those criteria. Customers are created by Newline or by the Client depending on the use case.\n\n- **Custodial Account** - This is the Account that exists in our Synthetic Core and represents the reciprocal Account on Fifth Third's ledger. These are the accounts you can access via Fifth Third Direct. Custodial Accounts will be created by Newline.\n\n- **Synthetic Account** - How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts that your Customers will likely use within your application. Synthetic Accounts of the general category will be created by Newline or by the Client depending on your use case. Clients will create external Synthetic Accounts like wire_external, ach_external, and instant_payment_external.\n\n- **Virtual Reference Number** - Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a synthetic account and can form a many-to-one relationship with their parent synthetic account.\n\n# Postman Collection\n\nHow to set up Postman, add our Newline collection, and use it to test Newline platform APIs.\n\n## Installing Postman\n\nPostman is available on a variety of platforms. Visit [Postman](https://www.postman.com/downloads/) to see if your platform is supported.  \nTo install Postman:\n\n1. Go to [Postman downloads](https://www.postman.com/downloads/).\n\n<img src=\"https://files.readme.io/fd1743f-Postman_Dowload_snip.jpg\">\n\n1. Download the required version.\n\n2. After your download is complete, run the downloaded file to install Postman.\n\n## Import the Newline Collection\n\nTo import our collection, click on the following [▶ Newline Collection](https://www.postman.com/newline53) button, and you will be redirected to our Newline Postman workspace, where you can download our collection.\n\nFor further information, see the [Postman documentation on importing data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).\n\n## Configure Your Postman Environment\n\n1. Create a Sandbox Environment.\n\n2. Set Sandbox variables.\n\n3. Save the environment.\n\n4. Ensure the new environment is selected.\n\n**Set API Keys**  \nYou will need to set your HMAC Key and Program UID as environment variables. You can set the variables in the headers in the environment tab within the Postman Collection.\n\n# Terminology\n\nThe terms, which represent API resource objects in Newline, below are referenced in our API documentation and endpoint definitions.  \nSome important notes while reading through this list:\n\nResource Objects often interact with one another, so please be sure to review our endpoints to see which serve as required inputs or are collected as outputs.\n\nCertain objects, like Transfers, are described differently in the payments industry depending on the Transaction Type. For instance, ach transactions are often referred to as entries rather than payments, as they can represent both credits (i.e., ODFI pushes) and debits (i.e., ODFI pulls).  \nWhile Resource Objects are distinct, they, in some cases, can represent the same entity.\n\n- Ex. 1 - Clients can also be Customers if they manage and own the financial products in question.\n\n- Ex. 2 - Transfers produce Transactions, but the produced Transactions (in aggregate) represent the original money movement.\n\n| Term | Definition |\n| --- | --- |\n| Customer | The end user of your application and the owner of assets in your Program. For example, when initiating a payment, this entity would be considered the **originator**. |\n| Client | The application or product owning organization that is affording end users (i.e., Customers) the ability to access the financial products.<br><br><br>**Note**<br>Clients can also be Customers in the event they own and have management over the financial products or the funds involved. |\n| Transmitter | Transmitters are the parties who have _requested_ the Transfer in question. When the Transmitter and Customer are the same party, Newline pulls origination information from the created Customer record. When the Transmitter and Customer are not the same party, it's the Client's responsibility to provide that information when making a Transfer.  <br>  <br>Transmitters are only required for the `wire` and `instant_payment` types (see the `wire_transmitter` and `instant_payment_transmitter` objects in the [Initiate a Transfer](https://developers.newline53.com/reference/post_transfers) reference). Client's should also take note of the `initiator_type` field, which dictates from where Transmitter information is pulled. For more context on Transmitters, refer to the [Payment Rail Regulation](https://newline-enterprise-group.readme.io/docs/transfer#payment-rail-regulation) section below. |\n| Partner | Any infrastructure partner integrated within the Newline Platform. |\n| Program | The Program is custom tailored to your offering and purpose built to enable financial products on your application. The Program defines what Synthetic and Custodial Account types, Customer Types, and Transactions Types are available for your Customers to utilize. The Program configuration is defined between the Client and Newline based on your (i.e., the Client's) use case. |\n| Product | Products represents the financial products available to your Customers. The Product object contains the account, compliance, and customer profile responses necessary for your Customers to gain access. |\n| Customer Product | The Customer Product is created when the Customer is added to a Product and respective Program. This often includes Newline automatically creating any needed financial products for the Customers' use. For instance, a Synthetic Account to represent the origination account at Fifth Third. |\n| Service Offering | The financial product offered by the Newline platform. These can be (but are not limited to) checking, savings, brokerage, or retirement accounts. |\n| Pool | Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. |\n| Custodial Accounts | This resource within Newline represents the assets held by your Customers, with direct alignment to accounts opened at Fifth Third. Custodial Accounts have the following relationships: one-to-one with Customers, and one-to-Many with Synthetic Accounts. |\n| Synthetic Accounts | How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts (i.e., Counterparties) that your Customers will likely use within your application. |\n| Virtual Reference Number (VRN) | Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a Synthetic Account, and can form a many-to-one relationship with their parent Synthetic Account. |\n| Transfer | The movement of assets from one Synthetic Account to another Synthetic Account. Most of asset movement initiated by your application will result in a Transfer. A successful Transfer will result in at least one Transaction. |\n| Transaction | Transactions are created based on how you instruct Newline to move assets (a Transfer) or how assets are moved or spent outside of your application (For example, ACH, Wire, and Instant Payments Transfers). The Transaction contains the amount, origin, and destination of assets. Newline categorizes Transactions into types to assist in their classification and representation. |\n| Transaction Events | The steps taken to complete the Transaction. These can be used to view the progress of an in-flight Transaction or see the history of a completed Transaction. |"
+servers:
+- url: https://sandbox.newline53.com/api/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Combined Transfers
+  description: "The Combined Transfers endpoint allows clients to create both a transfer and a counterparty in a single API call. This simplifies the process by eliminating the need to first create an external synthetic account and then reference it when initiating a transfer.\n\n## Endpoints:\n\n- GET List Combined Transfers: [GET /combined_transfers](https://developers.newline53.com/reference/get_combined-transfers)\n- POST Create a Combined Transfer: [POST/combined_transfers](https://developers.newline53.com/reference/post_combined-transfers)\n- GET Get a Single Combined Transfer: [GET /combined_transfers/{uid}](https://developers.newline53.com/reference/get_combined-transfers-uid)\n\nTransfers facilitate the movement of assets between accounts, enabling transactions such as payments and withdrawals. Combined Transfers work by creating both a synthetic account and a transfer in one API call, streamlining the process and reducing the steps required for asset movement.\n\nThe types and distribution of assets, the number of customers, and other rules governing the usage of Combined Transfers can be configured for each account on a program-by-program basis. This includes setting up the synthetic account types and defining the rules for asset movement between accounts.\n\n## Combined Transfers Statuses:\n\n**Queued:** The combined transfer request has been received and is waiting to be processed.  \n**Pending:** The combined transfer is currently being processed.  \n**Failed:** The combined transfer could not be completed due to an error.  \n**Completed:** The combined transfer has been successfully completed."
+paths:
+  /combined_transfers:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Combined Transfers
+      summary: List Combined Transfers
+      description: 'Retrieves a list of Combined Transfers. These represent transactions where both a counterparty Synthetic Account and a Transfer were created in a single API call. You can filter results by status and other parameters.
+
+        '
+      parameters:
+      - $ref: '#/paths/~1pools/get/parameters/1'
+      - $ref: '#/paths/~1pools/get/parameters/2'
+      - $ref: '#/paths/~1transactions/get/parameters/15'
+      - $ref: '#/paths/~1transactions/get/parameters/16'
+      - $ref: '#/paths/~1transfers/get/parameters/1'
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - queued
+          - pending
+          - failed
+          - completed
+          example: completed
+          description: 'Filter by status. Multiple values are allowed, e.g. `status[]=queued&status[]=pending`.
+
+            '
+      - name: synthetic_account_external_uid
+        in: query
+        schema:
+          type: string
+          example: client-generated-id
+        description: 'A unique, immutable id provided by the Client. Multiple values are allowed e.g. `synthetic_account_external_uid[]=uKxmLxUEiSj5h4M3&synthetic_account_external_uid[]=y9reyPMNEWuuYSC1`.
+
+          '
+      - name: synthetic_account_pool_uid
+        in: query
+        schema:
+          type: string
+          example: wTSMX1GubP21ev2h
+        description: 'Filter by Synthetic Account Pool. Multiple values are allowed, e.g. `synthetic_account_pool_uid[]=wTSMX1GubP21ev2h&synthetic_account_pool_uid[]=7UvkHn3Ss9AbWe2c`.
+
+          '
+      - name: synthetic_account_uid
+        in: query
+        schema:
+          type: string
+          example: 7UvkHn3Ss9AbWe2c
+        description: 'Newline-generated unique id of the associated Synthetic Account. Multiple values are allowed, e.g. `synthetic_account_uid[]=wTSMX1GubP21ev2h&synthetic_account_uid[]=7UvkHn3Ss9AbWe2c`.
+
+          '
+      - name: transfer_customer_uid
+        in: query
+        schema:
+          type: string
+          example: wTSMX1GubP21ev2h
+        description: 'Filter by Synthetic Transfer Customer. Multiple values are allowed, e.g. `transfer_customer_uid[]=wTSMX1GubP21ev2h&transfer_customer_uid[]=7UvkHn3Ss9AbWe2c`.
+
+          '
+      - name: transfer_external_uid
+        in: query
+        schema:
+          type: string
+          example: client-generated-id
+        description: 'A unique, immutable id provided by the Client. Multiple values are allowed e.g. `transfer_external_uid[]=uKxmLxUEiSj5h4M3&transfer_external_uid[]=y9reyPMNEWuuYSC1`.
+
+          '
+      - name: transfer_uid
+        in: query
+        schema:
+          type: string
+          example: 7UvkHn3Ss9AbWe2c
+        description: 'Newline-generated unique id of the associated Synthetic Transfer. Multiple values are allowed, e.g. `transfer_uid[]=wTSMX1GubP21ev2h&transfer_uid[]=7UvkHn3Ss9AbWe2c`.
+
+          '
+      responses:
+        '200':
+          description: A list of Combined Transfers is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        allOf:
+                        - $ref: '#/paths/~1combined_transfers/post/responses/201/content/application~1json/schema'
+              examples:
+                combined_transfers_list:
+                  value:
+                    total_count: 4
+                    count: 2
+                    limit: 2
+                    offset: 0
+                    data:
+                    - created_at: '2025-03-25T10:17:55.444Z'
+                      status: completed
+                      external_uid: 12345abcd
+                      synthetic_account:
+                        external_uid: abcd12345
+                        name: Spinach Fund
+                        pool_uid: axz9sbUgRVu5wqbw
+                        routing_number: '04200031'
+                        synthetic_account_type_uid: UyjH72G9KAhmbpNS
+                        ach:
+                          account_type: checking
+                          counterparty_name: awesome counterparty
+                        uid: dzc4FwjydgYAHpy9
+                      transfer:
+                        destination_synthetic_account_uid: azXvxqqcSsX9x9Yd
+                        initiating_customer_uid: PszWYuoA3CSUvAaq
+                        initiator_type: customer
+                        usd_transfer_amount: '1.23'
+                        ach:
+                          effective_entry_date: '2025-03-27'
+                          entry_description: Dividend Payment
+                          originator_name: Big Bank Inc
+                          company_id: COMPID1234
+                          service_processing: SAMEDAY
+                          sec_code: CCD
+                          addenda: valuable extra info
+                        uid: 87CwVJLxYnRsEHLS
+                      uid: 1BGeBkH7tU7REZVx
+                    - created_at: '2025-03-27T09:23:07.890Z'
+                      status: queued
+                      external_uid: null
+                      synthetic_account:
+                        uid: axz9sbUgRVu5wqbw
+                      transfer:
+                        initiating_customer_uid: PszWYuoA3CSUvAaq
+                        initiator_type: customer
+                        source_synthetic_account_uid: gfUHdwkR9kkEVxA4
+                        usd_transfer_amount: '1.23'
+                        wire:
+                          intermediary_bank_name: Big Bank Inc
+                          intermediary_bank_address:
+                            line1: 123 Main St
+                            line2: Brooklyn NY
+                            country: US
+                          intermediary_bank_routing_number: '123456789'
+                          wire_transmitter:
+                            name: Bunker LLC
+                            line1: 456 Second St
+                            line2: Queens NY
+                            country: US
+                            transmitter_identifier: '1234567890'
+                        uid: null
+                      uid: iLCATodsXhKPpPRv
+        '403':
+          description: Denied access to Combined Transfers
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                combined_transfers_disabled:
+                  value:
+                    errors:
+                    - code: 33004
+                      title: Combined Transfers disabled
+                      detail: Combined Transfer endpoints are not enabled for this program
+                      occurred_at: '2025-03-27T09:23:07.890Z'
+                    status: 403
+        '422':
+          description: Failed to retrieve Combined Transfers
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                failed_to_retrieve_combined_transfers:
+                  value:
+                    errors:
+                    - code: 33006
+                      title: Failed to retrieve Combined Transfers
+                      detail: An exception occurred while retrieving Combined Transfers
+                      occurred_at: '2025-03-27T09:23:07.890Z'
+                    status: 422
+    post:
+      tags:
+      - Combined Transfers
+      summary: Create a new Combined Transfer
+      description: 'Creates a Combined Transfer by simultaneously creating a counterparty Synthetic Account and initiating a Transfer. This streamlines asset movement by reducing the number of steps required to set up and execute a transaction.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                external_uid:
+                  type: string
+                  description: Optional client-supplied uid
+                  example: YrfDrfVRgpPgnhF5
+                synthetic_account:
+                  allOf:
+                  - $ref: '#/paths/~1synthetic_accounts/post/requestBody/content/application~1json/schema'
+                  - type: object
+                    description: 'Synthetic Account to be created or reused for a transfer. For more details on object structure, supported options and examples please refer to  [POST /synthetic_accounts](#tag/Synthetic-Accounts/paths/~1synthetic_accounts/post).
+
+                      '
+                transfer:
+                  allOf:
+                  - $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema'
+                  - type: object
+                    description: 'Transfer details to initiate a transfer with. For more details on object structure, supported options and examples please refer to [POST /transfers](#tag/Transfers/paths/~1transfers/post). **NOTE:** Only source or destination synthetic account uid must be supplied for combined transfer, `synthetic_account` from the request will be used as the other party.
+
+                      '
+              required:
+              - synthetic_account
+              - transfer
+            examples:
+              ach_transfer_to_new_account:
+                value:
+                  synthetic_account:
+                    account_number: '1234567890'
+                    external_uid: abcd12345
+                    name: Spinach Fund
+                    pool_uid: axz9sbUgRVu5wqbw
+                    routing_number: '04200031'
+                    synthetic_account_type_uid: UyjH72G9KAhmbpNS
+                    ach:
+                      account_type: checking
+                      counterparty_name: awesome counterparty
+                  transfer:
+                    destination_synthetic_account_uid: beHyJNeBU65Xv8LK
+                    initiating_customer_uid: axz9sbUgRVu5wqbw
+                    usd_transfer_amount: '12.34'
+                    initiator_type: customer
+                    ach:
+                      destination_synthetic_account_uid: azXvxqqcSsX9x9Yd
+                      initiating_customer_uid: PszWYuoA3CSUvAaq
+                      initiator_type: customer
+                      usd_transfer_amount: '1.23'
+                      ach:
+                        effective_entry_date: '2025-03-27'
+                        entry_description: Dividend Payment
+                        originator_name: Big Bank Inc
+                        company_id: COMPID1234
+                        service_processing: SAMEDAY
+                        sec_code: CCD
+                        addenda: valuable extra info
+                      uid: 87CwVJLxYnRsEHLS
+              ach_transfer_to_existing_account:
+                value:
+                  synthetic_account:
+                    uid: dzc4FwjydgYAHpy9
+                  transfer:
+                    destination_synthetic_account_uid: beHyJNeBU65Xv8LK
+                    initiating_customer_uid: axz9sbUgRVu5wqbw
+                    usd_transfer_amount: '12.34'
+                    initiator_type: customer
+                    ach:
+                      destination_synthetic_account_uid: azXvxqqcSsX9x9Yd
+                      initiating_customer_uid: PszWYuoA3CSUvAaq
+                      initiator_type: customer
+                      usd_transfer_amount: '1.23'
+                      ach:
+                        effective_entry_date: '2025-03-27'
+                        entry_description: Dividend Payment
+                        originator_name: Big Bank Inc
+                        company_id: COMPID1234
+                        service_processing: SAMEDAY
+                        sec_code: CCD
+                        addenda: valuable extra info
+                      uid: 87CwVJLxYnRsEHLS
+              instant_payment_transfer_to_new_account:
+                value:
+                  synthetic_account:
+                    account_number: '1234567890'
+                    external_uid: abcd12345
+                    name: Spinach Fund
+                    pool_uid: axz9sbUgRVu5wqbw
+                    routing_number: '04200031'
+                    synthetic_account_type_uid: UyjH72G9KAhmbpNS
+                    instant_payment:
+                      email: address@domain.com
+                      counterparty_name: awesome counterparty
+                      phone: '2121112233'
+                      counterparty_address:
+                        street_number: 123
+                        street1: Main street
+                        city: Brooklyn
+                        state: IA
+                        postal_code: 12345-6789
+                        country: US
+                  transfer:
+                    destination_synthetic_account_uid: beHyJNeBU65Xv8LK
+                    initiating_customer_uid: axz9sbUgRVu5wqbw
+                    usd_transfer_amount: '12.34'
+                    initiator_type: customer
+                    instant_payment:
+                      instant_payment_transmitter:
+                        name: Royalty Asset Management
+                        transmitter_identifier: '123456789'
+                        street_number: 123
+                        street1: Abc St.
+                        city: Boring
+                        state: OR
+                        postal_code: 97009
+                      memo: To unfreeze the prince's assets
+              instant_payment_transfer_to_existing_account:
+                value:
+                  synthetic_account:
+                    uid: dzc4FwjydgYAHpy9
+                  transfer:
+                    destination_synthetic_account_uid: beHyJNeBU65Xv8LK
+                    initiating_customer_uid: axz9sbUgRVu5wqbw
+                    usd_transfer_amount: '12.34'
+                    initiator_type: customer
+                    instant_payment:
+                      instant_payment_transmitter:
+                        name: Royalty Asset Management
+                        transmitter_identifier: '123456789'
+                        street_number: 123
+                        street1: Abc St.
+                        city: Boring
+                        state: OR
+                        postal_code: 97009
+                      memo: To unfreeze the prince's assets
+              wire_transfer_to_new_account:
+                value:
+                  synthetic_account:
+                    account_number: '1234567890'
+                    external_uid: abcd12345
+                    name: Spinach Fund
+                    pool_uid: axz9sbUgRVu5wqbw
+                    routing_number: '04200031'
+                    synthetic_account_type_uid: UyjH72G9KAhmbpNS
+                    wire:
+                      counterparty_name: Awesome Counterparty
+                      counterparty_bank_name: Biggest Bank Inc
+                  transfer:
+                    destination_synthetic_account_uid: beHyJNeBU65Xv8LK
+                    initiating_customer_uid: axz9sbUgRVu5wqbw
+                    usd_transfer_amount: '12.34'
+                    initiator_type: customer
+                    wire:
+                      intermediary_bank_name: Big Bank Inc
+                      intermediary_bank_address:
+                        line1: 123 Main St
+                        line2: Brooklyn NY
+                        country: US
+                      intermediary_bank_routing_number: '123456789'
+                      wire_transmitter:
+                        name: Bunker LLC
+                        line1: 456 Second St
+                        line2: Queens NY
+                        country: US
+                        transmitter_identifier: '1234567890'
+              wire_transfer_to_existing_account:
+                value:
+                  synthetic_account:
+                    uid: dzc4FwjydgYAHpy9
+                  transfer:
+                    destination_synthetic_account_uid: beHyJNeBU65Xv8LK
+                    initiating_customer_uid: axz9sbUgRVu5wqbw
+                    usd_transfer_amount: '12.34'
+                    initiator_type: customer
+                    wire:
+                      intermediary_bank_name: Big Bank Inc
+                      intermediary_bank_address:
+                        line1: 123 Main St
+                        line2: Brooklyn NY
+                        country: US
+                      intermediary_bank_routing_number: '123456789'
+                      wire_transmitter:
+                        name: Bunker LLC
+                        line1: 456 Second St
+                        line2: Queens NY
+                        country: US
+                        transmitter_identifier: '1234567890'
+      responses:
+        '201':
+          description: A single Combined Transfer is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created_at:
+                    type: string
+                    description: Timestamp of when the combined_transfer was created
+                    example: '2025-03-27T09:23:07.890Z'
+                  errors:
+                    type: array
+                    description: 'A collection of errors that occured during synthetic account and/or transfer creation. Only displayed if errors were detected.
+
+                      '
+                    items:
+                      $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema/properties/errors/items'
+                    example:
+                    - code: 33005
+                      title: Could not continue Combined Transfer
+                      detail: An exception occurred while continuing a Combined Transfer
+                      occurred_at: '2025-03-27T09:23:07.890Z'
+                  external_uid:
+                    $ref: '#/paths/~1combined_transfers/post/requestBody/content/application~1json/schema/properties/external_uid'
+                  status:
+                    description: The combined transfer's status
+                    type: string
+                    example: pending
+                    enum:
+                    - queued
+                    - pending
+                    - failed
+                    - completed
+                  synthetic_account:
+                    type: object
+                    description: 'Parameters provided at time of creation. UID field will get populated once synthetic account has been successfully created, unless uid value was supplied at creation time.
+
+                      '
+                  transfer:
+                    type: object
+                    description: 'Parameters provided at time of creation. UID field will get populated once transfer has been successfully initiated.
+
+                      '
+                  uid:
+                    type: string
+                    description: Unique identifier for the Combined Transfer
+                    example: dYTG8WAWAh5UyvY7
+              examples:
+                queued:
+                  value:
+                    created_at: '2025-03-27T09:23:07.890Z'
+                    status: queued
+                    external_uid: null
+                    synthetic_account:
+                      external_uid: abcd12345
+                      name: Spinach Fund
+                      pool_uid: axz9sbUgRVu5wqbw
+                      routing_number: '04200031'
+                      synthetic_account_type_uid: UyjH72G9KAhmbpNS
+                      wire:
+                        counterparty_name: Awesome Counterparty
+                        counterparty_bank_name: Biggest Bank Inc
+                      uid: null
+                    transfer:
+                      destination_synthetic_account_uid: azXvxqqcSsX9x9Yd
+                      initiating_customer_uid: PszWYuoA3CSUvAaq
+                      initiator_type: customer
+                      source_synthetic_account_uid: gfUHdwkR9kkEVxA4
+                      usd_transfer_amount: '1.23'
+                      wire:
+                        intermediary_bank_name: Big Bank Inc
+                        intermediary_bank_address:
+                          line1: 123 Main St
+                          line2: Brooklyn NY
+                          country: US
+                        intermediary_bank_routing_number: '123456789'
+                        wire_transmitter:
+                          name: Bunker LLC
+                          line1: 456 Second St
+                          line2: Queens NY
+                          country: US
+                          transmitter_identifier: '1234567890'
+                      uid: null
+                    uid: iLCATodsXhKPpPRv
+        '403':
+          description: Denied access to Combined Transfers
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                combined_transfers_disabled:
+                  $ref: '#/paths/~1combined_transfers/get/responses/403/content/application~1json/examples/combined_transfers_disabled'
+        '422':
+          description: Creation Error
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                combined_transfer_creation_error:
+                  value:
+                    errors:
+                    - code: 33001
+                      title: Could not create Combined Transfer
+                      detail: An exception occurred while creating a Combined Transfer
+                      occurred_at: '2025-03-27T09:23:07.890Z'
+                    status: 422
+                combined_transfer_external_uid_taken:
+                  value:
+                    errors:
+                    - code: 33007
+                      title: Combined Transfer external uid is already taken
+                      detail: Combined Transfer external uid must be unique
+                      occurred_at: '2025-03-27T09:23:07.890Z'
+                    status: 422
+  /combined_transfers/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Combined Transfers
+      summary: Get a single Combined Transfer
+      description: Retrieves details about a specific Combined Transfer, including the status, participating accounts, and associated metadata. Statuses include `queued`, `pending`, `failed`, and `completed`.
+      responses:
+        '200':
+          description: A single Combined Transfer is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1combined_transfers/post/responses/201/content/application~1json/schema'
+              examples:
+                queued:
+                  $ref: '#/paths/~1combined_transfers/post/responses/201/content/application~1json/examples/queued'
+                pending:
+                  value:
+                    created_at: '2025-03-27T09:23:07.890Z'
+                    status: pending
+                    external_uid: null
+                    synthetic_account:
+                      external_uid: abcd12345
+                      name: Spinach Fund
+                      pool_uid: axz9sbUgRVu5wqbw
+                      routing_number: '04200031'
+                      synthetic_account_type_uid: UyjH72G9KAhmbpNS
+                      wire:
+                        counterparty_name: Awesome Counterparty
+                        counterparty_bank_name: Biggest Bank Inc
+                      uid: null
+                    transfer:
+                      destination_synthetic_account_uid: azXvxqqcSsX9x9Yd
+                      initiating_customer_uid: PszWYuoA3CSUvAaq
+                      initiator_type: customer
+                      source_synthetic_account_uid: gfUHdwkR9kkEVxA4
+                      usd_transfer_amount: '1.23'
+                      wire:
+                        intermediary_bank_name: Big Bank Inc
+                        intermediary_bank_address:
+                          line1: 123 Main St
+                          line2: Brooklyn NY
+                          country: US
+                        intermediary_bank_routing_number: '123456789'
+                        wire_transmitter:
+                          name: Bunker LLC
+                          line1: 456 Second St
+                          line2: Queens NY
+                          country: US
+                          transmitter_identifier: '1234567890'
+                      uid: null
+                    uid: iLCATodsXhKPpPRv
+                failed:
+                  value:
+                    created_at: '2025-03-27T09:23:07.890Z'
+                    status: failed
+                    errors:
+                    - code: 33005
+                      title: Could not continue Combined Transfer
+                      detail: An exception occurred while continuing a Combined Transfer
+                      occurred_at: '2025-03-27T09:23:07.890Z'
+                    external_uid: null
+                    synthetic_account:
+                      external_uid: abcd12345
+                      name: Spinach Fund
+                      pool_uid: axz9sbUgRVu5wqbw
+                      routing_number: '04200031'
+                      synthetic_account_type_uid: UyjH72G9KAhmbpNS
+                      wire:
+                        counterparty_name: Awesome Counterparty
+                        counterparty_bank_name: Biggest Bank Inc
+                      uid: null
+                    transfer:
+                      destination_synthetic_account_uid: azXvxqqcSsX9x9Yd
+                      initiating_customer_uid: PszWYuoA3CSUvAaq
+                      initiator_type: customer
+                      source_synthetic_account_uid: gfUHdwkR9kkEVxA4
+                      usd_transfer_amount: '1.23'
+                      wire:
+                        intermediary_bank_name: Big Bank Inc
+                        intermediary_bank_address:
+                          line1: 123 Main St
+                          line2: Brooklyn NY
+                          country: US
+                        intermediary_bank_routing_number: '123456789'
+                        wire_transmitter:
+                          name: Bunker LLC
+                          line1: 456 Second St
+                          line2: Queens NY
+                          country: US
+                          transmitter_identifier: '1234567890'
+                      uid: null
+                    uid: iLCATodsXhKPpPRv
+                completed:
+                  value:
+                    created_at: '2025-03-27T09:23:07.890Z'
+                    status: completed
+                    external_uid: null
+                    synthetic_account:
+                      external_uid: abcd12345
+                      name: Spinach Fund
+                      pool_uid: axz9sbUgRVu5wqbw
+                      routing_number: '04200031'
+                      synthetic_account_type_uid: UyjH72G9KAhmbpNS
+                      wire:
+                        counterparty_name: Awesome Counterparty
+                        counterparty_bank_name: Biggest Bank Inc
+                      uid: dzc4FwjydgYAHpy9
+                    transfer:
+                      destination_synthetic_account_uid: azXvxqqcSsX9x9Yd
+                      initiating_customer_uid: PszWYuoA3CSUvAaq
+                      initiator_type: customer
+                      source_synthetic_account_uid: gfUHdwkR9kkEVxA4
+                      usd_transfer_amount: '1.23'
+                      wire:
+                        intermediary_bank_name: Big Bank Inc
+                        intermediary_bank_address:
+                          line1: 123 Main St
+                          line2: Brooklyn NY
+                          country: US
+                        intermediary_bank_routing_number: '123456789'
+                        wire_transmitter:
+                          name: Bunker LLC
+                          line1: 456 Second St
+                          line2: Queens NY
+                          country: US
+                          transmitter_identifier: '1234567890'
+                      uid: 87CwVJLxYnRsEHLS
+                    uid: iLCATodsXhKPpPRv
+        '403':
+          description: Denied access to Combined Transfers
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                combined_transfers_disabled:
+                  $ref: '#/paths/~1combined_transfers/get/responses/403/content/application~1json/examples/combined_transfers_disabled'
+        '404':
+          description: The Combined Transfer is not found
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                unknown_combined_transfer:
+                  value:
+                    errors:
+                    - code: 33000
+                      title: Unknown combined transfer
+                      detail: Could not find combined transfer
+                      occurred_at: '2025-03-27T09:23:07.890Z'
+                    status: 404
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Access token signed with shared HMAC
+x-explorer-enabled: false

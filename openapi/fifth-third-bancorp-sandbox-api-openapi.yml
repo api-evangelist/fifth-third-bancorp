@@ -1,0 +1,410 @@
+openapi: 3.2.0
+info:
+  title: Newline Platform Sandbox API
+  version: 1.0.0
+  description: "\nWelcome! In this section of our docs experience, you'll be able to go through common payment scenarios that both you and your end customers may encounter as you start to offer financial products through your own technology stack. These guides will also help to highlight and expand on concepts discussed in our API references, like [Synthetic Accounts](https://developers.newline53.com/reference/synthetic-accounts), [Transfers](https://developers.newline53.com/reference/transfers), [Transactions&nbsp;](https://developers.newline53.com/reference/transactions)  and [Customers](https://developers.newline53.com/reference/customers).\n\nOur guides are broken out by supported use cases. If you find there isn't a specific use case that fits your business, reach out to our [Sales &amp; Partnership team](https://newline53.com/contact-us.html) and they'll be able to help determine how we can support your business and provide any other questions or feedback.\n\nLastly, when you're ready to build, check out our [Onboarding Overview](https://developers.newline53.com/docs/overview) and [Sandbox Walkthrough](https://developers.newline53.com/docs/sandbox-walkthrough) guides.\n\n## About our API\n\nThe Newline API is organized around REST. With a few exceptions, our API has standard resource-oriented URLs, accepts form-encoded OR JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.\n\n## FAQs\n\nWant to quickly review some common questions about Newline and our financial experiences, check out our [FAQs](https://developers.newline53.com/docs/faqs) guide.\n\n# Overview\n\n## Newline Onboarding 101\n\nOnboarding to any SaaS product can be a daunting task, and at Newline we seek to make this experience as smooth as possible. Part of that is getting you, our Client, familiar with the process by which we establish key resources like your Program, Products, Customers, Custodial Accounts, and Synthetic Accounts.\n\nThe following guide details, in short order, the Program and resources that Newline will configure for you and how each of these components affect your ability to use our API Reference.\n\n<img src=\"https://files.readme.io/955347d-image.png\">\n\nThe above visualization shows the Program and resources Newline will provide and maintain for Clients going through onboarding and implementation, but we'll enumerate the details for each resource above.\n\n> **Note**\n> In the above visualization, the lighter color items are preset and created by Newline for any Client implementation. Synthetic Accounts is a special case where general Synthetic Accounts are preset and Clients will be responsible for creating their own external Synthetic Accounts and VRNs..\n\n- **Program** - the Program dictates the origination terms to which the Client and Newline mutually agree. This could include payment limitations like amounts, frequency, and the need for pre-funding (ex. ACH). Your Program will be created and configured by Newline.\n\n- **Products** - these are distinct Product offerings supported by Newline. For instance, this can include payment rails like ACH, Wire, and Instant Payments that are configured as available synthetic_account_types. Newline creates and configures a Program's Products.\n\n    - Products can be applied across multiple Customers, and Customers can be attached to multiple Products. Essentially there is a many-to-many relationship between these resources, which make them, in some cases, parallel.\n\n    - A Product can support multiple payment rails.\n\n- **Customer Type** - Customers are provided a Customer Type at creation. For instance, Primary Customers are considered full account owners and have complete authority to take any actions associated with their accounts and associated resources. You can also limit certain Customer Types to have access to only certain Products. Permitted Customer Types are configured by Newline.\n\n- **Pool** - Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. Newline will create Pools.\n\n- **Customer** - This is the entity that owns the Account and Funds stored at Newline. This entity also is deemed the Originator when it comes to any payment creation. Clients can also be Customers in the event they meet those criteria. Customers are created by Newline or by the Client depending on the use case.\n\n- **Custodial Account** - This is the Account that exists in our Synthetic Core and represents the reciprocal Account on Fifth Third's ledger. These are the accounts you can access via Fifth Third Direct. Custodial Accounts will be created by Newline.\n\n- **Synthetic Account** - How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts that your Customers will likely use within your application. Synthetic Accounts of the general category will be created by Newline or by the Client depending on your use case. Clients will create external Synthetic Accounts like wire_external, ach_external, and instant_payment_external.\n\n- **Virtual Reference Number** - Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a synthetic account and can form a many-to-one relationship with their parent synthetic account.\n\n# Postman Collection\n\nHow to set up Postman, add our Newline collection, and use it to test Newline platform APIs.\n\n## Installing Postman\n\nPostman is available on a variety of platforms. Visit [Postman](https://www.postman.com/downloads/) to see if your platform is supported.  \nTo install Postman:\n\n1. Go to [Postman downloads](https://www.postman.com/downloads/).\n\n<img src=\"https://files.readme.io/fd1743f-Postman_Dowload_snip.jpg\">\n\n1. Download the required version.\n\n2. After your download is complete, run the downloaded file to install Postman.\n\n## Import the Newline Collection\n\nTo import our collection, click on the following [▶ Newline Collection](https://www.postman.com/newline53) button, and you will be redirected to our Newline Postman workspace, where you can download our collection.\n\nFor further information, see the [Postman documentation on importing data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).\n\n## Configure Your Postman Environment\n\n1. Create a Sandbox Environment.\n\n2. Set Sandbox variables.\n\n3. Save the environment.\n\n4. Ensure the new environment is selected.\n\n**Set API Keys**  \nYou will need to set your HMAC Key and Program UID as environment variables. You can set the variables in the headers in the environment tab within the Postman Collection.\n\n# Terminology\n\nThe terms, which represent API resource objects in Newline, below are referenced in our API documentation and endpoint definitions.  \nSome important notes while reading through this list:\n\nResource Objects often interact with one another, so please be sure to review our endpoints to see which serve as required inputs or are collected as outputs.\n\nCertain objects, like Transfers, are described differently in the payments industry depending on the Transaction Type. For instance, ach transactions are often referred to as entries rather than payments, as they can represent both credits (i.e., ODFI pushes) and debits (i.e., ODFI pulls).  \nWhile Resource Objects are distinct, they, in some cases, can represent the same entity.\n\n- Ex. 1 - Clients can also be Customers if they manage and own the financial products in question.\n\n- Ex. 2 - Transfers produce Transactions, but the produced Transactions (in aggregate) represent the original money movement.\n\n| Term | Definition |\n| --- | --- |\n| Customer | The end user of your application and the owner of assets in your Program. For example, when initiating a payment, this entity would be considered the **originator**. |\n| Client | The application or product owning organization that is affording end users (i.e., Customers) the ability to access the financial products.<br><br><br>**Note**<br>Clients can also be Customers in the event they own and have management over the financial products or the funds involved. |\n| Transmitter | Transmitters are the parties who have _requested_ the Transfer in question. When the Transmitter and Customer are the same party, Newline pulls origination information from the created Customer record. When the Transmitter and Customer are not the same party, it's the Client's responsibility to provide that information when making a Transfer.  <br>  <br>Transmitters are only required for the `wire` and `instant_payment` types (see the `wire_transmitter` and `instant_payment_transmitter` objects in the [Initiate a Transfer](https://developers.newline53.com/reference/post_transfers) reference). Client's should also take note of the `initiator_type` field, which dictates from where Transmitter information is pulled. For more context on Transmitters, refer to the [Payment Rail Regulation](https://newline-enterprise-group.readme.io/docs/transfer#payment-rail-regulation) section below. |\n| Partner | Any infrastructure partner integrated within the Newline Platform. |\n| Program | The Program is custom tailored to your offering and purpose built to enable financial products on your application. The Program defines what Synthetic and Custodial Account types, Customer Types, and Transactions Types are available for your Customers to utilize. The Program configuration is defined between the Client and Newline based on your (i.e., the Client's) use case. |\n| Product | Products represents the financial products available to your Customers. The Product object contains the account, compliance, and customer profile responses necessary for your Customers to gain access. |\n| Customer Product | The Customer Product is created when the Customer is added to a Product and respective Program. This often includes Newline automatically creating any needed financial products for the Customers' use. For instance, a Synthetic Account to represent the origination account at Fifth Third. |\n| Service Offering | The financial product offered by the Newline platform. These can be (but are not limited to) checking, savings, brokerage, or retirement accounts. |\n| Pool | Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. |\n| Custodial Accounts | This resource within Newline represents the assets held by your Customers, with direct alignment to accounts opened at Fifth Third. Custodial Accounts have the following relationships: one-to-one with Customers, and one-to-Many with Synthetic Accounts. |\n| Synthetic Accounts | How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts (i.e., Counterparties) that your Customers will likely use within your application. |\n| Virtual Reference Number (VRN) | Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a Synthetic Account, and can form a many-to-one relationship with their parent Synthetic Account. |\n| Transfer | The movement of assets from one Synthetic Account to another Synthetic Account. Most of asset movement initiated by your application will result in a Transfer. A successful Transfer will result in at least one Transaction. |\n| Transaction | Transactions are created based on how you instruct Newline to move assets (a Transfer) or how assets are moved or spent outside of your application (For example, ACH, Wire, and Instant Payments Transfers). The Transaction contains the amount, origin, and destination of assets. Newline categorizes Transactions into types to assist in their classification and representation. |\n| Transaction Events | The steps taken to complete the Transaction. These can be used to view the progress of an in-flight Transaction or see the history of a completed Transaction. |"
+servers:
+- url: https://sandbox.newline53.com/api/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Sandbox
+  description: 'The Sandbox section provides tools to test and simulate interactions with the Newline API in a controlled environment.
+
+
+    **Endpoints:**
+
+
+    - POST [Simulate a Transaction: POST /sandbox/mock_transactions](https://developers.newline53.com/reference/post_sandbox-mock-transactions)'
+paths:
+  /sandbox/mock_transactions:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    post:
+      tags:
+      - Sandbox
+      summary: Simulate a Transaction
+      description: '> **Note** This endpoint is only available in Sandbox.
+
+
+        Create a Transaction by simulating the attributes that would be expected from reading an actual transaction received from a third party system. The simulated Transaction will appear in the respective [Transaction list](https://developers.newline53.com/reference/get_transactions) after it is successfully processed.
+
+
+        Transactions can be simulated against either a Synthetic Account, or a VRN that is created and mapped to a Synthetic Account.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - type: object
+                properties:
+                  customer_uid:
+                    type: string
+                    example: uKxmLxUEiSj5h4M3
+                    description: 'The uid of the customer for which to create the Transaction. Required except when `transaction_type` is `ach_return`.
+
+                      '
+                  transaction_type:
+                    type: string
+                    enum:
+                    - wire
+                    - instant_payment
+                    - ach
+                    - ach_return
+                  transaction_uid:
+                    type: string
+                    example: 6DZvpWma5vLsfCcN
+                    description: 'The Transaction UID value is required when the simulated transaction type is "ach_return". This is the transaction that newline will simulate the return for. The transaction supplied must be of type ''ACH''.
+
+                      '
+                  us_dollar_amount:
+                    type: number
+                    description: 'Positive value interpreted as a `credit`;
+
+                      negative value interpreted as a `debit`.
+
+                      Required for `transaction_type` of `wire`, `instant_payment`, and `ach`;
+
+                      ignored when `transaction_type` is `ach_return`.'
+                    example: 21.89
+                  description:
+                    type: string
+                    minLength: 8
+                    description: 'Additional information about this Mock Transaction; used as the Transaction description. When provided, a minimum of 8 characters is required.
+
+                      '
+                  synthetic_account_uid:
+                    type: string
+                    example: 4XkJnsfHsuqrxmeX
+                    description: Optionally specifies the general Synthetic Account to be used for creating the transaction. If not passed, a random Synthetic Account belonging to the Customer will be used.
+                  virtual_reference_number_uid:
+                    type: string
+                    example: tpowGE5fhRKVX3ge
+                    description: 'Optional. If a VRN UID is supplied the simulated transaction will be associated with that VRN. The VRN UID must be in an active status. Only the following simulated transactions can have an associated VRN: wire credits, ACHs, or instant_payment.'
+                  network:
+                    type: string
+                    enum:
+                    - tch
+                    - fednow
+                    example: fednow
+                    description: 'Optional. You may specify the network on which to simulate the transaction. If not specified, the default network `"tch"` will be used. Applicable for `transaction_type` of `instant_payment`.
+
+                      '
+                  counterparty_address:
+                    description: 'Address of the business or individual who owns the external account. Applicable for `transaction_type` of `wire` or `instant_payment`.
+
+                      '
+                    oneOf:
+                    - type: object
+                      properties:
+                        line1:
+                          type:
+                          - string
+                          - 'null'
+                          description: 'Optional 35 characters. Cannot contain \# @ $ ! " % & * ; < > { } [ ] _ ^ \ ~
+
+                            '
+                          pattern: ^[^#@\$!"%&\*;<>\{\}_\^\\~\]\[]{0,35}$
+                          example: 123 Abc St.
+                        line2:
+                          type:
+                          - string
+                          - 'null'
+                          description: 'Optional 35 characters. Cannot contain \# @ $ ! " % & * ; < > { } [ ] _ ^ \ ~
+
+                            '
+                          pattern: ^[^#@\$!"%&\*;<>\{\}_\^\\~\]\[]{0,35}$
+                          example: Boring, Oregon 97009
+                        line3:
+                          type:
+                          - string
+                          - 'null'
+                          description: 'Optional 32 characters. Note that this length is shorter than the other lines. Cannot contain \# @ $ ! " % & * ; < > { } [ ] _ ^ \ ~
+
+                            '
+                          pattern: ^[^#@\$!"%&\*;<>\{\}_\^\\~\]\[]{0,32}$
+                          example: null
+                        country:
+                          allOf:
+                          - type: string
+                            description: '2 character ISO 3166 country code: https://www.iso.org/iso-3166-country-codes.html
+
+                              '
+                            maxLength: 2
+                            minLength: 2
+                          - type:
+                            - string
+                            - 'null'
+                          - example: null
+                    - type: object
+                      properties:
+                        street_number:
+                          type: string
+                          description: Building number for counterparty address. Alphanumeric only.
+                          maxLength: 16
+                          pattern: ^[a-zA-Z0-9]{1,16}$
+                          example: 123abc
+                        street1:
+                          type: string
+                          description: Street name for counterparty address
+                          maxLength: 70
+                          minLength: 3
+                          pattern: '^[a-zA-Z0-9-. #/]{3,70}$'
+                          example: Abc St.
+                        street2:
+                          type: string
+                          description: Optional second line of street
+                          maxLength: 70
+                          pattern: '^[a-zA-Z0-9-. #/]{1,70}$'
+                          example: Suite 4A
+                        city:
+                          type:
+                          - string
+                          - 'null'
+                          description: Maximum 35 characters
+                          maxLength: 35
+                          pattern: ^[a-zA-Z-. /]{1,35}$
+                          example: Chicago
+                        state:
+                          type:
+                          - string
+                          - 'null'
+                          description: 2 characters. Must be a valid US state abbreviation.
+                          pattern: ^\w{2}$
+                          example: IL
+                        postal_code:
+                          type:
+                          - string
+                          - 'null'
+                          description: 5-digit string. ZIP+4 is allowed.
+                          pattern: ^\d{5}(-\d{4})?$
+                          example: '60301'
+                        country:
+                          $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0/properties/country'
+                      required:
+                      - street_number
+                      - street1
+                      - city
+                      - state
+                      - postal_code
+                      - country
+                  counterparty_name:
+                    description: 'Name of the business or individual who owns the external account. Maximum 35 characters. Applicable for `transaction_type` of `wire` or `instant_payment`.
+
+                      '
+                    allOf:
+                    - maxLength: 35
+                      type: string
+                      example: Marge's Roofing Inc
+                  counterparty_bank_address:
+                    description: 'Address of the financial institution where the external account is held. Applicable for `transaction_type` of `wire`.
+
+                      '
+                    allOf:
+                    - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0'
+                  counterparty_bank_name:
+                    description: 'Name of the financial institution where the counterparty account is held. Maximum 35 characters. Applicable for `transaction_type` of `wire`.
+
+                      '
+                    allOf:
+                    - maxLength: 35
+                      type: string
+                      example: East West Regional Bank
+                  entry_description:
+                    description: 'Description of the transaction. Applicable for `transaction_type` of `ach`.
+
+                      '
+                    allOf:
+                    - type: string
+                      minLength: 1
+                      maxLength: 10
+                      pattern: ^[a-zA-Z0-9 ]{1,10}$
+                      example: ACH Entry
+                  intermediary_bank_address:
+                    description: 'Address of the intermediary bank, when applicable. Applicable for `transaction_type` of `wire`.
+
+                      '
+                    allOf:
+                    - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0'
+                  intermediary_bank_name:
+                    description: 'Name of the intermediary bank, when applicable. Maximum 35 characters. Applicable for `transaction_type` of `wire`.
+
+                      '
+                    allOf:
+                    - maxLength: 35
+                      type: string
+                      example: Fidelity Fiduciary Bank
+                  intermediary_bank_routing_number:
+                    description: 'The routing number associated with the intermediary bank involved in the wire transfer. Applicable for `transaction_type` of `wire`.
+
+                      '
+                    allOf:
+                    - example: '923456789'
+                      allOf:
+                      - $ref: '#/paths/~1virtual_reference_numbers/post/requestBody/content/application~1json/schema/properties/routing_number/allOf/0'
+                  memo:
+                    description: 'A message transmitted to the recipient. Applicable for `transaction_type` of `instant_payment`.
+
+                      '
+                    allOf:
+                    - description: 'A message transmitted to the recipient bank. Supports letters, numbers, and special characters: . !@#$%^&*'',/:;<=>?~`|[]{})(+=_- (max 140 characters).
+
+                        '
+                      allOf:
+                      - type:
+                        - string
+                        - 'null'
+                        example: 'Payment for invoice #123 @client'
+                        maxLength: 140
+                        pattern: ^[a-zA-Z0-9. !@#$%^&*',/:;<=>?~`|\[\]\{\})(+=_-]{0,140}$
+                  wire_instructions:
+                    description: 'Instructions for the recipient of the wire. Maximum 140 characters. Applicable for `transaction_type` of `wire`.
+
+                      '
+                    allOf:
+                    - description: 'Additional details or instructions for the wire, issued to the recipient financial institution when the wire is executed.
+
+                        '
+                      allOf:
+                      - type: string
+                        maxLength: 140
+                        example: Send ASAP
+                  addenda:
+                    allOf:
+                    - type: string
+                      description: 'Optional additional payment-related information, such as invoice numbers, originator/receiver information, payment instructions, etc. Up to 80 characters. Optional for all newline supported SEC codes other than TEL. Newline will reject the Transfer if an Addenda value is provided with SEC code TEL.
+
+                        '
+                      maxLength: 80
+                      pattern: ^.{1,80}$
+                  sec_code:
+                    allOf:
+                    - type: string
+                      description: 'Standard Entry Class (SEC) code. Newline supports the following SEC codes: CCD, CIE, PPD, TEL, WEB. For more details, refer to our ACH guide''s [section](https://developers.newline53.com/docs/ach#standard-entry-class-sec-codes) on SEC code use.
+
+                        '
+                      enum:
+                      - CCD
+                      - CIE
+                      - PPD
+                      - TEL
+                      - WEB
+                      example: CIE
+                  iat:
+                    type:
+                    - string
+                    - 'null'
+                    example: enabled
+                    description: Optional. If the `iat` param is supplied on a mocked RDFI or ODFI ACH transaction, the transaction will have IAT details mocked accordingly.
+              - type: object
+                properties:
+                  chips:
+                    type:
+                    - string
+                    - 'null'
+                    description: 'CHIPS number of the wire recipient. At most one of `chips`, `imad`, or `uetr` should be present.
+
+                      '
+                  imad:
+                    type:
+                    - string
+                    - 'null'
+                    description: 'FedWire IMAD number identifying a wire transaction. At most one of `chips`, `imad`, or `uetr` should be present.
+
+                      '
+                    example: 20220123ABCDEFGH123456
+                  uetr:
+                    type:
+                    - string
+                    - 'null'
+                    description: 'Unique End to end Transaction Reference value from SWIFT for a wire transaction. At most one of `chips`, `imad`, or `uetr` should be present.
+
+                      '
+              required:
+              - transaction_type
+            examples:
+              wire_mock_transaction_minimal:
+                value:
+                  customer_uid: kaxHFJnWvJxRJZxq
+                  transaction_type: wire
+                  us_dollar_amount: 21.89
+              wire_mock_transaction:
+                value:
+                  customer_uid: kaxHFJnWvJxRJZxq
+                  transaction_type: wire
+                  us_dollar_amount: 21.89
+                  counterparty_address:
+                    line1: 123 Abc Ave
+                    line2: San Francisco
+                    line3: CA 94016
+                    country: US
+                  counterparty_name: Judith's Woodworks LLP
+                  counterparty_bank_address:
+                    line1: 345 Def Ave
+                    line2: San Francisco
+                    line3: CA 94016
+                    country: US
+                  counterparty_bank_name: Bank of Americana
+                  imad: 20220123ABCDEFGH123456
+                  synthetic_account_uid: 4XkJnsfHsuqrxmeX
+                  wire_instructions: 'shipment #424 cedar owl dioramas'
+                  virtual_reference_number_uid: tpowGE5fhRKVX3ge
+              instant_payment_mock_transaction_minimal:
+                value:
+                  customer_uid: kaxHFJnWvJxRJZxq
+                  transaction_type: instant_payment
+                  us_dollar_amount: 21.89
+              instant_payment_mock_transaction:
+                value:
+                  customer_uid: kaxHFJnWvJxRJZxq
+                  counterparty_address:
+                    line1: 123 Abc Ave
+                    line2: San Francisco
+                    line3: CA 94016
+                    country: US
+                  counterparty_name: Boryslav's Baking Co
+                  description: Instant payments mock transaction
+                  memo: weekly pumpernickel
+                  transaction_type: instant_payment
+                  us_dollar_amount: 21.89
+                  virtual_reference_number_uid: tpowGE5fhRKVX3ge
+              ach_mock_transaction:
+                value:
+                  customer_uid: kaxHFJnWvJxRJZxq
+                  transaction_type: ach
+                  us_dollar_amount: 21.89
+                  synthetic_account_uid: 4XkJnsfHsuqrxmeX
+                  sec_code: CCD
+                  virtual_reference_number_uid: tpowGE5fhRKVX3ge
+              ach_return_mock_transaction:
+                value:
+                  transaction_type: ach_return
+                  transaction_uid: 6DZvpWma5vLsfCcN
+      responses:
+        '201':
+          description: A success message is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: A mocked transaction has been successfully initiated.
+                  uid:
+                    type: string
+                    description: 'The UID of the newly mocked Transaction.
+
+                      '
+                    example: mDBBkGGG4wJzg3QV
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Access token signed with shared HMAC
+x-explorer-enabled: false

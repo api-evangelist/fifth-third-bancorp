@@ -1,0 +1,525 @@
+openapi: 3.2.0
+info:
+  title: Newline Platform Returns API
+  version: 1.0.0
+  description: "\nWelcome! In this section of our docs experience, you'll be able to go through common payment scenarios that both you and your end customers may encounter as you start to offer financial products through your own technology stack. These guides will also help to highlight and expand on concepts discussed in our API references, like [Synthetic Accounts](https://developers.newline53.com/reference/synthetic-accounts), [Transfers](https://developers.newline53.com/reference/transfers), [Transactions&nbsp;](https://developers.newline53.com/reference/transactions)  and [Customers](https://developers.newline53.com/reference/customers).\n\nOur guides are broken out by supported use cases. If you find there isn't a specific use case that fits your business, reach out to our [Sales &amp; Partnership team](https://newline53.com/contact-us.html) and they'll be able to help determine how we can support your business and provide any other questions or feedback.\n\nLastly, when you're ready to build, check out our [Onboarding Overview](https://developers.newline53.com/docs/overview) and [Sandbox Walkthrough](https://developers.newline53.com/docs/sandbox-walkthrough) guides.\n\n## About our API\n\nThe Newline API is organized around REST. With a few exceptions, our API has standard resource-oriented URLs, accepts form-encoded OR JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.\n\n## FAQs\n\nWant to quickly review some common questions about Newline and our financial experiences, check out our [FAQs](https://developers.newline53.com/docs/faqs) guide.\n\n# Overview\n\n## Newline Onboarding 101\n\nOnboarding to any SaaS product can be a daunting task, and at Newline we seek to make this experience as smooth as possible. Part of that is getting you, our Client, familiar with the process by which we establish key resources like your Program, Products, Customers, Custodial Accounts, and Synthetic Accounts.\n\nThe following guide details, in short order, the Program and resources that Newline will configure for you and how each of these components affect your ability to use our API Reference.\n\n<img src=\"https://files.readme.io/955347d-image.png\">\n\nThe above visualization shows the Program and resources Newline will provide and maintain for Clients going through onboarding and implementation, but we'll enumerate the details for each resource above.\n\n> **Note**\n> In the above visualization, the lighter color items are preset and created by Newline for any Client implementation. Synthetic Accounts is a special case where general Synthetic Accounts are preset and Clients will be responsible for creating their own external Synthetic Accounts and VRNs..\n\n- **Program** - the Program dictates the origination terms to which the Client and Newline mutually agree. This could include payment limitations like amounts, frequency, and the need for pre-funding (ex. ACH). Your Program will be created and configured by Newline.\n\n- **Products** - these are distinct Product offerings supported by Newline. For instance, this can include payment rails like ACH, Wire, and Instant Payments that are configured as available synthetic_account_types. Newline creates and configures a Program's Products.\n\n    - Products can be applied across multiple Customers, and Customers can be attached to multiple Products. Essentially there is a many-to-many relationship between these resources, which make them, in some cases, parallel.\n\n    - A Product can support multiple payment rails.\n\n- **Customer Type** - Customers are provided a Customer Type at creation. For instance, Primary Customers are considered full account owners and have complete authority to take any actions associated with their accounts and associated resources. You can also limit certain Customer Types to have access to only certain Products. Permitted Customer Types are configured by Newline.\n\n- **Pool** - Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. Newline will create Pools.\n\n- **Customer** - This is the entity that owns the Account and Funds stored at Newline. This entity also is deemed the Originator when it comes to any payment creation. Clients can also be Customers in the event they meet those criteria. Customers are created by Newline or by the Client depending on the use case.\n\n- **Custodial Account** - This is the Account that exists in our Synthetic Core and represents the reciprocal Account on Fifth Third's ledger. These are the accounts you can access via Fifth Third Direct. Custodial Accounts will be created by Newline.\n\n- **Synthetic Account** - How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts that your Customers will likely use within your application. Synthetic Accounts of the general category will be created by Newline or by the Client depending on your use case. Clients will create external Synthetic Accounts like wire_external, ach_external, and instant_payment_external.\n\n- **Virtual Reference Number** - Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a synthetic account and can form a many-to-one relationship with their parent synthetic account.\n\n# Postman Collection\n\nHow to set up Postman, add our Newline collection, and use it to test Newline platform APIs.\n\n## Installing Postman\n\nPostman is available on a variety of platforms. Visit [Postman](https://www.postman.com/downloads/) to see if your platform is supported.  \nTo install Postman:\n\n1. Go to [Postman downloads](https://www.postman.com/downloads/).\n\n<img src=\"https://files.readme.io/fd1743f-Postman_Dowload_snip.jpg\">\n\n1. Download the required version.\n\n2. After your download is complete, run the downloaded file to install Postman.\n\n## Import the Newline Collection\n\nTo import our collection, click on the following [▶ Newline Collection](https://www.postman.com/newline53) button, and you will be redirected to our Newline Postman workspace, where you can download our collection.\n\nFor further information, see the [Postman documentation on importing data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).\n\n## Configure Your Postman Environment\n\n1. Create a Sandbox Environment.\n\n2. Set Sandbox variables.\n\n3. Save the environment.\n\n4. Ensure the new environment is selected.\n\n**Set API Keys**  \nYou will need to set your HMAC Key and Program UID as environment variables. You can set the variables in the headers in the environment tab within the Postman Collection.\n\n# Terminology\n\nThe terms, which represent API resource objects in Newline, below are referenced in our API documentation and endpoint definitions.  \nSome important notes while reading through this list:\n\nResource Objects often interact with one another, so please be sure to review our endpoints to see which serve as required inputs or are collected as outputs.\n\nCertain objects, like Transfers, are described differently in the payments industry depending on the Transaction Type. For instance, ach transactions are often referred to as entries rather than payments, as they can represent both credits (i.e., ODFI pushes) and debits (i.e., ODFI pulls).  \nWhile Resource Objects are distinct, they, in some cases, can represent the same entity.\n\n- Ex. 1 - Clients can also be Customers if they manage and own the financial products in question.\n\n- Ex. 2 - Transfers produce Transactions, but the produced Transactions (in aggregate) represent the original money movement.\n\n| Term | Definition |\n| --- | --- |\n| Customer | The end user of your application and the owner of assets in your Program. For example, when initiating a payment, this entity would be considered the **originator**. |\n| Client | The application or product owning organization that is affording end users (i.e., Customers) the ability to access the financial products.<br><br><br>**Note**<br>Clients can also be Customers in the event they own and have management over the financial products or the funds involved. |\n| Transmitter | Transmitters are the parties who have _requested_ the Transfer in question. When the Transmitter and Customer are the same party, Newline pulls origination information from the created Customer record. When the Transmitter and Customer are not the same party, it's the Client's responsibility to provide that information when making a Transfer.  <br>  <br>Transmitters are only required for the `wire` and `instant_payment` types (see the `wire_transmitter` and `instant_payment_transmitter` objects in the [Initiate a Transfer](https://developers.newline53.com/reference/post_transfers) reference). Client's should also take note of the `initiator_type` field, which dictates from where Transmitter information is pulled. For more context on Transmitters, refer to the [Payment Rail Regulation](https://newline-enterprise-group.readme.io/docs/transfer#payment-rail-regulation) section below. |\n| Partner | Any infrastructure partner integrated within the Newline Platform. |\n| Program | The Program is custom tailored to your offering and purpose built to enable financial products on your application. The Program defines what Synthetic and Custodial Account types, Customer Types, and Transactions Types are available for your Customers to utilize. The Program configuration is defined between the Client and Newline based on your (i.e., the Client's) use case. |\n| Product | Products represents the financial products available to your Customers. The Product object contains the account, compliance, and customer profile responses necessary for your Customers to gain access. |\n| Customer Product | The Customer Product is created when the Customer is added to a Product and respective Program. This often includes Newline automatically creating any needed financial products for the Customers' use. For instance, a Synthetic Account to represent the origination account at Fifth Third. |\n| Service Offering | The financial product offered by the Newline platform. These can be (but are not limited to) checking, savings, brokerage, or retirement accounts. |\n| Pool | Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. |\n| Custodial Accounts | This resource within Newline represents the assets held by your Customers, with direct alignment to accounts opened at Fifth Third. Custodial Accounts have the following relationships: one-to-one with Customers, and one-to-Many with Synthetic Accounts. |\n| Synthetic Accounts | How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts (i.e., Counterparties) that your Customers will likely use within your application. |\n| Virtual Reference Number (VRN) | Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a Synthetic Account, and can form a many-to-one relationship with their parent Synthetic Account. |\n| Transfer | The movement of assets from one Synthetic Account to another Synthetic Account. Most of asset movement initiated by your application will result in a Transfer. A successful Transfer will result in at least one Transaction. |\n| Transaction | Transactions are created based on how you instruct Newline to move assets (a Transfer) or how assets are moved or spent outside of your application (For example, ACH, Wire, and Instant Payments Transfers). The Transaction contains the amount, origin, and destination of assets. Newline categorizes Transactions into types to assist in their classification and representation. |\n| Transaction Events | The steps taken to complete the Transaction. These can be used to view the progress of an in-flight Transaction or see the history of a completed Transaction. |"
+servers:
+- url: https://sandbox.newline53.com/api/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Returns
+  description: 'The Returns endpoints help initiate, track, and manage returns of received and originated payments. These endpoints are accessible within the Sandbox and Production environments.
+
+
+    **Endpoints:**
+
+
+    - GET [List Returns: GET /returns](https://developers.newline53.com/reference/get_returns)
+
+    - POST [Create a new Return: POST /returns](https://developers.newline53.com/reference/post_returns)
+
+    - GET [Get a single Return: GET /returns/{uid}](https://developers.newline53.com/reference/get_returns-uid)
+
+
+    The returns endpoint allows for the retrieval and creation of return transactions within the system.
+
+
+    [GET List Returns](https://newline-enterprise-group.readme.io/reference/get_returns)- Use this endpoint to retrieve a list of all return transactions. You can filter the results based on various parameters such as status or date.
+
+
+    [POST Create a New Return](https://newline-enterprise-group.readme.io/reference/post_returns)- This endpoint is used to Create a new return transaction. Return can only be created for eligible transactions that have already been completed.
+
+
+    [GET a Single Return](https://newline-enterprise-group.readme.io/reference/get_returns-uid)- Use this endpoint to retrieve details about a specific return transaction.'
+paths:
+  /returns:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Returns
+      summary: List Returns
+      description: 'Retrieves a list of return transactions. You can filter the results based on parameters such as status, date, and transaction type. This endpoint is available in Sandbox and Production environments.
+
+        '
+      parameters:
+      - name: customer_uid
+        in: query
+        schema:
+          type: string
+          description: The UID of the customer requesting a return.
+          example: Trzqy9t6j6tFGoG3
+      - name: requestor_type
+        in: query
+        schema:
+          type: string
+          description: Type of the customer requesting a return.
+          example: customer
+          enum:
+          - customer
+          - subclient
+      responses:
+        '200':
+          description: A list of Returns is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created_at:
+                    type: string
+                    description: The DateTime at which this Return was created.
+                    example: null
+                  external_uid:
+                    $ref: '#/paths/~1returns/post/requestBody/content/application~1json/schema/properties/external_uid'
+                  original_transaction_uid:
+                    $ref: '#/paths/~1returns/post/requestBody/content/application~1json/schema/properties/original_transaction_uid'
+                  customer_uid:
+                    $ref: '#/paths/~1returns/get/parameters/0/schema'
+                  requestor_type:
+                    $ref: '#/paths/~1returns/get/parameters/1/schema'
+                  return_reason:
+                    $ref: '#/paths/~1returns/post/requestBody/content/application~1json/schema/properties/return_reason'
+                  return_transaction_uid:
+                    type: string
+                    description: The transaction returning the funds.
+                    example: SMwKC1osz77DTEiu
+                  status:
+                    type: string
+                    description: 'A value indicating the overall status of the Return.
+
+                      '
+                    enum:
+                    - canceled
+                    - queued
+                    - pending
+                    - settled
+                    - failed
+                    readOnly: true
+                    example: pending
+                  uid:
+                    type: string
+                    description: Unique identifier for the Return
+                    example: dYTG8WAWAh5UyvY7
+              examples:
+                returns_list:
+                  value:
+                    total_count: 4
+                    count: 2
+                    limit: 2
+                    offset: 0
+                    data:
+                    - created_at: '2024-05-01T00:00:00.000Z'
+                      external_uid: null,
+                      original_transaction_uid: nwXnpBbX3A5sTki3
+                      customer_uid: Trzqy9t6j6tFGoG3
+                      requestor_type: customer
+                      return_reason: RLYGR8CO RMA Z452208-13
+                      return_transaction_uid: upKspzfHgAh47pHf
+                      status: settled
+                      uid: 9ZZ87saSFLkkDG7z
+                    - created_at: '2024-05-01T15:53:13.591Z'
+                      external_uid: partner-created-id,
+                      original_transaction_uid: DbxJUHVuqt3C7hGK
+                      customer_uid: EhrQZJNjCd79LLYq
+                      requestor_type: subclient
+                      return_reason: Insufficient Funds
+                      return_transaction_uid: 7UvkHn3Ss9AbWe2c
+                      status: pending
+                      uid: o1gSDeWvEt45Yuaa
+        '403':
+          description: Denied access to Returns
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          description: Code provided by Newline for reference
+                          example: 1234
+                        title:
+                          type: string
+                          description: Title of Error Code
+                          example: Sorry, something went wrong
+                        detail:
+                          type: string
+                          description: Description of Error Code
+                          example: Details about it here.
+                        occurred_at:
+                          type: string
+                          description: Error Timestamp
+                          example: '2022-10-21T18:22:22.300Z'
+                        extra:
+                          type: string
+                          description: Included based on Error Code; Additional context to help users self-solve the error
+                          example: Extra details are sometimes provided here.
+                  status:
+                    type: integer
+                    description: HTTP Status Code
+              examples:
+                access_to_returns:
+                  value:
+                    errors:
+                    - code: 18007
+                      title: Returns not enabled
+                      detail: Returns are not enabled for this program.
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 403
+        '422':
+          description: Failed to retrieve Returns
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                failed_to_retrieve_returns:
+                  value:
+                    errors:
+                    - code: 31001
+                      title: Failed to retrieve Returns
+                      detail: An exception occurred while retrieving Returns
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 422
+    post:
+      tags:
+      - Returns
+      summary: Create a new Return
+      description: 'Initiates a Return of an ACH or wire payment.
+
+        A full ACH addenda is not available for ACH returns because an addenda record is used for the return itself; the `addenda_info` field contains the remaining available space.
+
+        For wire returns, the `wire_instruction` field is limited to 70 characters because Newline prefixes the instructions with the original wire transaction identifier (e.g., IMAD).
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                external_uid:
+                  type: string
+                  description: Client supplied unique identifier. It must be unique within the customer. If the same value is given, no new resource will be created.
+                  example: YrfDrfVRgpPgnhF5
+                original_transaction_uid:
+                  type: string
+                  description: The transaction to be returned.
+                  example: nwXnpBbX3A5sTki3
+                requesting_customer_uid:
+                  $ref: '#/paths/~1returns/get/parameters/0/schema'
+                requestor_type:
+                  $ref: '#/paths/~1returns/get/parameters/1/schema'
+                return_reason:
+                  type: string
+                  maxLength: 140
+                  description: 'Freeform text (up to 140 characters) documenting the reason for return. For wire returns, this value will be sent to the other bank.
+
+                    '
+                  example: Insufficient Funds
+                ach:
+                  type: object
+                  properties:
+                    ach_return_code:
+                      type: string
+                      description: 'The reason an ACH payment is being returned. Required if returning an RDFI transaction. Optional if reversing an ODFI transaction.
+
+                        '
+                      example: R02
+                      enum:
+                      - R01
+                      - R02
+                      - R03
+                      - R04
+                      - R06
+                      - R09
+                      - R10
+                      - R16
+                      - R17
+                      - R20
+                      - R23
+                      - R29
+                      - R31
+                    addenda_info:
+                      type: string
+                      description: Freeform text (up to 44 characters) to attach a memo to return.
+                      maxLength: 44
+                      example: TXN0055BADD1E cancelled
+                wire:
+                  type: object
+                  properties:
+                    wire_instructions:
+                      type: string
+                      maxLength: 140
+                      description: 'DEPRECATED. Use `return_reason` instead. Wire information for the return transaction (up to 140 characters).
+
+                        '
+                      example: ORDER 5555555555
+              required:
+              - original_transaction_uid
+              - requesting_customer_uid
+              - requestor_type
+              - return_reason
+            examples:
+              ach:
+                value:
+                  original_transaction_uid: nwXnpBbX3A5sTki3
+                  requesting_customer_uid: Trzqy9t6j6tFGoG3
+                  requestor_type: customer
+                  return_reason: RLYGR8CO RMA Z452208-13
+                  ach:
+                    ach_return_code: R02
+                    addenda_info: TXN0055BADD1E cancelled
+              wire:
+                value:
+                  original_transaction_uid: DbxJUHVuqt3C7hGK
+                  requesting_customer_uid: EhrQZJNjCd79LLYq
+                  requestor_type: customer
+                  return_reason: 'Refund issued by Bruno''s Boxing for Order #5555555555'
+                  wire:
+                    wire_instructions: ORDER 5555555555
+      responses:
+        '201':
+          description: A single registered Return is returned.
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1returns/get/responses/200/content/application~1json/schema'
+                - type: object
+                  properties:
+                    ach:
+                      $ref: '#/paths/~1returns/post/requestBody/content/application~1json/schema/properties/ach'
+                    wire:
+                      $ref: '#/paths/~1returns/post/requestBody/content/application~1json/schema/properties/wire'
+              examples:
+                created_return:
+                  value:
+                    '<<':
+                      created_at: '2024-05-01T00:00:00.000Z'
+                      external_uid: null,
+                      original_transaction_uid: nwXnpBbX3A5sTki3
+                      customer_uid: Trzqy9t6j6tFGoG3
+                      requestor_type: customer
+                      return_reason: RLYGR8CO RMA Z452208-13
+                      return_transaction_uid: upKspzfHgAh47pHf
+                      status: settled
+                      uid: 9ZZ87saSFLkkDG7z
+                    ach:
+                      ach_return_code: R02
+                      addenda_info: TXN0055BADD1E cancelled
+        '400':
+          description: Creation Error
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                unknown_requestor_type:
+                  value:
+                    errors:
+                    - code: 31003
+                      title: Unknown Requestor Type
+                      detail: The requestor type is not recognized
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 400
+                bad_original_transaction_status:
+                  value:
+                    errors:
+                    - code: 31005
+                      title: Cannot Initiate Return
+                      detail: The given Transaction must be settled to issue Return
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 400
+                unsupported_return:
+                  value:
+                    errors:
+                    - code: 31006
+                      title: Unsupported Return
+                      detail: Returns are not supported for the given Transaction type
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 400
+                expired_return_window:
+                  value:
+                    errors:
+                    - code: 31007
+                      title: Expired Transaction
+                      detail: A Return can not be issued as specified; too much time has elapsed
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 400
+                network_code_unsupported:
+                  value:
+                    errors:
+                    - code: 31008
+                      title: Network code unsupported
+                      detail: Returns are not supported for Wires with UETR numbers
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 400
+                unsupported_original_transaction_code:
+                  value:
+                    errors:
+                    - code: 31012
+                      title: Unsupported Transaction Code
+                      detail: Returns are not supported for the original transaction code
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 400
+                cannot_return_a_return_transaction:
+                  value:
+                    errors:
+                    - code: 31013
+                      title: Cannot return a return
+                      detail: A return transaction cannot be returned.
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 400
+                cannot_return_an_ineligible_transaction:
+                  value:
+                    errors:
+                    - code: 31014
+                      title: Ineligible transaction
+                      detail: This transaction is not eligible to be returned.
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 400
+        '403':
+          description: Denied access to Returns
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                access_to_returns:
+                  $ref: '#/paths/~1returns/get/responses/403/content/application~1json/examples/access_to_returns'
+        '422':
+          description: Creation Error
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                return_creation_error:
+                  value:
+                    errors:
+                    - code: 31002
+                      title: Could not create Return
+                      detail: An exception occurred while creating a Return
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 422
+                return_already_exists:
+                  value:
+                    errors:
+                    - code: 31004
+                      title: Return Already Exists
+                      detail: A Return already exists for the given Transaction
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 422
+                extraneous_payment_rail_info_for_return:
+                  value:
+                    errors:
+                    - code: 31009
+                      title: Extra payment information
+                      detail: Payment information was provided that is not required for this return.
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 422
+                information_unavailable_for_return:
+                  value:
+                    errors:
+                    - code: 31010
+                      title: Insufficient information for return.
+                      detail: The original transaction data required to submit a return is not available.
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 422
+                insufficient_time_to_process_return:
+                  value:
+                    errors:
+                    - code: 31011
+                      title: Insufficient time to process return.
+                      detail: The return cannot be processed because there is insufficient time remaining to process and submit the return to the appropriate institution.
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 422
+  /returns/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Returns
+      summary: Get a single Return
+      description: Retrieves details about a specific return transaction, including its status, original transaction reference, and any associated metadata.
+      responses:
+        '200':
+          description: A single Return is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/post/responses/201/content/application~1json/schema'
+              examples:
+                single_return:
+                  $ref: '#/paths/~1returns/post/responses/201/content/application~1json/examples/created_return'
+        '403':
+          description: Denied access to Returns
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/200/content/application~1json/schema'
+              examples:
+                access_to_returns:
+                  $ref: '#/paths/~1returns/get/responses/403/content/application~1json/examples/access_to_returns'
+        '404':
+          description: Unknown Return
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                unknown_return_uid:
+                  value:
+                    errors:
+                    - code: 31000
+                      title: Unknown Return
+                      detail: Could not find Return with the given uid
+                      occurred_at: '2023-05-04T13:23:04.345Z'
+                    status: 404
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Access token signed with shared HMAC
+x-explorer-enabled: false

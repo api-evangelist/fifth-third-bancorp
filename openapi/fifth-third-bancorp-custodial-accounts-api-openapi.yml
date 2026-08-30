@@ -1,0 +1,389 @@
+openapi: 3.2.0
+info:
+  title: Newline Platform Custodial Accounts API
+  version: 1.0.0
+  description: "\nWelcome! In this section of our docs experience, you'll be able to go through common payment scenarios that both you and your end customers may encounter as you start to offer financial products through your own technology stack. These guides will also help to highlight and expand on concepts discussed in our API references, like [Synthetic Accounts](https://developers.newline53.com/reference/synthetic-accounts), [Transfers](https://developers.newline53.com/reference/transfers), [Transactions&nbsp;](https://developers.newline53.com/reference/transactions)  and [Customers](https://developers.newline53.com/reference/customers).\n\nOur guides are broken out by supported use cases. If you find there isn't a specific use case that fits your business, reach out to our [Sales &amp; Partnership team](https://newline53.com/contact-us.html) and they'll be able to help determine how we can support your business and provide any other questions or feedback.\n\nLastly, when you're ready to build, check out our [Onboarding Overview](https://developers.newline53.com/docs/overview) and [Sandbox Walkthrough](https://developers.newline53.com/docs/sandbox-walkthrough) guides.\n\n## About our API\n\nThe Newline API is organized around REST. With a few exceptions, our API has standard resource-oriented URLs, accepts form-encoded OR JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.\n\n## FAQs\n\nWant to quickly review some common questions about Newline and our financial experiences, check out our [FAQs](https://developers.newline53.com/docs/faqs) guide.\n\n# Overview\n\n## Newline Onboarding 101\n\nOnboarding to any SaaS product can be a daunting task, and at Newline we seek to make this experience as smooth as possible. Part of that is getting you, our Client, familiar with the process by which we establish key resources like your Program, Products, Customers, Custodial Accounts, and Synthetic Accounts.\n\nThe following guide details, in short order, the Program and resources that Newline will configure for you and how each of these components affect your ability to use our API Reference.\n\n<img src=\"https://files.readme.io/955347d-image.png\">\n\nThe above visualization shows the Program and resources Newline will provide and maintain for Clients going through onboarding and implementation, but we'll enumerate the details for each resource above.\n\n> **Note**\n> In the above visualization, the lighter color items are preset and created by Newline for any Client implementation. Synthetic Accounts is a special case where general Synthetic Accounts are preset and Clients will be responsible for creating their own external Synthetic Accounts and VRNs..\n\n- **Program** - the Program dictates the origination terms to which the Client and Newline mutually agree. This could include payment limitations like amounts, frequency, and the need for pre-funding (ex. ACH). Your Program will be created and configured by Newline.\n\n- **Products** - these are distinct Product offerings supported by Newline. For instance, this can include payment rails like ACH, Wire, and Instant Payments that are configured as available synthetic_account_types. Newline creates and configures a Program's Products.\n\n    - Products can be applied across multiple Customers, and Customers can be attached to multiple Products. Essentially there is a many-to-many relationship between these resources, which make them, in some cases, parallel.\n\n    - A Product can support multiple payment rails.\n\n- **Customer Type** - Customers are provided a Customer Type at creation. For instance, Primary Customers are considered full account owners and have complete authority to take any actions associated with their accounts and associated resources. You can also limit certain Customer Types to have access to only certain Products. Permitted Customer Types are configured by Newline.\n\n- **Pool** - Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. Newline will create Pools.\n\n- **Customer** - This is the entity that owns the Account and Funds stored at Newline. This entity also is deemed the Originator when it comes to any payment creation. Clients can also be Customers in the event they meet those criteria. Customers are created by Newline or by the Client depending on the use case.\n\n- **Custodial Account** - This is the Account that exists in our Synthetic Core and represents the reciprocal Account on Fifth Third's ledger. These are the accounts you can access via Fifth Third Direct. Custodial Accounts will be created by Newline.\n\n- **Synthetic Account** - How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts that your Customers will likely use within your application. Synthetic Accounts of the general category will be created by Newline or by the Client depending on your use case. Clients will create external Synthetic Accounts like wire_external, ach_external, and instant_payment_external.\n\n- **Virtual Reference Number** - Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a synthetic account and can form a many-to-one relationship with their parent synthetic account.\n\n# Postman Collection\n\nHow to set up Postman, add our Newline collection, and use it to test Newline platform APIs.\n\n## Installing Postman\n\nPostman is available on a variety of platforms. Visit [Postman](https://www.postman.com/downloads/) to see if your platform is supported.  \nTo install Postman:\n\n1. Go to [Postman downloads](https://www.postman.com/downloads/).\n\n<img src=\"https://files.readme.io/fd1743f-Postman_Dowload_snip.jpg\">\n\n1. Download the required version.\n\n2. After your download is complete, run the downloaded file to install Postman.\n\n## Import the Newline Collection\n\nTo import our collection, click on the following [▶ Newline Collection](https://www.postman.com/newline53) button, and you will be redirected to our Newline Postman workspace, where you can download our collection.\n\nFor further information, see the [Postman documentation on importing data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).\n\n## Configure Your Postman Environment\n\n1. Create a Sandbox Environment.\n\n2. Set Sandbox variables.\n\n3. Save the environment.\n\n4. Ensure the new environment is selected.\n\n**Set API Keys**  \nYou will need to set your HMAC Key and Program UID as environment variables. You can set the variables in the headers in the environment tab within the Postman Collection.\n\n# Terminology\n\nThe terms, which represent API resource objects in Newline, below are referenced in our API documentation and endpoint definitions.  \nSome important notes while reading through this list:\n\nResource Objects often interact with one another, so please be sure to review our endpoints to see which serve as required inputs or are collected as outputs.\n\nCertain objects, like Transfers, are described differently in the payments industry depending on the Transaction Type. For instance, ach transactions are often referred to as entries rather than payments, as they can represent both credits (i.e., ODFI pushes) and debits (i.e., ODFI pulls).  \nWhile Resource Objects are distinct, they, in some cases, can represent the same entity.\n\n- Ex. 1 - Clients can also be Customers if they manage and own the financial products in question.\n\n- Ex. 2 - Transfers produce Transactions, but the produced Transactions (in aggregate) represent the original money movement.\n\n| Term | Definition |\n| --- | --- |\n| Customer | The end user of your application and the owner of assets in your Program. For example, when initiating a payment, this entity would be considered the **originator**. |\n| Client | The application or product owning organization that is affording end users (i.e., Customers) the ability to access the financial products.<br><br><br>**Note**<br>Clients can also be Customers in the event they own and have management over the financial products or the funds involved. |\n| Transmitter | Transmitters are the parties who have _requested_ the Transfer in question. When the Transmitter and Customer are the same party, Newline pulls origination information from the created Customer record. When the Transmitter and Customer are not the same party, it's the Client's responsibility to provide that information when making a Transfer.  <br>  <br>Transmitters are only required for the `wire` and `instant_payment` types (see the `wire_transmitter` and `instant_payment_transmitter` objects in the [Initiate a Transfer](https://developers.newline53.com/reference/post_transfers) reference). Client's should also take note of the `initiator_type` field, which dictates from where Transmitter information is pulled. For more context on Transmitters, refer to the [Payment Rail Regulation](https://newline-enterprise-group.readme.io/docs/transfer#payment-rail-regulation) section below. |\n| Partner | Any infrastructure partner integrated within the Newline Platform. |\n| Program | The Program is custom tailored to your offering and purpose built to enable financial products on your application. The Program defines what Synthetic and Custodial Account types, Customer Types, and Transactions Types are available for your Customers to utilize. The Program configuration is defined between the Client and Newline based on your (i.e., the Client's) use case. |\n| Product | Products represents the financial products available to your Customers. The Product object contains the account, compliance, and customer profile responses necessary for your Customers to gain access. |\n| Customer Product | The Customer Product is created when the Customer is added to a Product and respective Program. This often includes Newline automatically creating any needed financial products for the Customers' use. For instance, a Synthetic Account to represent the origination account at Fifth Third. |\n| Service Offering | The financial product offered by the Newline platform. These can be (but are not limited to) checking, savings, brokerage, or retirement accounts. |\n| Pool | Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. |\n| Custodial Accounts | This resource within Newline represents the assets held by your Customers, with direct alignment to accounts opened at Fifth Third. Custodial Accounts have the following relationships: one-to-one with Customers, and one-to-Many with Synthetic Accounts. |\n| Synthetic Accounts | How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts (i.e., Counterparties) that your Customers will likely use within your application. |\n| Virtual Reference Number (VRN) | Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a Synthetic Account, and can form a many-to-one relationship with their parent Synthetic Account. |\n| Transfer | The movement of assets from one Synthetic Account to another Synthetic Account. Most of asset movement initiated by your application will result in a Transfer. A successful Transfer will result in at least one Transaction. |\n| Transaction | Transactions are created based on how you instruct Newline to move assets (a Transfer) or how assets are moved or spent outside of your application (For example, ACH, Wire, and Instant Payments Transfers). The Transaction contains the amount, origin, and destination of assets. Newline categorizes Transactions into types to assist in their classification and representation. |\n| Transaction Events | The steps taken to complete the Transaction. These can be used to view the progress of an in-flight Transaction or see the history of a completed Transaction. |"
+servers:
+- url: https://sandbox.newline53.com/api/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Custodial Accounts
+  description: "Fifth Third Bank holds Custodial Accounts and represents funds managed for Customers. Through these endpoints, you can manage balances and track account statuses.\n\n**Endpoints:**\n\n- GET [List Custodial Accounts: GET /custodial_accounts](https://developers.newline53.com/reference/get_custodial-accounts)\n    \n- GET [Get a single Custodial Account: GET /custodial_accounts/{uid}](https://developers.newline53.com/reference/get_custodial-accounts-uid)\n\nA Custodial Account is the account held by Fifth Third Bank. Custodial Accounts in a Program can only be created for the Service Offerings that have been configured for that Program.\n\nA Customer must successfully complete onboarding and pass all KYC/AML checks before their Custodial Accounts can be opened. This endpoint can be used to retrieve the accounts (active and archived) and their balances for your Customers. All funds must be emptied from a Custodial Account before it can be archived."
+paths:
+  /custodial_accounts:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Custodial Accounts
+      summary: List Custodial Accounts
+      description: 'Retrieve a list of Custodial Accounts held by Fifth Third Bank for onboarded Customers. This endpoint returns active and archived accounts along with their balances.
+
+        '
+      parameters:
+      - $ref: '#/paths/~1pools/get/parameters/0'
+      - $ref: '#/paths/~1transfers/get/parameters/1'
+      - $ref: '#/paths/~1pools/get/parameters/1'
+      - $ref: '#/paths/~1pools/get/parameters/2'
+      - name: liability
+        in: query
+        schema:
+          type: boolean
+        description: Filter by liability or asset
+      - name: type
+        in: query
+        schema:
+          type: string
+          enum:
+          - dda
+          - dda_cash_external
+          - dda_cash_received
+          example: dda
+          description: 'Filter by type. Multiple values are allowed, e.g. `type[]=dda&type[]=dda_cash_external`.
+
+            '
+      responses:
+        '200':
+          description: A list of Custodial Accounts is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        allOf:
+                        - $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/0'
+                        - $ref: '#/paths/~1custodial_accounts~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/1'
+  /custodial_accounts/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Custodial Accounts
+      summary: Get a single Custodial Account
+      description: 'Returns a single Custodial Account resource along with supporting details and account balances.
+
+        '
+      responses:
+        '200':
+          description: A single Custodial Account is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    customer_uid:
+                      type: string
+                      description: A UID referring to the customer this Custodial Account belongs to
+                      example: YrfDrfVRgpPgnhF5
+                    pool_uid:
+                      type: string
+                      description: A UID referring to the pool this Custodial Account belongs to
+                      example: kaxHFJnWvJxRJZxq
+                    type:
+                      type: string
+                      enum:
+                      - dda
+                      - dda_cash_external
+                      - dda_cash_received
+                      example: dda
+                      description: '`dda` accounts are liability DDA accounts. Any asset movements in or out of the brick-and-mortar accounts will be journaled in the `dda` Custodial Accounts. Balances shown in the `dda` accounts are the balances the owner Customers have.
+
+
+                        `dda_cash_external` accounts are asset accounts, representing external accounts. When ODFI transfers, initiated by a Synthetic Transfer from or to external Synthetic Accounts, are settled, the `dda_cash_external` Custodial Accounts will be credited or debited.
+
+
+                        `dda_cash_received` accounts are asset cash accounts. When RDFI transfers, initiated outside of Newline from or to Custodial Accounts, are settled, the `dda_cash_received` Custodial Accounts will be credited or debited.
+
+                        '
+                      readOnly: true
+                    liability:
+                      type: boolean
+                      example: true
+                      description: 'When true, the account is a liability account; when false, an asset account. Liability Custodial Accounts represent real accounts at Financial Institutions. Asset accounts are used for accounting purposes and may be generated by Newline during events such as new custodial account creations or new external account connections.
+
+                        '
+                      readOnly: true
+                    name:
+                      type:
+                      - string
+                      - 'null'
+                      description: 'A friendly name used to identify the account at the Custodial Partner. This name is sometimes shown on statements and ACH transfers. Nullable for asset Custodial Accounts.
+
+                        '
+                      example: XYZ Checking Account
+                    primary_account:
+                      type: boolean
+                      description: 'Used to identify the primary account when multiple Custodial Accounts exist at a single Custodial Partner
+
+                        '
+                      example: true
+                    status:
+                      type:
+                      - string
+                      - 'null'
+                      description: 'A value indicating the overall state of this Custodial Account (nullable if account type is asset).
+
+                        '
+                      default: active
+                      enum:
+                      - active
+                      - archived
+                      readOnly: true
+                    account_errors:
+                      type: array
+                      description: 'A list of errors related to this account. These are passed through during interactions with the underlying Custodial Partner and can help with resolving customer issues. Only provided for accounts that are in an `error` or `manual_review` status.
+
+                        '
+                      items:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          error_code:
+                            type: string
+                            example: FI1234
+                          error_name:
+                            type: string
+                            example: DOB does not match
+                          error_description:
+                            type: string
+                            example: The given DOB does not match the known DOB for the SSN provided
+                      readOnly: true
+                    net_usd_balance:
+                      type: string
+                      description: 'The current settled balance of this Custodial Account in US Dollars. Null for Asset accounts.
+
+                        '
+                      readOnly: true
+                      example: '12.34'
+                    net_usd_pending_balance:
+                      type: string
+                      description: 'The sum of all pending transactions for this Custodial Account in US Dollars. Null for Asset accounts.
+
+                        '
+                      readOnly: true
+                      example: '-2.56'
+                    net_usd_available_balance:
+                      type: string
+                      description: 'The balance available to spend calculated as Normal balance less any withdrawals. Pending deposits are not included. Null for Asset accounts.
+
+                        '
+                      readOnly: true
+                      example: '9.78'
+                    net_usd_closing_balance:
+                      type:
+                      - string
+                      - 'null'
+                      description: The settled balance for the account in US Dollars as of the date in net_usd_closing_balance_as_of. Null for Asset accounts.
+                      readOnly: true
+                      example: '9.87'
+                    net_usd_closing_balance_as_of:
+                      type: string
+                      description: The date that net_usd_closing_balance was last calculated. Null for Asset accounts.
+                      readOnly: true
+                      example: '2025-08-19'
+                    asset_balances:
+                      type: array
+                      description: 'A list of balances for the various asset types held in this Custodial Account. Null for Asset accounts.
+
+                        '
+                      items:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          asset_quantity:
+                            type: string
+                            example: '122.11'
+                          asset_type:
+                            type: string
+                            example: USD
+                          current_usd_value:
+                            type: string
+                            example: '122.11'
+                          debit:
+                            type: boolean
+                            example: true
+                      readOnly: true
+                    routing_number:
+                      description: 'The ABA routing number associated with the Custodial Partner. Nullable if asset.
+
+                        '
+                      readOnly: true
+                      type:
+                      - string
+                      - 'null'
+                      allOf:
+                      - $ref: '#/paths/~1virtual_reference_numbers/post/requestBody/content/application~1json/schema/properties/routing_number/allOf/0'
+                    opened_at:
+                      type: string
+                      description: The DateTime at which this account was created
+                      format: date-time
+                      readOnly: true
+                      example: '2019-01-31T17:32:28Z'
+                    closed_at:
+                      type:
+                      - string
+                      - 'null'
+                      description: The DateTime at which this account was closed
+                      format: date-time
+                      readOnly: true
+                      example: '2019-10-19T08:15:13Z'
+                    account_number_masked:
+                      type:
+                      - string
+                      - 'null'
+                      description: Last 4 digits of the ACH account number. Nullable if asset.
+                      readOnly: true
+                      example: '9012'
+                  required:
+                  - customer_uid
+                  - pool_uid
+                  - primary_account
+                - type: object
+                  properties:
+                    account_number:
+                      description: 'The ACH account number that can be used to make transfers into/out of this account. Nullable if asset.
+
+                        '
+                      readOnly: true
+                      type:
+                      - string
+                      - 'null'
+                      allOf:
+                      - maxLength: 17
+                        minLength: 1
+                        type: string
+                        example: '123456789012'
+                        pattern: ^[0-9]{1,17}$
+                    company_ids:
+                      type: array
+                      description: 'A list of company ids associated with the Custodial Partner. Not present if asset.
+
+                        '
+                      items:
+                        type: string
+                        example: COMPID1234
+  /custodial_account_closing_balances:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Custodial Accounts
+      summary: List Custodial Account Closing Balances
+      description: Retrieves a paginated list of Custodial Account Closing balances, filtered by various parameters.
+      parameters:
+      - name: custodial_account_uid
+        in: query
+        schema:
+          type: string
+          example: yqyYk5b1xgXFFrXs
+        description: Filter by Custodial Account
+      - name: custodial_account_external_uid
+        in: query
+        schema:
+          type: string
+          example: 4XkJnsfHsuqrxmeX
+        description: 'Filter by Custodial Account External. Multiple values are allowed, e.g. `custodial_account_external_uid[]=4XkJnsfHsuqrxmeX&custodial_account_external_uid[]=exMDShw6yM3NHLYV`.
+
+          '
+      - $ref: '#/paths/~1pools/get/parameters/1'
+      - $ref: '#/paths/~1pools/get/parameters/2'
+      - name: net_usd_closing_balance_as_of
+        in: query
+        required: false
+        schema:
+          $ref: '#/paths/~1transactions/get/parameters/17/schema'
+      - name: net_usd_closing_balance_before
+        in: query
+        required: false
+        schema:
+          $ref: '#/paths/~1transactions/get/parameters/17/schema'
+      - name: net_usd_closing_balance_after
+        in: query
+        required: false
+        schema:
+          $ref: '#/paths/~1transactions/get/parameters/17/schema'
+      responses:
+        '200':
+          description: A list of Custodial Account Closing balances is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        allOf:
+                        - $ref: '#/paths/~1transaction_events~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/0'
+                        - $ref: '#/paths/~1custodial_account_closing_balances~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/1'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+  /custodial_account_closing_balances/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Custodial Accounts
+      summary: Get a single Custodial Account Closing Balance
+      responses:
+        '200':
+          description: A single Custodial Account Closing Balance is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1transaction_events~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    custodial_account_uid:
+                      type: string
+                      description: A unique id referring to the Custodial Account
+                      example: Jy8degj6iv2QngLo
+                    custodial_account_external_uid:
+                      type: string
+                      description: A unique id referring to the External Custodial Account
+                      example: ptRLF7nQvy8VoqM1
+                    net_usd_closing_balance:
+                      type: string
+                      description: The USD amount of the Custodial Account's closing balance
+                      example: '12.34'
+                    net_usd_closing_balance_as_of:
+                      type: string
+                      format: date
+                      example: '1978-08-17'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Access token signed with shared HMAC
+x-explorer-enabled: false

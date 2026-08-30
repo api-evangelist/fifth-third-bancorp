@@ -1,0 +1,970 @@
+openapi: 3.2.0
+info:
+  title: Newline Platform Transfers API
+  version: 1.0.0
+  description: "\nWelcome! In this section of our docs experience, you'll be able to go through common payment scenarios that both you and your end customers may encounter as you start to offer financial products through your own technology stack. These guides will also help to highlight and expand on concepts discussed in our API references, like [Synthetic Accounts](https://developers.newline53.com/reference/synthetic-accounts), [Transfers](https://developers.newline53.com/reference/transfers), [Transactions&nbsp;](https://developers.newline53.com/reference/transactions)  and [Customers](https://developers.newline53.com/reference/customers).\n\nOur guides are broken out by supported use cases. If you find there isn't a specific use case that fits your business, reach out to our [Sales &amp; Partnership team](https://newline53.com/contact-us.html) and they'll be able to help determine how we can support your business and provide any other questions or feedback.\n\nLastly, when you're ready to build, check out our [Onboarding Overview](https://developers.newline53.com/docs/overview) and [Sandbox Walkthrough](https://developers.newline53.com/docs/sandbox-walkthrough) guides.\n\n## About our API\n\nThe Newline API is organized around REST. With a few exceptions, our API has standard resource-oriented URLs, accepts form-encoded OR JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.\n\n## FAQs\n\nWant to quickly review some common questions about Newline and our financial experiences, check out our [FAQs](https://developers.newline53.com/docs/faqs) guide.\n\n# Overview\n\n## Newline Onboarding 101\n\nOnboarding to any SaaS product can be a daunting task, and at Newline we seek to make this experience as smooth as possible. Part of that is getting you, our Client, familiar with the process by which we establish key resources like your Program, Products, Customers, Custodial Accounts, and Synthetic Accounts.\n\nThe following guide details, in short order, the Program and resources that Newline will configure for you and how each of these components affect your ability to use our API Reference.\n\n<img src=\"https://files.readme.io/955347d-image.png\">\n\nThe above visualization shows the Program and resources Newline will provide and maintain for Clients going through onboarding and implementation, but we'll enumerate the details for each resource above.\n\n> **Note**\n> In the above visualization, the lighter color items are preset and created by Newline for any Client implementation. Synthetic Accounts is a special case where general Synthetic Accounts are preset and Clients will be responsible for creating their own external Synthetic Accounts and VRNs..\n\n- **Program** - the Program dictates the origination terms to which the Client and Newline mutually agree. This could include payment limitations like amounts, frequency, and the need for pre-funding (ex. ACH). Your Program will be created and configured by Newline.\n\n- **Products** - these are distinct Product offerings supported by Newline. For instance, this can include payment rails like ACH, Wire, and Instant Payments that are configured as available synthetic_account_types. Newline creates and configures a Program's Products.\n\n    - Products can be applied across multiple Customers, and Customers can be attached to multiple Products. Essentially there is a many-to-many relationship between these resources, which make them, in some cases, parallel.\n\n    - A Product can support multiple payment rails.\n\n- **Customer Type** - Customers are provided a Customer Type at creation. For instance, Primary Customers are considered full account owners and have complete authority to take any actions associated with their accounts and associated resources. You can also limit certain Customer Types to have access to only certain Products. Permitted Customer Types are configured by Newline.\n\n- **Pool** - Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. Newline will create Pools.\n\n- **Customer** - This is the entity that owns the Account and Funds stored at Newline. This entity also is deemed the Originator when it comes to any payment creation. Clients can also be Customers in the event they meet those criteria. Customers are created by Newline or by the Client depending on the use case.\n\n- **Custodial Account** - This is the Account that exists in our Synthetic Core and represents the reciprocal Account on Fifth Third's ledger. These are the accounts you can access via Fifth Third Direct. Custodial Accounts will be created by Newline.\n\n- **Synthetic Account** - How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts that your Customers will likely use within your application. Synthetic Accounts of the general category will be created by Newline or by the Client depending on your use case. Clients will create external Synthetic Accounts like wire_external, ach_external, and instant_payment_external.\n\n- **Virtual Reference Number** - Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a synthetic account and can form a many-to-one relationship with their parent synthetic account.\n\n# Postman Collection\n\nHow to set up Postman, add our Newline collection, and use it to test Newline platform APIs.\n\n## Installing Postman\n\nPostman is available on a variety of platforms. Visit [Postman](https://www.postman.com/downloads/) to see if your platform is supported.  \nTo install Postman:\n\n1. Go to [Postman downloads](https://www.postman.com/downloads/).\n\n<img src=\"https://files.readme.io/fd1743f-Postman_Dowload_snip.jpg\">\n\n1. Download the required version.\n\n2. After your download is complete, run the downloaded file to install Postman.\n\n## Import the Newline Collection\n\nTo import our collection, click on the following [▶ Newline Collection](https://www.postman.com/newline53) button, and you will be redirected to our Newline Postman workspace, where you can download our collection.\n\nFor further information, see the [Postman documentation on importing data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).\n\n## Configure Your Postman Environment\n\n1. Create a Sandbox Environment.\n\n2. Set Sandbox variables.\n\n3. Save the environment.\n\n4. Ensure the new environment is selected.\n\n**Set API Keys**  \nYou will need to set your HMAC Key and Program UID as environment variables. You can set the variables in the headers in the environment tab within the Postman Collection.\n\n# Terminology\n\nThe terms, which represent API resource objects in Newline, below are referenced in our API documentation and endpoint definitions.  \nSome important notes while reading through this list:\n\nResource Objects often interact with one another, so please be sure to review our endpoints to see which serve as required inputs or are collected as outputs.\n\nCertain objects, like Transfers, are described differently in the payments industry depending on the Transaction Type. For instance, ach transactions are often referred to as entries rather than payments, as they can represent both credits (i.e., ODFI pushes) and debits (i.e., ODFI pulls).  \nWhile Resource Objects are distinct, they, in some cases, can represent the same entity.\n\n- Ex. 1 - Clients can also be Customers if they manage and own the financial products in question.\n\n- Ex. 2 - Transfers produce Transactions, but the produced Transactions (in aggregate) represent the original money movement.\n\n| Term | Definition |\n| --- | --- |\n| Customer | The end user of your application and the owner of assets in your Program. For example, when initiating a payment, this entity would be considered the **originator**. |\n| Client | The application or product owning organization that is affording end users (i.e., Customers) the ability to access the financial products.<br><br><br>**Note**<br>Clients can also be Customers in the event they own and have management over the financial products or the funds involved. |\n| Transmitter | Transmitters are the parties who have _requested_ the Transfer in question. When the Transmitter and Customer are the same party, Newline pulls origination information from the created Customer record. When the Transmitter and Customer are not the same party, it's the Client's responsibility to provide that information when making a Transfer.  <br>  <br>Transmitters are only required for the `wire` and `instant_payment` types (see the `wire_transmitter` and `instant_payment_transmitter` objects in the [Initiate a Transfer](https://developers.newline53.com/reference/post_transfers) reference). Client's should also take note of the `initiator_type` field, which dictates from where Transmitter information is pulled. For more context on Transmitters, refer to the [Payment Rail Regulation](https://newline-enterprise-group.readme.io/docs/transfer#payment-rail-regulation) section below. |\n| Partner | Any infrastructure partner integrated within the Newline Platform. |\n| Program | The Program is custom tailored to your offering and purpose built to enable financial products on your application. The Program defines what Synthetic and Custodial Account types, Customer Types, and Transactions Types are available for your Customers to utilize. The Program configuration is defined between the Client and Newline based on your (i.e., the Client's) use case. |\n| Product | Products represents the financial products available to your Customers. The Product object contains the account, compliance, and customer profile responses necessary for your Customers to gain access. |\n| Customer Product | The Customer Product is created when the Customer is added to a Product and respective Program. This often includes Newline automatically creating any needed financial products for the Customers' use. For instance, a Synthetic Account to represent the origination account at Fifth Third. |\n| Service Offering | The financial product offered by the Newline platform. These can be (but are not limited to) checking, savings, brokerage, or retirement accounts. |\n| Pool | Container for one or more Synthetic Accounts, with Assets owned by one or more Customers. Pools allow for shared assets and flexibility in ownership and transfer of assets. |\n| Custodial Accounts | This resource within Newline represents the assets held by your Customers, with direct alignment to accounts opened at Fifth Third. Custodial Accounts have the following relationships: one-to-one with Customers, and one-to-Many with Synthetic Accounts. |\n| Synthetic Accounts | How Newline represents the assets held by your Customers. These are the accounts that Customers view and interact with on your application. Synthetic Accounts are also used to manage external accounts (i.e., Counterparties) that your Customers will likely use within your application. |\n| Virtual Reference Number (VRN) | Virtual Reference Numbers (or VRNs) are virtualized account numbers. They are aliases to a Synthetic Account, and can form a many-to-one relationship with their parent Synthetic Account. |\n| Transfer | The movement of assets from one Synthetic Account to another Synthetic Account. Most of asset movement initiated by your application will result in a Transfer. A successful Transfer will result in at least one Transaction. |\n| Transaction | Transactions are created based on how you instruct Newline to move assets (a Transfer) or how assets are moved or spent outside of your application (For example, ACH, Wire, and Instant Payments Transfers). The Transaction contains the amount, origin, and destination of assets. Newline categorizes Transactions into types to assist in their classification and representation. |\n| Transaction Events | The steps taken to complete the Transaction. These can be used to view the progress of an in-flight Transaction or see the history of a completed Transaction. |"
+servers:
+- url: https://sandbox.newline53.com/api/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Transfers
+  description: "Transfers facilitate the movement of assets between accounts, enabling transactions such as payments and withdrawals.\n\n**Endpoints:**\n\n- GET [List Transfers: GET /transfers](https://developers.newline53.com/reference/get_transfers)\n\n- POST [Initiate a Transfer: POST /transfers](https://developers.newline53.com/reference/post_transfers)\n\n- GET [Get a single Transfer: GET /transfers/{uid}](https://developers.newline53.com/reference/get_transfers-uid)\n\n- PUT [Cancel a Transfer: PUT /transfers/{uid}/cancel](https://developers.newline53.com/reference/put_transfers-uid-cancel)\n\nA Transfer is the Action of moving assets between two Synthetic Accounts. Most asset movement initiated by your application will result in a Transfer. Asset movement is determined by the makeup of assets in both participating accounts, the Synthetic Account Type of the participating accounts, the available Custodial Accounts for all participating Customers, and the overall Program configuration. A Transfer can never be initiated between two external accounts.\n\n### Company ID Behavior\n\nThe company_id field is optional when initiating a transfer. However, it becomes required if your organization has multiple company IDs or multiple custodial accounts, to ensure accurate routing of funds. If provided, the value will be validated.\n\nIn sandbox environments:\n\n- `company_id` is optional and will be validated if supplied.\n- `company_id` and custodial accounts are always in a 1:1 relationship.\n\n> **Note** \n> Any time a Transfer is created, it creates 1+ Transactions, which are returned in the response payload for a successful Transfer. Please note or record these uids, as they will be needed to query the Transaction object and any associated key data points. For instance, Fed IMAD or CHIPS SSN is used for outgoing wires."
+paths:
+  /transfers:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    get:
+      tags:
+      - Transfers
+      summary: List Transfers
+      description: 'Retrieves a list of Transfers filtered by the given parameters. Transfers facilitate the movement of assets between accounts, enabling transactions such as payments and withdrawals.
+
+        '
+      parameters:
+      - $ref: '#/paths/~1pools/get/parameters/0'
+      - name: external_uid
+        in: query
+        schema:
+          type: string
+          example: client-generated-id
+        description: A unique, immutable id provided by the Client. Multiple values are allowed e.g. `external_uid[]=uKxmLxUEiSj5h4M3&external_uid[]=y9reyPMNEWuuYSC1`.
+      - name: pool_uid
+        in: query
+        schema:
+          type: string
+          example: wTSMX1GubP21ev2h
+        description: 'Filter by pool. Multiple values are allowed, e.g. `pool_uid[]=wTSMX1GubP21ev2h&pool_uid[]=7UvkHn3Ss9AbWe2c`.
+
+          '
+      - name: synthetic_account_uid
+        in: query
+        schema:
+          type: string
+          example: 4XkJnsfHsuqrxmeX
+        description: 'Filter by Synthetic Account. Multiple values are allowed, e.g. `synthetic_account_uid[]=4XkJnsfHsuqrxmeX&synthetic_account_uid[]=exMDShw6yM3NHLYV`.
+
+          '
+      - $ref: '#/paths/~1pools/get/parameters/1'
+      - $ref: '#/paths/~1pools/get/parameters/2'
+      - name: sort
+        in: query
+        schema:
+          type: string
+          enum:
+          - created_at_asc
+          - created_at_desc
+      responses:
+        '200':
+          description: A list of Transfers is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/paths/~1pools/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/paths/~1transfers/post/responses/201/content/application~1json/schema/allOf/0'
+              examples:
+                transactions:
+                  value:
+                    total_count: 3
+                    count: 3
+                    limit: 3
+                    offset: 1
+                    data:
+                    - uid: EhrQZJNjCd79LLYq
+                      external_uid: partner-generated-id
+                      source_synthetic_account_uid: 4XkJnsfHsuqrxmeX
+                      destination_synthetic_account_uid: exMDShw6yM3NHLYV
+                      initiating_customer_uid: iDtmSA52zRhgN4iy
+                      destination_customer_uid: iDtmSA52zRhgN4iy
+                      status: pending
+                      initiator_type: transmitter
+                      created_at: '2019-10-14T03:21:53.301Z'
+                      transaction_uids: []
+                      usd_transfer_amount: 33.12
+                      wire:
+                        intermediary_bank_address:
+                          line1: 345 Def Ave
+                          line2: San Francisco
+                          line3: CA 94016
+                          country: US
+                        intermediary_bank_name: Fidelity Fiduciary Bank
+                        intermediary_bank_routing_number: '923456789'
+                        wire_transmitter:
+                          name: Top Tier Tacos
+                          transmitter_identifier: '123456789'
+                          street_number: 123
+                          street1: Abc St.
+                          city: Boring
+                          state: OR
+                          postal_code: 97009
+                    - uid: VeYqeb1iHqBR4LEi
+                      external_uid: partner-created-id
+                      source_synthetic_account_uid: ABv3vs5yVypxpGgF
+                      destination_synthetic_account_uid: RRbw63TF4o1vg2RQ
+                      initiating_customer_uid: oBugADTMCMEU4sfE
+                      destination_customer_uid: 22PBwMT88qCQWMSg
+                      status: settled
+                      initiator_type: transmitter
+                      created_at: '2019-10-14T03:21:53.301Z'
+                      transaction_uids:
+                      - d8WUMmm4dZfMpLeh
+                      usd_transfer_amount: 32.13
+                      instant_payment:
+                        instant_payment_transmitter:
+                          name: Royalty Asset Management
+                          transmitter_identifier: '123456789'
+                          street_number: 123
+                          street1: Abc St.
+                          city: Boring
+                          state: OR
+                          postal_code: 97009
+                        memo: To unfreeze the prince's assets
+                    - uid: EhrQZJNjCd79LLYq
+                      external_uid: partner-generated-id
+                      source_synthetic_account_uid: 4XkJnsfHsuqrxmeX
+                      destination_synthetic_account_uid: exMDShw6yM3NHLYV
+                      initiating_customer_uid: iDtmSA52zRhgN4iy
+                      destination_customer_uid: iDtmSA52zRhgN4iy
+                      status: pending
+                      initiator_type: customer
+                      created_at: '2019-10-14T03:21:53.301Z'
+                      transaction_uids: []
+                      ach:
+                        originator_name: Mr. Hyyt Meiser
+                        company_id: HJK867
+                        company_discretionary_data: Some data
+                        prenote: false
+                        sec_code: CCD
+                        payment_type: S
+                        entry_description: ACH Entry
+                        service_processing: STANDARD
+                        effective_entry_date: '2023-12-21'
+                        id_number: 4270465600
+                        addenda: Having said that, this
+    post:
+      tags:
+      - Transfers
+      summary: Initiate a Transfer
+      description: 'Attempt to initiate a Transfer between two Synthetic Accounts. Before the Transfer will be initiated, several checks will be performed to ensure there is sufficient balance in the source account and that the initiating Customer has all the necessary access to both Synthetic Accounts.
+
+
+        The Synthetic Accounts allowed in a Transfer request are listed below
+
+
+        - between a liability Synthetic Account in the `general` category and a Synthetic Account in the `ach_external`, `wire_external`, or `instant_payment_external` category
+
+        - between two liability Synthetic Accounts in the `general` category that are also owned by the same Customer.
+
+
+        > **Note**
+
+        > Please note that if utilizing the Transmitter information, the initiator type should be set to transmitter. If not set, the field defaults to customer and any data provided in that field will be ignored.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - allOf:
+                - $ref: '#/paths/~1transaction_events~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/0'
+                - type: object
+                  properties:
+                    external_uid:
+                      $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/put/requestBody/content/application~1json/schema/properties/external_uid/allOf/0'
+              - allOf:
+                - type: object
+                  properties:
+                    source_synthetic_account_uid:
+                      type: string
+                      example: 4XkJnsfHsuqrxmeX
+                      description: Synthetic Account where the assets should be debited. Must be an active liability or external-type account. Cannot be equal to `destination_synthetic_account_uid`.
+                    destination_synthetic_account_uid:
+                      type: string
+                      example: exMDShw6yM3NHLYV
+                      description: Synthetic Account where the assets should be credited. Must be an active liability or external-type account. Cannot be equal to `source_synthetic_account_uid`.
+                    initiating_customer_uid:
+                      type: string
+                      example: iDtmSA52zRhgN4iy
+                      description: Customer that initiated the Transfer, when `initiator_type` is `customer`. The Customer and Synthetic Accounts supplied in the Transfer request must relate to the same Pool for the Transfer to be accepted.
+                    destination_customer_uid:
+                      type: string
+                      example: iDtmSA52zRhgN4iy
+                      description: Customer who is on the receiving end of the Transfer. The destination Customer must be provided for peer to peer Transfers and can be optional for all other Transfers. If not provided, the destination Customer will be the same as the initiating Customer by default.
+                    status:
+                      type: string
+                      description: 'A value indicating the overall status of the Transfer.
+
+                        '
+                      enum:
+                      - canceled
+                      - queued
+                      - pending
+                      - settled
+                      - failed
+                      readOnly: true
+                      example: pending
+                    initiator_type:
+                      type: string
+                      description: 'The initiator_type declares the originator for the Transfer. If set to Customer, origination information is pulled from the supplied initiating_customer_uid. If set to Transmitter, origination information is required, provided in the transmitter object (see below). Defaults to Customer. Providing Transmitter information is the Client''s responsibility, please review more details in our [Transfers guide](https://developers.newline53.com/docs/transfer#introduction-what-is-a-transfer).
+
+                        '
+                      enum:
+                      - customer
+                      - transmitter
+                      example: customer
+                    created_at:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                      description: Timestamp of when the transfer request was received
+                      example: '2019-10-14T03:21:53.301Z'
+                    queued_until:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                      description: 'Timestamp indicating when the transfer is scheduled to be processed. Only applicable when the program is configured to queue on the relevant payment rail. When queuing is configured, the value is equal to the configured queuing minutes added to the transfer creation time.
+
+                        '
+                      example: '2019-10-14T03:31:53.301Z'
+              - type: object
+                properties:
+                  usd_transfer_amount:
+                    type: string
+                    description: The USD amount to transfer
+                    example: '12.34'
+                  ach:
+                    type: object
+                    description: 'ACH information. Only present if the Transfer is an ACH.
+
+                      '
+                    allOf:
+                    - type: object
+                      properties:
+                        originator_name:
+                          type: string
+                          description: 'Individual or business originating the ACH transfer. 1 to 16 characters; letters, numbers, apostrophe, comma, period, dash allowed.
+
+                            '
+                          pattern: ^[a-zA-Z0-9.,' -]{1,16}$
+                          example: J. Fred Muggs
+                        company_id:
+                          type: string
+                          description: 'ACH Company ID. 1 to 10 characters. Letters, numbers, apostrophe, comma, period, dash allowed. Optional for the majority of cases. Required if the general liability account is configured with multiple IDs. Whether optional or required, it will be validated if supplied.
+
+                            '
+                          pattern: ^[a-zA-Z0-9.,' -]{1,10}$
+                          example: ABC-123456
+                        company_discretionary_data:
+                          type: string
+                          description: 'An optional field to add customized information such as a customer code or internal reference number. 1 to 10 characters. Alphanumeric. Also allows ''.'', '','', or ''-''.
+
+                            '
+                          pattern: ^[a-zA-Z0-9.,' -]{1,10}$
+                          example: ABC.123
+                        prenote:
+                          type: boolean
+                          description: 'If prenote is ''true'', the amount of the transfer must be $0.00. Newline will infer credit_prenote or debit_prenote based on the source and destination accounts. If prenote is ''true'', then the resulting Transaction Type of the resulting transaction record is of type: ''ach''. If no value is provided, the default value will be ''false''.
+
+                            '
+                          example: false
+                        sec_code:
+                          $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/sec_code/allOf/0'
+                        payment_type:
+                          type: string
+                          description: 'Recurring (R), single entry (S), or standing authorization entry (ST). If no value is provided, the default value populated in the NACHA file is for a single entry.
+
+                            '
+                          enum:
+                          - R
+                          - S
+                          - ST
+                          example: ST
+                        entry_description:
+                          description: 'Description value that will appear in the bank statement.
+
+                            '
+                          allOf:
+                          - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/entry_description/allOf/0'
+                        service_processing:
+                          type: string
+                          description: 'Requested service processing duration for the ACH transfer. Allowable values are: STANDARD or SAMEDAY
+
+                            '
+                          enum:
+                          - SAMEDAY
+                          - STANDARD
+                          example: SAMEDAY
+                        effective_entry_date:
+                          type: string
+                          description: 'The effective date when the transaction is scheduled to be processed. Date values provided cannot be in the past or provided in the future beyond 30 days. For received returns, if the date provided by the originating financial institution does not match the Newline format, then the raw value will be returned. The Newline date format is YYYY-MM-DD
+
+                            '
+                          pattern: ^\d{4}-\d{2}-\d{2}$
+                          example: '2023-12-01'
+                        id_number:
+                          type: string
+                          description: 'Unique identifier supplied by the originator of a transaction (e.g. invoice number). 1 to 22 characters depending on SEC code, alphanumeric. If the SEC value is anything other than CIE, then this is an optional field and can be up to 15 characters. If SEC value CIE is provided, then the ID number is mandatory, and the character length can be up to 22 characters.
+
+                            '
+                          pattern: ^[a-zA-Z0-9 ]{1,22}$
+                          example: '4270465600'
+                        addenda:
+                          $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/addenda/allOf/0'
+                      required:
+                      - effective_entry_date
+                      - entry_description
+                      - originator_name
+                      - sec_code
+                      - service_processing
+                  instant_payment:
+                    type: object
+                    description: 'Instant payment information. Only present if the Transfer is an instant payment.
+
+                      '
+                    properties:
+                      instant_payment_transmitter:
+                        allOf:
+                        - type: object
+                          description: 'Address of the Transmitter. Must be provided if the `initiator_type` is `transmitter`.
+
+                            '
+                          properties:
+                            name:
+                              description: 'Name of the Transmitter.
+
+                                '
+                              maxLength: 140
+                              type: string
+                              example: Marge's Roofing Inc
+                              pattern: '[a-zA-Z0-9-_#|]{1,140}$'
+                            transmitter_identifier:
+                              description: Up to 24 characters, and supplied by Transmitter. Alphanumeric only.
+                              maxLength: 24
+                              minLength: 1
+                              type: string
+                              example: 123456789012ABC
+                              pattern: ^[a-zA-Z0-9]+$
+                          required:
+                          - name
+                          - transmitter_identifier
+                        - type: object
+                          properties:
+                            street_number:
+                              type: string
+                              description: Building number for Transmitter address. Alphanumeric only.
+                              maxLength: 16
+                              pattern: ^[a-zA-Z0-9]{1,16}$
+                              example: 123abc
+                            street1:
+                              type: string
+                              description: Street name for Transmitter address
+                              maxLength: 70
+                              pattern: '^[a-zA-Z0-9-. #/]{1,70}$'
+                              example: Abc St.
+                            city:
+                              type:
+                              - string
+                              - 'null'
+                              description: Maximum 35 characters
+                              maxLength: 35
+                              pattern: ^[a-zA-Z-. /]{1,35}$
+                              example: Chicago
+                            state:
+                              type:
+                              - string
+                              - 'null'
+                              description: 2 characters. Must be a valid US state abbreviation.
+                              pattern: ^\w{2}$
+                              example: IL
+                            postal_code:
+                              type:
+                              - string
+                              - 'null'
+                              description: 5-digit string. ZIP+4 is allowed.
+                              pattern: ^\d{5}(-\d{4})?$
+                              example: '60301'
+                            country:
+                              $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0/properties/country'
+                          required:
+                          - street_number
+                          - street1
+                          - city
+                          - state
+                          - postal_code
+                          - country
+                      memo:
+                        $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/memo/allOf/0'
+                  wire:
+                    type: object
+                    description: 'Wire-specific information. Only present if the Transfer is a wire.
+
+                      '
+                    allOf:
+                    - type: object
+                      properties:
+                        intermediary_bank_address:
+                          description: 'Address of the intermediary bank. To be populated if an intermediary bank is required to execute the wire transfer.
+
+                            '
+                          allOf:
+                          - example:
+                              line1: 345 Def Ave
+                              line2: San Francisco
+                              line3: CA 94016
+                              country: US
+                            allOf:
+                            - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0'
+                        intermediary_bank_name:
+                          $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/intermediary_bank_name/allOf/0'
+                        intermediary_bank_routing_number:
+                          description: 'The ABA routing number associated with the intermediary bank involved in the wire transfer. This value is required if intermediary_bank_name or intermediary_bank_address is present; optional otherwise
+
+                            '
+                          allOf:
+                          - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/intermediary_bank_routing_number/allOf/0'
+                        wire_instructions:
+                          $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/wire_instructions/allOf/0'
+                        wire_transmitter:
+                          allOf:
+                          - type: object
+                            description: 'Address of the Transmitter. Must be provided if the `initiator_type` is `transmitter`.
+
+                              '
+                            properties:
+                              name:
+                                description: 'Name of the Transmitter.
+
+                                  '
+                                maxLength: 35
+                                type: string
+                                example: Marge's Roofing Inc
+                                pattern: ^[a-zA-Z0-9.,' -]{1,35}$
+                              transmitter_identifier:
+                                $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/instant_payment/properties/instant_payment_transmitter/allOf/0/properties/transmitter_identifier'
+                          - type: object
+                            properties:
+                              line1:
+                                type:
+                                - string
+                                - 'null'
+                                description: Up to 35 characters. Cannot contain \# @ $ ! " % & * ; < > { } [ ] _ ^ \ ~
+                                pattern: ^[^#@\$!"%&\*;<>\{\}_\^\\~\]\[]{1,35}$
+                                example: 123 Abc St.
+                              line2:
+                                $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0/properties/line2'
+                              line3:
+                                $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0/properties/line3'
+                              country:
+                                allOf:
+                                - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/counterparty_address/oneOf/0/properties/country/allOf/0'
+                                - type: string
+                                - example: US
+                          - required:
+                            - name
+                            - transmitter_identifier
+                            - line1
+                            - country
+                required:
+                - destination_synthetic_account_uid
+                - initiating_customer_uid
+                - source_synthetic_account_uid
+                - usd_transfer_amount
+            examples:
+              ach:
+                value:
+                  external_uid: partner-generated-id
+                  initiating_customer_uid: iDtmSA52zRhgN4iy
+                  destination_customer_uid: iDtmSA52zRhgN4iy
+                  initiator_type: customer
+                  source_synthetic_account_uid: 4XkJnsfHsuqrxmeX
+                  destination_synthetic_account_uid: exMDShw6yM3NHLYV
+                  usd_transfer_amount: '12.34'
+                  ach:
+                    originator_name: Mr. Hyyt Meiser
+                    company_id: HJK867
+                    company_discretionary_data: Some data
+                    prenote: false
+                    sec_code: CCD
+                    payment_type: S
+                    entry_description: ACH Entry
+                    service_processing: STANDARD
+                    effective_entry_date: '2023-12-21'
+                    id_number: 4270465600
+                    addenda: Having said that, this
+              instant_payment:
+                value:
+                  external_uid: partner-generated-id
+                  initiating_customer_uid: iDtmSA52zRhgN4iy
+                  destination_customer_uid: iDtmSA52zRhgN4iy
+                  initiator_type: customer
+                  source_synthetic_account_uid: 4XkJnsfHsuqrxmeX
+                  destination_synthetic_account_uid: exMDShw6yM3NHLYV
+                  usd_transfer_amount: '12.34'
+                  instant_payment:
+                    instant_payment_transmitter:
+                      name: Royalty Asset Management
+                      transmitter_identifier: '123456789'
+                      street_number: 123
+                      street1: Abc St.
+                      city: Boring
+                      state: OR
+                      postal_code: 97009
+                    memo: To unfreeze the prince's assets
+              wire:
+                value:
+                  external_uid: partner-generated-id
+                  initiating_customer_uid: iDtmSA52zRhgN4iy
+                  destination_customer_uid: iDtmSA52zRhgN4iy
+                  initiator_type: customer
+                  source_synthetic_account_uid: 4XkJnsfHsuqrxmeX
+                  destination_synthetic_account_uid: exMDShw6yM3NHLYV
+                  usd_transfer_amount: '12.34'
+                  wire:
+                    intermediary_bank_address:
+                      line1: 345 Def Ave
+                      line2: San Francisco
+                      line3: CA 94016
+                      country: US
+                    intermediary_bank_name: Fidelity Fiduciary Bank
+                    intermediary_bank_routing_number: '923456789'
+                    wire_transmitter:
+                      name: Top Tier Tacos
+                      transmitter_identifier: '123456789'
+                      street_number: 123
+                      street1: Abc St.
+                      city: Boring
+                      state: OR
+                      postal_code: 97009
+                    wire_instructions: Please send ASAP
+      responses:
+        '201':
+          description: A new Transfer is initiated
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - allOf:
+                  - $ref: '#/paths/~1transaction_events~1%7Buid%7D/get/responses/200/content/application~1json/schema/allOf/0'
+                  - type: object
+                    properties:
+                      external_uid:
+                        description: 'A unique identifier, optionally supplied by the Client when the Transfer was requested
+
+                          '
+                        allOf:
+                        - $ref: '#/paths/~1virtual_reference_numbers~1%7Buid%7D/put/requestBody/content/application~1json/schema/properties/external_uid/allOf/0'
+                  - $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/1'
+                  - type: object
+                    properties:
+                      transaction_uids:
+                        type: array
+                        description: 'An array of Transaction UIDs that are associated with this Transfer.
+
+                          '
+                        example:
+                        - Ym4RSchXQmmr6KfK
+                        - vmxGSMb1vFLoyc1B
+                        items:
+                          type: string
+                      usd_transfer_amount:
+                        type: string
+                        description: 'The USD amount to transfer
+
+                          '
+                        example: '34.12'
+                      ach:
+                        type: object
+                        description: 'ACH information. Only present if the Transfer is an ACH.
+
+                          '
+                        allOf:
+                        - type: object
+                          properties:
+                            originator_name:
+                              $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/ach/allOf/0/properties/originator_name'
+                            company_id:
+                              $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/ach/allOf/0/properties/company_id'
+                            company_discretionary_data:
+                              $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/ach/allOf/0/properties/company_discretionary_data'
+                            prenote:
+                              $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/ach/allOf/0/properties/prenote'
+                            sec_code:
+                              $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/sec_code/allOf/0'
+                            payment_type:
+                              $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/ach/allOf/0/properties/payment_type'
+                            entry_description:
+                              $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/ach/allOf/0/properties/entry_description'
+                            service_processing:
+                              $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/ach/allOf/0/properties/service_processing'
+                            effective_entry_date:
+                              $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/ach/allOf/0/properties/effective_entry_date'
+                            id_number:
+                              $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/ach/allOf/0/properties/id_number'
+                      instant_payment:
+                        type: object
+                        description: 'Instant payment information. Only present if the Transfer is an instant payment.
+
+                          '
+                        properties:
+                          instant_payment_transmitter:
+                            $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/instant_payment/properties/instant_payment_transmitter'
+                      wire:
+                        description: 'Wire-specific information. Only present if the Transfer is a wire.
+
+                          '
+                        allOf:
+                        - $ref: '#/paths/~1transfers/post/responses/201/content/application~1json/schema/allOf/1/properties/wire/allOf/0'
+                      cancellation:
+                        type: object
+                        description: 'Cancellation information. Only present if there has been an attempt at canceling the transfer.
+
+                          '
+                        properties:
+                          authorized_representative_name:
+                            type: string
+                            description: Name of the authorized representative who wanted to cancel the transfer.
+                            example: Swee'Pea
+                          cancellation_reason:
+                            type: string
+                            description: Reason for cancellation.
+                            example: Transfer submitted by accident
+                          current_cancellation_status:
+                            type: string
+                            enum:
+                            - pending_cancellation
+                            - successful_cancellation
+                            - failed_cancellation
+                          cancellation_requested_at:
+                            type: string
+                            format: date-time
+                            description: The DateTime at which a cancellation request was most recently received.
+                            example: '2024-02-06T22:25:28.013Z'
+                          cancellation_succeeded_at:
+                            type: string
+                            format: date-time
+                            description: 'The DateTime at which a cancellation request succeeded. Only present if `current_cancellation_status` is `successful_cancellation`.
+
+                              '
+                            example: '2024-02-06T22:25:39.618Z'
+                          cancellation_failed_at:
+                            type: string
+                            format: date-time
+                            description: 'The DateTime at which a cancellation request last failed. Only present if `current_cancellation_status` is `failed_cancellation`.
+
+                              '
+                            example: '2024-02-06T22:25:39.618Z'
+                - type: object
+                  properties:
+                    ach:
+                      type: object
+                      description: 'ACH information. Only present if the Transfer is an ACH.
+
+                        '
+                      allOf:
+                      - allOf:
+                        - $ref: '#/paths/~1transfers/post/responses/201/content/application~1json/schema/allOf/0/allOf/3/properties/ach/allOf/0'
+                        - type: object
+                          properties:
+                            transfer_trace_id:
+                              type: string
+                              description: Trace ID to identify the transaction across Newline and Fifth Third Bank applications.
+                              example: A1Z2b3y4c5x6DW78
+                            addenda:
+                              $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/addenda/allOf/0'
+                      example: null
+                    instant_payment:
+                      type: object
+                      description: 'Instant payment information. Only present if the Transfer is an instant payment.
+
+                        '
+                      properties:
+                        memo:
+                          $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/memo/allOf/0'
+                      example: null
+                    wire:
+                      type: object
+                      description: 'Wire-specific information. Only present if the Transfer is a wire.
+
+                        '
+                      allOf:
+                      - allOf:
+                        - allOf:
+                          - type: object
+                            properties:
+                              intermediary_bank_address:
+                                description: 'Address of the intermediary bank. To be populated if an intermediary bank is required to execute the wire transfer.
+
+                                  '
+                                $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/wire/allOf/0/properties/intermediary_bank_address/allOf/0'
+                          - type: object
+                            properties:
+                              intermediary_bank_name:
+                                description: 'Name of the intermediary bank, when applicable. For wires only. Maximum 35 characters.
+
+                                  '
+                                allOf:
+                                - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/intermediary_bank_name/allOf/0'
+                              intermediary_bank_routing_number:
+                                description: 'The ABA routing number associated with the intermediary bank involved in the wire transfer. This value is required if intermediary_bank_name or intermediary_bank_address is present; optional otherwise
+
+                                  '
+                                $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/intermediary_bank_routing_number/allOf/0'
+                        - type: object
+                          properties:
+                            intermediary_bank_routing_number:
+                              description: 'The ABA routing number associated with the intermediary bank involved in the wire transfer
+
+                                '
+                              allOf:
+                              - $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/intermediary_bank_routing_number/allOf/0'
+                            wire_transmitter:
+                              $ref: '#/paths/~1transfers/post/requestBody/content/application~1json/schema/allOf/2/properties/wire/allOf/0/properties/wire_transmitter'
+                      - type: object
+                        properties:
+                          wire_instructions:
+                            $ref: '#/paths/~1sandbox~1mock_transactions/post/requestBody/content/application~1json/schema/allOf/0/properties/wire_instructions/allOf/0'
+              examples:
+                ach_transfer:
+                  value:
+                    uid: EhrQZJNjCd79LLYq
+                    external_uid: partner-generated-id
+                    source_synthetic_account_uid: 4XkJnsfHsuqrxmeX
+                    destination_synthetic_account_uid: exMDShw6yM3NHLYV
+                    initiating_customer_uid: iDtmSA52zRhgN4iy
+                    destination_customer_uid: iDtmSA52zRhgN4iy
+                    status: pending
+                    initiator_type: customer
+                    created_at: '2019-10-14T03:21:53.301Z'
+                    transaction_uids: []
+                    ach:
+                      originator_name: Mr. Hyyt Meiser
+                      company_id: HJK867
+                      company_discretionary_data: Some data
+                      prenote: false
+                      sec_code: CCD
+                      payment_type: S
+                      entry_description: ACH Entry
+                      service_processing: STANDARD
+                      effective_entry_date: '2023-12-21'
+                      id_number: 4270465600
+                      addenda: Having said that, this
+                instant_payment_transfer:
+                  value:
+                    uid: VeYqeb1iHqBR4LEi
+                    external_uid: partner-created-id
+                    source_synthetic_account_uid: ABv3vs5yVypxpGgF
+                    destination_synthetic_account_uid: RRbw63TF4o1vg2RQ
+                    initiating_customer_uid: oBugADTMCMEU4sfE
+                    destination_customer_uid: 22PBwMT88qCQWMSg
+                    status: settled
+                    initiator_type: transmitter
+                    created_at: '2019-10-14T03:21:53.301Z'
+                    transaction_uids:
+                    - d8WUMmm4dZfMpLeh
+                    usd_transfer_amount: 32.13
+                    instant_payment:
+                      instant_payment_transmitter:
+                        name: Royalty Asset Management
+                        transmitter_identifier: '123456789'
+                        street_number: 123
+                        street1: Abc St.
+                        city: Boring
+                        state: OR
+                        postal_code: 97009
+                      memo: To unfreeze the prince's assets
+                wire_transfer:
+                  value:
+                    uid: EhrQZJNjCd79LLYq
+                    external_uid: partner-generated-id
+                    source_synthetic_account_uid: 4XkJnsfHsuqrxmeX
+                    destination_synthetic_account_uid: exMDShw6yM3NHLYV
+                    initiating_customer_uid: iDtmSA52zRhgN4iy
+                    destination_customer_uid: iDtmSA52zRhgN4iy
+                    status: pending
+                    initiator_type: transmitter
+                    created_at: '2019-10-14T03:21:53.301Z'
+                    transaction_uids: []
+                    usd_transfer_amount: 33.12
+                    wire:
+                      intermediary_bank_address:
+                        line1: 345 Def Ave
+                        line2: San Francisco
+                        line3: CA 94016
+                        country: US
+                      intermediary_bank_name: Fidelity Fiduciary Bank
+                      intermediary_bank_routing_number: '923456789'
+                      wire_transmitter:
+                        name: Top Tier Tacos
+                        transmitter_identifier: '123456789'
+                        street_number: 123
+                        street1: Abc St.
+                        city: Boring
+                        state: OR
+                        postal_code: 97009
+                      wire_instructions: Please send ASAP
+  /transfers/{uid}:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    get:
+      tags:
+      - Transfers
+      summary: Get a single Transfer
+      description: 'Retrieves a single Transfer resource along with its details, including status, participating accounts, and associated Transactions.
+
+
+        Filter parameters are not case sensitive but will only return exact matches.'
+      responses:
+        '200':
+          description: A single Transfer is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1transfers/post/responses/201/content/application~1json/schema'
+              examples:
+                ach_transfer:
+                  $ref: '#/paths/~1transfers/post/responses/201/content/application~1json/examples/ach_transfer'
+                instant_payment_transfer:
+                  $ref: '#/paths/~1transfers/post/responses/201/content/application~1json/examples/instant_payment_transfer'
+                wire_transfer:
+                  $ref: '#/paths/~1transfers/post/responses/201/content/application~1json/examples/wire_transfer'
+                canceled_transfer:
+                  value:
+                    uid: EhrQZJNjCd79LLYq
+                    external_uid: partner-generated-id
+                    source_synthetic_account_uid: 4XkJnsfHsuqrxmeX
+                    destination_synthetic_account_uid: exMDShw6yM3NHLYV
+                    initiating_customer_uid: iDtmSA52zRhgN4iy
+                    destination_customer_uid: iDtmSA52zRhgN4iy
+                    status: canceled
+                    initiator_type: customer
+                    created_at: '2019-10-14T03:21:53.301Z'
+                    transaction_uids: []
+                    usd_transfer_amount: 33.12
+                    wire:
+                      intermediary_bank_address:
+                        line1: 345 Def Ave
+                        line2: San Francisco
+                        line3: CA 94016
+                        country: US
+                      intermediary_bank_name: Fidelity Fiduciary Bank
+                      intermediary_bank_routing_number: '923456789'
+                      wire_instructions: Please send ASAP
+                      wire_transmitter: null
+                    cancellation:
+                      authorized_representative_name: Swee'Pea
+                      cancellation_reason: Transfer submitted by accident
+                      current_cancellation_status: successful_cancellation
+                      cancellation_requested_at: '2019-10-14T03:29:31.230Z'
+                      cancellation_succeeded_at: '2019-10-14T03:29:35.806Z'
+                      cancellation_failed_at: null
+  /transfers/{uid}/cancel:
+    parameters:
+    - $ref: '#/paths/~1auth/parameters/0'
+    - $ref: '#/paths/~1pools~1%7Buid%7D/parameters/1'
+    put:
+      tags:
+      - Transfers
+      summary: Cancel a Transfer
+      description: 'Transfers must be canceled by the originating Customer (or Authorized Representative).
+
+
+        Transfers can only enter the canceled state if Newline receives a request while the Transfer is in `queued` or `pending states`.
+
+
+        A cancellation request during the `pending` state is not guaranteed, as this state may include payment execution. At that stage, a cancel request will result in an error.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                authorized_representative_name:
+                  type: string
+                  description: 'Name of the authorized representative who wants to cancel the transfer. Max 35 characters.
+
+                    '
+                  maxLength: 35
+                  example: Swee'Pea
+                cancellation_reason:
+                  type: string
+                  description: 'Reason for cancellation. Max 135 characters.
+
+                    '
+                  maxLength: 135
+                  example: Transfer submitted by accident
+      responses:
+        '200':
+          description: The updated Transfer resource is returned
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1transfers/post/responses/201/content/application~1json/schema'
+              examples:
+                canceled_transfer:
+                  $ref: '#/paths/~1transfers~1%7Buid%7D/get/responses/200/content/application~1json/examples/canceled_transfer'
+        '400':
+          description: The transfer is not eligible for cancellation
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                invalid_transfer_cancellation:
+                  value:
+                    errors:
+                    - code: 3025
+                      title: Transfer cannot be canceled
+                      detail: Newline cannot cancel the transfer submitted. Please verify the transfer UIDs, the type of transfer (wire or ACH), and the status of the transfer being canceled.
+                      occurred_at: '2024-03-06T14:53:45.084Z'
+                      extra: 'Transfer status must be one of the following to cancel: pending, queued'
+                    status: 400
+        '422':
+          description: The transfer could not be canceled
+          headers:
+            x-trace-id:
+              $ref: '#/paths/~1auth/post/responses/201/headers/x-trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1returns/get/responses/403/content/application~1json/schema'
+              examples:
+                transfer_cancellation_error:
+                  value:
+                    errors:
+                    - code: 3026
+                      title: Could not cancel transfer
+                      detail: An exception occurred while canceling the transfer
+                      occurred_at: '2024-03-06T14:15:55.723Z'
+                      extra: The payment has already been submitted. It is too late to cancel.
+                    status: 422
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Access token signed with shared HMAC
+x-explorer-enabled: false
