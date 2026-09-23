@@ -1,7 +1,9 @@
 ---
 title: Fifth Third and Brex Partner to Bring AI-Powered Finance ...
 url: https://www.53.com/content/fifth-third/en/media-center/press-releases/2025/press-release-2025-12-09.html
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"Fifth Third Bancorp" press release artificial intelligence'
 position: 1
 source: serpapi-google

@@ -1,7 +1,9 @@
 ---
 title: Fifth Third Bank Welcomes Back Art Weston
 url: https://ir.53.com/news/news-details/2022/Fifth-Third-Bank-Welcomes-Back-Art-Weston/default.aspx
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"Fifth Third Bancorp" press release artificial intelligence'
 position: 2
 source: serpapi-google

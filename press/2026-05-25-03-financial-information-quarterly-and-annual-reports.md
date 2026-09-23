@@ -1,7 +1,9 @@
 ---
 title: Financial Information - Quarterly and Annual Reports
 url: https://ir.53.com/financial-information/quarterly-and-annual-reports/default.aspx
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"Fifth Third Bancorp" press release artificial intelligence'
 position: 3
 source: serpapi-google
