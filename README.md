@@ -1,4 +1,4 @@
-# Fifth Third Bancorp (fifth-third-bancorp)
+# Fifth Third Bancorp
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,69 +64,135 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Fifth Third Bancorp is a Fortune 500 super-regional financial services company
-providing commercial banking, branch banking, consumer lending, and wealth and
-asset management services across multiple U.S. states. Its public, documented
-API surface is delivered through **Newline by Fifth Third** — an API-first
-Banking-as-a-Service platform (built on the 2023 Rize Money acquisition) that
-lets fintechs and enterprises embed payments, deposit, and card products
-directly with Fifth Third Bank. This repository captures the APIs, developer
-tools, and machine-readable API artifacts for Fifth Third Bancorp.
+Fifth Third Bancorp is a diversified super-regional financial services company providing commercial banking, branch banking, consumer lending, and wealth and asset management services across multiple U.S. states. Its embedded-finance arm, Newline by Fifth Third (built on the 2023 Rize Money acquisition), operates a documented, API-first Banking-as-a-Service platform: the Newline Platform API exposes payments (ACH, wire, Real-Time Payments/RTP, book transfers), FDIC-insured deposit and custodial accounts, synthetic accounts, virtual reference numbers, card issuing, customer/KYC onboarding, transactions, returns, and webhook/message-queue notifications so fintechs and enterprises can embed financial products directly with Fifth Third Bank.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/fifth-third-bancorp/refs/heads/main/apis.yml)
+**Areas:** Banking · United States · Embedded Finance · Banking as a Service · Payments · ACH · Real-Time Payments · Deposits · Card Issuing · Commercial Banking · Consumer Lending · Wealth Management
 
-## Scope
+## Fifth Third Bancorp on APIs.io
 
-- **Type:** Contract
-- **Position:** Producing
-- **Access:** Partner (sandbox self-serve, partner onboarding for production)
+Everything profiled for Fifth Third Bancorp is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/fifth-third-bancorp/](https://apis.io/providers/fifth-third-bancorp/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (13)
 
-- Banking
-- United States
-- Embedded Finance
-- Banking as a Service
-- Payments (ACH, Wire, Real-Time Payments)
-- Deposits / Card Issuing
-- Commercial Banking
-- Consumer Lending
-- Wealth Management
-- Treasury Management
-- Super-Regional Bank
-- Fortune 500
+- [Fifth Third Bancorp Auth API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-auth-api/) — The Authentication section explains how to securely interact with Newline's API using access tokens and static IP addresses. Learn how to generate and…
+- [Fifth Third Bancorp Combined Transfers API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-combined-transfers-api/) — The Combined Transfers endpoint allows clients to create both a transfer and a counterparty in a single API call. This simplifies the process by eliminating…
+- [Fifth Third Bancorp Custodial Accounts API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-custodial-accounts-api/) — Fifth Third Bank holds Custodial Accounts and represents funds managed for Customers. Through these endpoints, you can manage balances and track account…
+- [Fifth Third Bancorp Customer Products API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-customer-products-api/) — Customer Products link Customers to financial products. This section outlines how to onboard customers, manage their product relationships, and track…
+- [Fifth Third Bancorp Customers API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-customers-api/) — The Customers section provides details on managing end-user accounts. Learn how to create, update, and archive customer records and onboard them to…
+- [Fifth Third Bancorp Pools API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-pools-api/) — Pools group multiple Customers for asset sharing and distributed account ownership. Each Pool is unique to a Customer or program. **Endpoints:** - GET [List…
+- [Fifth Third Bancorp Products API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-products-api/) — Products represent financial services available in your program. Discover onboarding requirements, prerequisites, and detailed product configurations.…
+- [Fifth Third Bancorp Returns API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-returns-api/) — The Returns endpoints help initiate, track, and manage returns of received and originated payments. These endpoints are accessible within the Sandbox and…
+- [Fifth Third Bancorp Sandbox API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-sandbox-api/) — The Sandbox section provides tools to test and simulate interactions with the Newline API in a controlled environment. **Endpoints:** - POST [Simulate a…
+- [Fifth Third Bancorp Synthetic Accounts API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-synthetic-accounts-api/) — Synthetic Accounts serve as the foundation for asset tracking in Newline. They allow for flexible configurations tailored to your program. **Endpoints:** -…
+- [Fifth Third Bancorp Transactions API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-transactions-api/) — Transactions represent asset movements, such as ACH payments, wire transfers, or card purchases. Track transaction statuses and events through these…
+- [Fifth Third Bancorp Transfers API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-transfers-api/) — Transfers facilitate the movement of assets between accounts, enabling transactions such as payments and withdrawals. **Endpoints:** - GET [List Transfers:…
+- [Fifth Third Bancorp Virtual Reference Numbers API](https://apis.io/apis/fifth-third-bancorp/fifth-third-bancorp-virtual-reference-numbers-api/) — VRNs act as aliases for accounts, enabling unique use cases like accounts receivable segmentation or reconciliation. **Endpoints:** - GET [List Virtual…
 
-## APIs
+### Published properties
 
-The **Newline Platform API** (OpenAPI 3.0.2, 53 operations across 13 resource
-groups) is documented at [developers.newline53.com](https://developers.newline53.com/)
-with a downloadable spec, official TypeScript/Java/.NET SDKs, a Postman
-collection, and an MCP server. Product families captured here:
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-- **Auth** — JWS/HMAC-HS512 token exchange
-- **Customers** and **Customer Products** — onboarding + KYC/AML lifecycle
-- **Products**, **Pools**, **Custodial Accounts**, **Synthetic Accounts**
-- **Transfers** and **Combined Transfers** — ACH, wire, RTP, book transfers
-- **Transactions**, **Returns**, **Virtual Reference Numbers**
-- **Sandbox** — simulation and error-scenario testing
+#### AsyncAPI (1)
 
-Consumer (retail) account data access at the 53.com brand remains
-aggregator-mediated (e.g. Plaid); there is no published first-party FDX/CFPB
-1033 endpoint. See `review.yml` for the full reviewer finding and spec
-provenance.
+Event-driven and webhook contracts.
 
-## Common Properties
+- [Fifth Third Bancorp Newline Webhooks](https://apis.io/asyncapis/fifth-third-bancorp/fifth-third-bancorp-newline-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [newline](https://apis.io/servers/fifth-third-bancorp/newline/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Fifth Third Bancorp Agentic Access](https://apis.io/agentic-access/fifth-third-bancorp/fifth-third-bancorp-agentic-access/)
+
+#### Collections (1)
+
+Postman and Open Collection request collections.
+
+- [Newline Platform API](https://apis.io/collections/fifth-third-bancorp/open-newline-platform-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Fifth Third Bancorp Newline Platform Overlay](https://apis.io/overlays/fifth-third-bancorp/fifth-third-bancorp-newline-platform-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Fifth Third Bancorp Authentication](https://apis.io/security/fifth-third-bancorp/fifth-third-bancorp-authentication/)
+- [Fifth Third Bancorp Domain Security](https://apis.io/security/fifth-third-bancorp/fifth-third-bancorp-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.53.com/)
-- [Developer Portal](https://developers.newline53.com/)
 - [Documentation](https://developers.newline53.com/docs/welcome)
-- [OpenAPI](https://developers.newline53.com/openapi/newline-platform-api.json)
-- [GitHub Organization](https://github.com/newline53)
-- [Status Page](https://status.newline53.com)
-- [Investor Relations](https://ir.53.com/)
+- [Getting started](https://developers.newline53.com/docs/quickstart-guide-completing-a-transfer)
+- [Blog](https://www.53.com/blog/)
+- [Terms of service](https://developers.newline53.com/docs/terms-conditions)
+- [Privacy policy](https://www.53.com/content/fifth-third/en/privacy-security.html)
+- [GitHub](https://github.com/newline53)
+- [Status](https://status.newline53.com)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
+**Kin Score 41.0** — developing · rubric 0.25.0 · scored 2026-10-23
 
-**Email:** kin@apievangelist.com
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 58.5 |
+| Contract governance | 4.5 |
+| Operational transparency | 42.1 |
+| Developer ergonomics | 64.3 |
+| Access clarity | 5.3 |
+
+**Agent readiness 44.9** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | verified |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | yes |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 17.0** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/fifth-third-bancorp/](https://apis.io/providers/fifth-third-bancorp/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Fifth Third Bancorp: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/fifth-third-bancorp/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
